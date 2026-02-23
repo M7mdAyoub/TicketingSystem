@@ -5,90 +5,89 @@
 
 <div class="page-header">
     <div>
-        <h4 class="page-title">Team Members</h4>
-        <p class="page-subtitle">Manage your support agents and access control.</p>
+        <h4 class="page-title">Organization Members</h4>
+        <p class="page-subtitle">Manage your organization's team members and their access status.</p>
     </div>
     <a href="@Url.Action("Create")" class="btn-coral">
-        <i class="bi bi-plus-lg"></i> New User
+        <i class="bi bi-person-plus me-1"></i> Add Member
     </a>
 </div>
 
-<div class="card">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Joined</th>
-                        <th style="width:100px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Count == 0)
-                    {
-                        <tr><td colspan="5">
-                            <div class="empty-state">
-                                <i class="bi bi-people"></i>
-                                <p>No users found yet.</p>
-                            </div>
-                        </td></tr>
-                    }
-                    @foreach (var user in Model)
-                    {
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    <div style="width:38px;height:38px;border-radius:50%;background:var(--green-dark);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.75rem;flex-shrink:0;">
-                                        @{
-                                            var parts = user.FullName.Split(' ');
-                                            var i = parts.Length >= 2
-                                                ? parts[0].Substring(0,1).ToUpper() + parts[^1].Substring(0,1).ToUpper()
-                                                : user.FullName.Substring(0,1).ToUpper();
-                                        }
-                                        @i
-                                    </div>
-                                    <div>
-                                        <div style="font-weight:700;color:var(--dark);font-size:0.9rem;">@user.FullName</div>
-                                        <div style="font-size:0.78rem;color:var(--text-light);">ID: @user.Id</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="color:var(--text-muted);font-size:0.88rem;">@user.Email</td>
-                            <td>
-                                @if (user.IsActive)
-                                {
-                                    <span class="badge-status badge-active">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="badge-status badge-inactive">Inactive</span>
-                                }
-                            </td>
-                            <td style="color:var(--text-muted);font-size:0.85rem;">@user.CreatedDate.ToString("MMM dd, yyyy")</td>
-                            <td>
-                                <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" style="display:inline;">
-                                    @Html.AntiForgeryToken()
-                                    @if (user.IsActive)
-                                    {
-                                        <button type="submit" class="btn-ghost" title="Deactivate" style="color:var(--coral);">
-                                            <i class="bi bi-toggle-on" style="font-size:1.2rem;"></i>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="submit" class="btn-ghost" title="Activate">
-                                            <i class="bi bi-toggle-off" style="font-size:1.2rem;"></i>
-                                        </button>
-                                    }
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+<!-- User Cards Grid -->
+@if (Model.Count == 0)
+{
+    <div class="card">
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <p>No users found yet.</p>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var user in Model)
+        {
+            <div class="col-md-6 col-lg-3">
+                <div class="card" style="text-align:center;padding:24px 20px;position:relative;">
+                    <!-- Active/Inactive Toggle -->
+                    <div style="position:absolute;top:12px;right:12px;">
+                        <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            @if (user.IsActive)
+                            {
+                                <button type="submit" style="background:var(--coral-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="Active — Click to deactivate">
+                                    <span style="font-size:0.65rem;font-weight:700;color:var(--coral);text-transform:uppercase;">Active</span>
+                                    <div style="width:28px;height:16px;background:var(--coral);border-radius:10px;position:relative;">
+                                        <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div>
+                                    </div>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" style="background:var(--border-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="Inactive — Click to activate">
+                                    <span style="font-size:0.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;">Inactive</span>
+                                    <div style="width:28px;height:16px;background:var(--text-light);border-radius:10px;position:relative;">
+                                        <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;"></div>
+                                    </div>
+                                </button>
+                            }
+                        </form>
+                    </div>
+
+                    <!-- Avatar -->
+                    <div style="margin:16px auto 16px;position:relative;width:80px;">
+                        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;margin:0 auto;box-shadow:0 4px 16px rgba(11,61,44,0.2);">
+                            @{
+                                var parts = user.FullName.Split(' ');
+                                var initials = parts.Length >= 2
+                                    ? parts[0].Substring(0,1).ToUpper() + parts[^1].Substring(0,1).ToUpper()
+                                    : user.FullName.Substring(0,1).ToUpper();
+                            }
+                            @initials
+                        </div>
+                        @if (user.IsActive)
+                        {
+                            <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;border:3px solid var(--white);position:absolute;bottom:2px;left:2px;"></div>
+                        }
+                    </div>
+
+                    <!-- Name & Info -->
+                    <h5 style="font-family:var(--font-serif);font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:2px;">@user.FullName</h5>
+                    <div style="font-size:0.78rem;color:var(--coral);font-weight:600;font-style:italic;margin-bottom:4px;">Team Member</div>
+                    <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:16px;">@user.Email</div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="mailto:@user.Email" style="width:36px;height:36px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);text-decoration:none;transition:all 0.2s ease;" title="Send Email">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <div style="width:36px;height:36px;border-radius:10px;background:var(--border-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;" title="More Options">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
