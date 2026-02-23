@@ -7,18 +7,18 @@ USE HelpdeskDB;
 GO
 
 -- Insert more users
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Mohammad Al-Ahmad', 'mohammad@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Fatima Al-Zahra', 'fatima@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Omar Khaled', 'omar@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Aya Hassan', 'aya@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Yousef Al-Rashid', 'yousef@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Nour Al-Din', 'nour@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Layla Ibrahim', 'layla@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Ahmad Mansour', 'ahmad@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Sara Al-Harbi', 'sara@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Khaled Abu Hamza', 'khaled@helpdesk.com', 'Pass@123', 1);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Rania Taha', 'rania@helpdesk.com', 'Pass@123', 0);
-INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Hussein Al-Jabri', 'hussein@helpdesk.com', 'Pass@123', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Mohammad Al-Ahmad', 'mohammad@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Fatima Al-Zahra', 'fatima@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Omar Khaled', 'omar@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Aya Hassan', 'aya@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Yousef Al-Rashid', 'yousef@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Nour Al-Din', 'nour@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Layla Ibrahim', 'layla@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Ahmad Mansour', 'ahmad@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Sara Al-Harbi', 'sara@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Khaled Abu Hamza', 'khaled@helpdesk.com', 'Test@1234', 1);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Rania Taha', 'rania@helpdesk.com', 'Test@1234', 0);
+INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Hussein Al-Jabri', 'hussein@helpdesk.com', 'Test@1234', 1);
 GO
 
 -- Insert more tickets (need 20+ so pagination shows multiple pages at pageSize=5)

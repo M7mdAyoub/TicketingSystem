@@ -73,11 +73,11 @@ GO
 
 -- Insert Admin User (Password: Admin@123)
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive)
-VALUES ('Mohammad Ayoub', 'admin@helpdesk.com', 'Admin@123', 1);
+VALUES ('Mohammad Ayoub', 'admin@helpdesk.com', 'Test@1234', 1);
 
 -- Insert Test User (Password: Test@123)
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive)
-VALUES ('Ali Mahmoud', 'test@helpdesk.com', 'Test@123', 1);
+VALUES ('Ali Mahmoud', 'test@helpdesk.com', 'Test@1234', 1);
 GO
 
 -- Insert Categories
@@ -112,5 +112,5 @@ VALUES (2, 'Ordered a replacement monitor. Should arrive by Friday.', 1);
 GO
 
 PRINT 'Database setup complete!';
-PRINT 'Default login: admin@helpdesk.com / Admin@123';
+PRINT 'Default login: admin@helpdesk.com / Test@1234';
 GO
