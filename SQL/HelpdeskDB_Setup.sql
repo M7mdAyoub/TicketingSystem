@@ -73,11 +73,11 @@ GO
 
 -- Insert Admin User (Password: Admin@123)
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive)
-VALUES ('Admin User', 'admin@helpdesk.com', 'Admin@123', 1);
+VALUES ('Mohammad Ayoub', 'admin@helpdesk.com', 'Admin@123', 1);
 
 -- Insert Test User (Password: Test@123)
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive)
-VALUES ('Test User', 'test@helpdesk.com', 'Test@123', 1);
+VALUES ('Ali Mahmoud', 'test@helpdesk.com', 'Test@123', 1);
 GO
 
 -- Insert Categories
