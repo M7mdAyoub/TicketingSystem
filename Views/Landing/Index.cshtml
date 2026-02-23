@@ -1,162 +1,160 @@
 @{
-    ViewData["Title"] = "Helpdesk Pro";
+    ViewData["Title"] = "NatureDesk - Customer Support, Naturally Refined";
     Layout = "_Layout";
 }
 
-<!-- Navigation -->
-<div class="landing-body" style="min-height:100vh;">
-    <nav class="landing-nav">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-12" style="gap:12px;">
-                    <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:flex;align-items:center;justify-content:center;">
-                        <i class="bi bi-headset" style="color:#fff;font-size:1.1rem;"></i>
-                    </div>
-                    <span style="font-weight:800;font-size:1.1rem;color:#fff;">Help<span style="color:#22d3ee;">desk</span> Pro</span>
-                </div>
-                <a href="@Url.Action("Login", "Account")" class="hero-btn hero-btn-primary" style="padding:10px 24px;font-size:0.9rem;">
-                    <i class="bi bi-box-arrow-in-right"></i> Sign In
+<!-- LANDING NAV -->
+<nav class="landing-nav">
+    <a href="/" class="nav-brand">
+        <div class="nav-brand-icon"><i class="bi bi-leaf"></i></div>
+        <span class="nav-brand-text">NatureDesk</span>
+    </a>
+    <div class="d-flex align-items-center gap-3">
+        <a href="@Url.Action("Login", "Account")" style="font-weight:600;color:var(--text-muted);text-decoration:none;font-size:0.9rem;">Sign In</a>
+        <a href="@Url.Action("Login", "Account")" class="btn-coral">Start Free Trial</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="landing-hero">
+    <div class="landing-hero-inner">
+        <div style="flex:1;">
+            <div class="hero-badge">
+                <i class="bi bi-star-fill" style="font-size:0.65rem;"></i> TRUSTED BY 500+ PREMIUM BRANDS
+            </div>
+            <h1 class="hero-title">
+                Customer support,<br>
+                <em>naturally refined.</em>
+            </h1>
+            <p class="hero-desc">
+                An elegant ticketing ecosystem built for sophisticated teams who prioritize human connection over automated noise.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+                <a href="@Url.Action("Login", "Account")" class="btn-coral">
+                    <i class="bi bi-leaf me-1"></i> Elevate Your Desk
+                </a>
+                <a href="#features" class="btn-outline-dark">
+                    <i class="bi bi-play-circle me-1"></i> See the workflow
                 </a>
             </div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <div class="hero-badge">
-                        <i class="bi bi-lightning-fill"></i> Fast & Reliable Support System
-                    </div>
-                    <h1 class="hero-title">
-                        Streamline Your<br />
-                        <span class="gradient-text">Support Tickets</span><br />
-                        Effortlessly
-                    </h1>
-                    <p class="hero-desc">
-                        A modern helpdesk solution designed to help teams track, manage, and resolve 
-                        support tickets with speed and clarity. Built for productivity.
-                    </p>
-                    <div class="d-flex gap-3 flex-wrap">
-                        <a href="@Url.Action("Login", "Account")" class="hero-btn hero-btn-primary">
-                            Get Started <i class="bi bi-arrow-right"></i>
-                        </a>
-                        <a href="#features" class="hero-btn hero-btn-outline">
-                            <i class="bi bi-play-circle"></i> Learn More
-                        </a>
-                    </div>
-
-                    <!-- Stats row -->
-                    <div class="d-flex gap-5 mt-5 pt-3" style="gap:48px !important;">
-                        <div>
-                            <div style="font-size:2rem;font-weight:900;color:#fff;">99%</div>
-                            <div style="font-size:0.82rem;color:#94a3b8;">Uptime</div>
-                        </div>
-                        <div>
-                            <div style="font-size:2rem;font-weight:900;color:#fff;">&lt;2h</div>
-                            <div style="font-size:0.82rem;color:#94a3b8;">Avg Response</div>
-                        </div>
-                        <div>
-                            <div style="font-size:2rem;font-weight:900;color:#fff;">24/7</div>
-                            <div style="font-size:0.82rem;color:#94a3b8;">Availability</div>
-                        </div>
-                    </div>
+        <div style="flex:0 0 420px;position:relative;">
+            <div style="background:var(--green-dark);border-radius:var(--radius-xl);padding:32px;color:#fff;box-shadow:var(--shadow-lg);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+                    <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></div>
+                    <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
+                    <div style="width:10px;height:10px;border-radius:50%;background:#22c55e;"></div>
                 </div>
-                <div class="col-lg-5 d-none d-lg-block text-center" style="position:relative;z-index:1;">
-                    <!-- Floating cards illustration -->
-                    <div style="position:relative;">
-                        <div style="background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;max-width:380px;margin:0 auto;">
-                            <div class="d-flex align-items-center gap-3 mb-4">
-                                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;">
-                                    <i class="bi bi-ticket-detailed" style="color:#fff;font-size:1.2rem;"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight:700;font-size:0.95rem;">Ticket #1024</div>
-                                    <div style="font-size:0.78rem;color:#94a3b8;">Email not working</div>
-                                </div>
-                                <span style="margin-left:auto;padding:4px 12px;border-radius:50px;background:rgba(16,185,129,0.15);color:#34d399;font-size:0.75rem;font-weight:600;">Open</span>
-                            </div>
-                            <div style="height:2px;background:linear-gradient(90deg,#6366f1,#06b6d4,#f472b6);border-radius:2px;margin-bottom:20px;"></div>
-                            <div class="d-flex gap-3">
-                                <div style="flex:1;padding:14px;border-radius:12px;background:rgba(99,102,241,0.1);text-align:center;">
-                                    <div style="font-size:1.3rem;font-weight:800;color:#818cf8;">27</div>
-                                    <div style="font-size:0.72rem;color:#94a3b8;">Total</div>
-                                </div>
-                                <div style="flex:1;padding:14px;border-radius:12px;background:rgba(16,185,129,0.1);text-align:center;">
-                                    <div style="font-size:1.3rem;font-weight:800;color:#34d399;">18</div>
-                                    <div style="font-size:0.72rem;color:#94a3b8;">Open</div>
-                                </div>
-                                <div style="flex:1;padding:14px;border-radius:12px;background:rgba(244,114,182,0.1);text-align:center;">
-                                    <div style="font-size:1.3rem;font-weight:800;color:#f472b6;">6</div>
-                                    <div style="font-size:0.72rem;color:#94a3b8;">InProgress</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:12px;">
+                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Active Ticket</div>
+                    <div style="font-family:var(--font-serif);font-size:1rem;font-weight:700;">Email server timeout</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px;">Reported by Fatima Al-Zahra • 2h ago</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;">
+                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Response Time</div>
+                    <div style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;">1.4 min<span style="font-size:0.9rem;color:#22c55e;margin-left:8px;">↓ 23%</span></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="text-center mb-5">
-                <div class="hero-badge mx-auto" style="margin-bottom:16px;">
-                    <i class="bi bi-stars"></i> Features
-                </div>
-                <h2 style="font-size:2.2rem;font-weight:800;margin-bottom:12px;">Everything You Need</h2>
-                <p style="color:#94a3b8;font-size:1rem;max-width:500px;margin:0 auto;">
-                    Powerful tools to manage your support workflow from start to finish.
-                </p>
-            </div>
+<!-- STATS BAR -->
+<div class="stats-bar">
+    <div class="stats-bar-item">
+        <div class="stats-bar-value">96%</div>
+        <div class="stats-bar-label">Resolution Rate</div>
+    </div>
+    <div class="stats-bar-item">
+        <div class="stats-bar-value" style="color:var(--coral);">4.9/5</div>
+        <div class="stats-bar-label">User Satisfaction</div>
+    </div>
+    <div class="stats-bar-item">
+        <div class="stats-bar-value">92%</div>
+        <div class="stats-bar-label">SLA Compliance</div>
+    </div>
+    <div class="stats-bar-item">
+        <div class="stats-bar-value">50%</div>
+        <div class="stats-bar-label">Ticket Volume ↓</div>
+    </div>
+</div>
 
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon" style="background:rgba(99,102,241,0.15);color:#818cf8;">
-                            <i class="bi bi-ticket-detailed-fill"></i>
-                        </div>
-                        <div class="feature-title">Ticket Management</div>
-                        <div class="feature-desc">Create, track, and resolve support tickets with a powerful and intuitive interface.</div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon" style="background:rgba(6,182,212,0.15);color:#22d3ee;">
-                            <i class="bi bi-chat-dots-fill"></i>
-                        </div>
-                        <div class="feature-title">Live Comments</div>
-                        <div class="feature-desc">Collaborate with your team through ticket comments with real-time updates.</div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon" style="background:rgba(244,114,182,0.15);color:#f472b6;">
-                            <i class="bi bi-people-fill"></i>
-                        </div>
-                        <div class="feature-title">User Management</div>
-                        <div class="feature-desc">Manage users with activation control and secure authentication.</div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="feature-card">
-                        <div class="feature-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24;">
-                            <i class="bi bi-search"></i>
-                        </div>
-                        <div class="feature-title">Smart Search</div>
-                        <div class="feature-desc">Find tickets instantly with search, filters, and category-based organization.</div>
-                    </div>
-                </div>
+<!-- FEATURES -->
+<section class="features-section" id="features">
+    <h2 class="features-title">Crafted for Excellence</h2>
+    <p class="features-subtitle">The intersection of organic efficiency and technological prowess.</p>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-intersect"></i></div>
+                <h4>Unified Inflow</h4>
+                <p>Bring harmony to your channels — email, and live chat converged into a single, serene workspace.</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="landing-footer">
-        <div class="container">
-            <p class="mb-0">&copy; @DateTime.Now.Year Helpdesk Pro — Built with ASP.NET Core MVC & ADO.NET</p>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-cpu"></i></div>
+                <h4>Intelligent Roots</h4>
+                <p>Smart auto-suggestions that help your team provide the warmest, most accurate support responses.</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
+            </div>
         </div>
-    </footer>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <h4>Organic Growth</h4>
+                <p>Deep analytics that reveal the health of your customer relations, not just the numbers in a database.</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2 class="cta-title" style="font-style:italic;">Ready to plant the seeds of<br>better support?</h2>
+    <p class="cta-desc">Join thousands of companies growing their customer loyalty with NatureDesk's premium ecosystem.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="@Url.Action("Login", "Account")" class="btn-coral" style="padding:14px 32px;">Get Started Free</a>
+        <a href="#" class="btn-outline-dark" style="padding:14px 32px;color:#fff;border-color:rgba(255,255,255,0.25);">Talk to Sales</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="landing-footer">
+    <div class="footer-col">
+        <a href="/" class="nav-brand" style="margin-bottom:12px;">
+            <div class="nav-brand-icon"><i class="bi bi-leaf"></i></div>
+            <span class="nav-brand-text">NatureDesk</span>
+        </a>
+        <p style="font-size:0.85rem;color:var(--text-muted);max-width:240px;margin-top:8px;">Redefining helpdesk standards through thoughtful design and organic efficiency.</p>
+    </div>
+    <div class="footer-col">
+        <h5>Product</h5>
+        <a href="#">Ticketing</a>
+        <a href="#">Automation</a>
+        <a href="#">Analytics</a>
+    </div>
+    <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Our Story</a>
+        <a href="#">Careers</a>
+    </div>
+    <div class="footer-col">
+        <h5>Support</h5>
+        <a href="#">Help Center</a>
+        <a href="#">Documentation</a>
+        <a href="#">Contact</a>
+    </div>
+</footer>
+
+<div class="footer-bottom">
+    <span>© 2026 NatureDesk Inc. All rights reserved.</span>
+    <div class="d-flex gap-3">
+        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">Privacy Policy</a>
+        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">Terms of Service</a>
+    </div>
 </div>

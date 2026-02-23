@@ -8,33 +8,33 @@
         <div class="page-header">
             <div>
                 <h4 class="page-title">Create User</h4>
-                <p class="page-subtitle">Add a new team member to the system</p>
+                <p class="page-subtitle">Add a new team member to the system.</p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-body p-4">
+            <div class="card-body" style="padding:32px;">
                 <form asp-action="Create" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
-                        <label asp-for="FullName" class="form-label"><i class="bi bi-person me-1" style="color:var(--primary);"></i> Full Name</label>
+                        <label asp-for="FullName" class="form-label">Full Name</label>
                         <input asp-for="FullName" class="form-control" placeholder="e.g., Mohammad Ahmad" />
                         <span asp-validation-for="FullName" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Email" class="form-label"><i class="bi bi-envelope me-1" style="color:var(--primary);"></i> Email</label>
-                        <input asp-for="Email" class="form-control" placeholder="user@example.com" />
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" placeholder="user@@example.com" />
                         <span asp-validation-for="Email" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="PasswordHash" class="form-label"><i class="bi bi-lock me-1" style="color:var(--primary);"></i> Password</label>
+                        <label asp-for="PasswordHash" class="form-label">Password</label>
                         <input asp-for="PasswordHash" class="form-control" type="password" placeholder="Min 8 chars, Aa1@@" />
                         <span asp-validation-for="PasswordHash" class="text-danger" style="font-size:0.8rem;"></span>
-                        <div style="margin-top:8px;padding:10px 14px;background:var(--gray-7);border-radius:8px;font-size:0.78rem;color:var(--gray-2);">
-                            <i class="bi bi-shield-check me-1" style="color:var(--success);"></i>
+                        <div style="margin-top:8px;padding:10px 14px;background:var(--green-pale);border-radius:8px;font-size:0.78rem;color:var(--green-dark);">
+                            <i class="bi bi-shield-check me-1"></i>
                             Requires: 8+ chars, uppercase, lowercase, number, special character
                         </div>
                     </div>
@@ -46,11 +46,11 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn-coral">
                             <i class="bi bi-check-lg me-1"></i> Create User
                         </button>
-                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary" style="border-radius:8px;">Cancel</a>
+                        <a href="@Url.Action("Index")" class="btn-outline-dark">Cancel</a>
                     </div>
                 </form>
             </div>

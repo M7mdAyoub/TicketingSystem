@@ -6,10 +6,10 @@
 <div class="page-header">
     <div>
         <h4 class="page-title">Categories</h4>
-        <p class="page-subtitle">Organize tickets by category</p>
+        <p class="page-subtitle">Organize tickets by category for natural workflow.</p>
     </div>
-    <a href="@Url.Action("Create")" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> New Category
+    <a href="@Url.Action("Create")" class="btn-coral">
+        <i class="bi bi-plus-lg"></i> New Category
     </a>
 </div>
 
@@ -40,39 +40,39 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ec4899,#f472b6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.9rem;flex-shrink:0;">
+                                    <div style="width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:0.9rem;flex-shrink:0;">
                                         <i class="bi bi-tag-fill"></i>
                                     </div>
                                     <div>
                                         <div style="font-weight:700;color:var(--dark);font-size:0.9rem;">@cat.Name</div>
-                                        <div style="font-size:0.78rem;color:var(--gray-3);">ID: @cat.Id</div>
+                                        <div style="font-size:0.78rem;color:var(--text-light);">ID: @cat.Id</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 @if (cat.IsActive)
                                 {
-                                    <span class="badge badge-active"><i class="bi bi-check-circle me-1"></i>Active</span>
+                                    <span class="badge-status badge-active">Active</span>
                                 }
                                 else
                                 {
-                                    <span class="badge badge-inactive"><i class="bi bi-x-circle me-1"></i>Inactive</span>
+                                    <span class="badge-status badge-inactive">Inactive</span>
                                 }
                             </td>
-                            <td style="color:var(--gray-2);font-size:0.85rem;">@cat.CreatedDate.ToString("MMM dd, yyyy")</td>
+                            <td style="color:var(--text-muted);font-size:0.85rem;">@cat.CreatedDate.ToString("MMM dd, yyyy")</td>
                             <td>
                                 <form asp-action="ToggleActive" asp-route-id="@cat.Id" method="post" style="display:inline;">
                                     @Html.AntiForgeryToken()
                                     @if (cat.IsActive)
                                     {
-                                        <button type="submit" class="btn btn-sm btn-ghost" title="Deactivate" style="background:rgba(239,68,68,0.08);color:#ef4444;">
-                                            <i class="bi bi-toggle-on"></i>
+                                        <button type="submit" class="btn-ghost" title="Deactivate" style="color:var(--coral);">
+                                            <i class="bi bi-toggle-on" style="font-size:1.2rem;"></i>
                                         </button>
                                     }
                                     else
                                     {
-                                        <button type="submit" class="btn btn-sm btn-ghost" title="Activate">
-                                            <i class="bi bi-toggle-off"></i>
+                                        <button type="submit" class="btn-ghost" title="Activate">
+                                            <i class="bi bi-toggle-off" style="font-size:1.2rem;"></i>
                                         </button>
                                     }
                                 </form>

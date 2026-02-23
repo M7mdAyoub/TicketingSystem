@@ -5,58 +5,84 @@
 }
 
 <div class="login-page">
-    <div class="login-card">
-        <div class="text-center mb-4">
-            <div style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 8px 24px rgba(99,102,241,0.35);">
-                <i class="bi bi-headset" style="font-size:1.6rem;color:#fff;"></i>
-            </div>
-            <h3 style="font-weight:800;color:#0f172a;font-size:1.5rem;margin-bottom:4px;">Welcome Back</h3>
-            <p style="color:#94a3b8;font-size:0.9rem;">Sign in to your helpdesk account</p>
-        </div>
+    <!-- Left Panel -->
+    <div class="login-left">
+        <a href="@Url.Action("Index", "Landing")" class="nav-brand" style="position:relative;z-index:2;">
+            <div class="nav-brand-icon" style="background:rgba(255,255,255,0.15);"><i class="bi bi-leaf"></i></div>
+            <span class="nav-brand-text" style="color:#fff;">NatureDesk</span>
+        </a>
 
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div asp-validation-summary="All" class="alert alert-danger" style="font-size:0.85rem;"></div>
-        }
+        <div style="position:relative;z-index:2;">
+            <h1 class="login-left-title">
+                Experience<br>serene support<br>management.
+            </h1>
+            <p class="login-left-desc">
+                Our nature-inspired dashboard brings calm to the chaos of ticketing, helping your team focus on what matters most.
+            </p>
 
-        <form asp-action="Login" asp-controller="Account" method="post">
-            @Html.AntiForgeryToken()
-
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label" style="font-size:0.85rem;">Email Address</label>
-                <div class="input-group">
-                    <span class="input-group-text" style="border-radius:8px 0 0 8px;border:1.5px solid #e2e8f0;border-right:none;background:#f8fafc;color:#94a3b8;">
-                        <i class="bi bi-envelope"></i>
-                    </span>
-                    <input asp-for="Email" class="form-control" placeholder="you@example.com" style="border-left:none;" />
+            <div style="display:flex;align-items:center;gap:12px;margin-top:40px;">
+                <div style="display:flex;">
+                    <div style="width:32px;height:32px;border-radius:50%;background:#2d8f65;border:2px solid var(--green-dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">MA</div>
+                    <div style="width:32px;height:32px;border-radius:50%;background:#e8465a;border:2px solid var(--green-dark);margin-left:-8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">FZ</div>
                 </div>
-                <span asp-validation-for="Email" class="text-danger" style="font-size:0.78rem;"></span>
-            </div>
-
-            <div class="mb-4">
-                <label asp-for="Password" class="form-label" style="font-size:0.85rem;">Password</label>
-                <div class="input-group">
-                    <span class="input-group-text" style="border-radius:8px 0 0 8px;border:1.5px solid #e2e8f0;border-right:none;background:#f8fafc;color:#94a3b8;">
-                        <i class="bi bi-lock"></i>
-                    </span>
-                    <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" style="border-left:none;" />
+                <div>
+                    <div style="font-weight:700;font-size:0.85rem;">2,400+ teams</div>
+                    <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">trust NatureDesk today</div>
                 </div>
-                <span asp-validation-for="Password" class="text-danger" style="font-size:0.78rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="login-right">
+        <div class="login-form-wrap">
+            <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.7rem;color:var(--dark);margin-bottom:6px;">Welcome back</h2>
+            <p style="color:var(--text-muted);margin-bottom:32px;">Please enter your details to access your account.</p>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger" style="font-size:0.85rem;margin-bottom:20px;"></div>
+            }
+
+            <form asp-action="Login" asp-controller="Account" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius:12px 0 0 12px;border:1.5px solid var(--border);border-right:none;background:var(--cream);color:var(--text-light);">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                        <input asp-for="Email" class="form-control" placeholder="name@@company.com" style="border-left:none;" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger" style="font-size:0.78rem;"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius:12px 0 0 12px;border:1.5px solid var(--border);border-right:none;background:var(--cream);color:var(--text-light);">
+                            <i class="bi bi-lock"></i>
+                        </span>
+                        <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" style="border-left:none;" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:0.78rem;"></span>
+                </div>
+
+                <button type="submit" style="width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--green-dark);color:#fff;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.25s ease;">
+                    Sign In <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <small style="color:var(--text-light);">Default: <strong>admin@@helpdesk.com</strong> / <strong>Test@@1234</strong></small>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2" style="font-size:0.95rem;font-weight:700;">
-                Sign In <i class="bi bi-arrow-right ms-1"></i>
-            </button>
-        </form>
-
-        <div class="text-center mt-4">
-            <small style="color:#94a3b8;">Default: <strong>admin@@helpdesk.com</strong> / <strong>Test@@1234</strong></small>
-        </div>
-
-        <div class="text-center mt-3">
-            <a href="@Url.Action("Index", "Landing")" style="color:#6366f1;font-size:0.85rem;font-weight:600;text-decoration:none;">
-                <i class="bi bi-arrow-left me-1"></i> Back to Home
-            </a>
+            <div class="text-center mt-3" style="padding-top:20px;border-top:1px solid var(--border-light);">
+                <a href="@Url.Action("Index", "Landing")" style="color:var(--coral);font-size:0.85rem;font-weight:600;text-decoration:none;">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Home
+                </a>
+            </div>
         </div>
     </div>
 </div>

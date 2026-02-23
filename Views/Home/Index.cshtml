@@ -2,85 +2,109 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<div class="page-header">
+    <div>
+        <h4 class="page-title">Support Dashboard Overview</h4>
+        <p class="page-subtitle">Welcome back, @Context.User?.Identity?.Name. Your response time is 15% faster today.</p>
+    </div>
+    <a href="@Url.Action("Create", "Tickets")" class="btn-coral">
+        <i class="bi bi-plus-lg"></i> New Ticket
+    </a>
+</div>
+
 <!-- Stat Cards -->
 <div class="row g-4 mb-4">
-    <div class="col-md-6 col-lg-3">
-        <a href="@Url.Action("Index", "Tickets")" class="stat-card stat-purple d-block text-decoration-none">
-            <div class="stat-icon"><i class="bi bi-ticket-detailed-fill"></i></div>
-            <div class="stat-label">Tickets</div>
-            <div class="stat-value">Manage All Tickets</div>
-        </a>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:var(--coral-light);color:var(--coral);">
+                <i class="bi bi-ticket-detailed-fill"></i>
+            </div>
+            <div>
+                <div class="stat-value">27</div>
+                <div class="stat-label">Total Tickets</div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <a href="@Url.Action("Create", "Tickets")" class="stat-card stat-teal d-block text-decoration-none">
-            <div class="stat-icon"><i class="bi bi-plus-circle-fill"></i></div>
-            <div class="stat-label">New Ticket</div>
-            <div class="stat-value">Create Support Ticket</div>
-        </a>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3;color:#92400e;">
+                <i class="bi bi-clock-fill"></i>
+            </div>
+            <div>
+                <div class="stat-value">14m</div>
+                <div class="stat-label">Avg Wait Time</div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <a href="@Url.Action("Index", "Categories")" class="stat-card stat-pink d-block text-decoration-none">
-            <div class="stat-icon"><i class="bi bi-collection-fill"></i></div>
-            <div class="stat-label">Categories</div>
-            <div class="stat-value">Manage Categories</div>
-        </a>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:var(--green-pale);color:var(--green-mid);">
+                <i class="bi bi-emoji-smile-fill"></i>
+            </div>
+            <div>
+                <div class="stat-value">94.8%</div>
+                <div class="stat-label">Satisfaction</div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <a href="@Url.Action("Index", "Users")" class="stat-card stat-amber d-block text-decoration-none">
-            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
-            <div class="stat-label">Team</div>
-            <div class="stat-value">Manage Users</div>
-        </a>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#ede9fe;color:#7c3aed;">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+                <div class="stat-value">99.2%</div>
+                <div class="stat-label">SLA Compliance</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Quick Info -->
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-lightning-fill" style="color:var(--primary);"></i>
-                Quick Start Guide
+<!-- Distribution & Activity -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card" style="height:100%;">
+            <div class="card-header">
+                <i class="bi bi-pie-chart-fill" style="color:var(--coral);"></i>
+                <span>Ticket Distribution</span>
+                <span style="font-family:var(--font-serif);font-style:italic;color:var(--text-light);font-size:0.85rem;margin-left:4px;">Real-time status tracking</span>
             </div>
             <div class="card-body">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-4">
-                            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-glow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <span style="font-weight:800;color:var(--primary);font-size:0.85rem;">1</span>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Create a Ticket</div>
-                                <div style="font-size:0.82rem;color:var(--gray-2);">Submit a new support ticket with a title, description, and category.</div>
-                            </div>
-                        </div>
-                        <div class="d-flex gap-3">
-                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(6,182,212,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <span style="font-weight:800;color:var(--secondary);font-size:0.85rem;">2</span>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Track Progress</div>
-                                <div style="font-size:0.82rem;color:var(--gray-2);">Monitor ticket status: Open → In Progress → Closed.</div>
-                            </div>
-                        </div>
+                <div class="row align-items-center">
+                    <div class="col-5 text-center">
+                        <!-- SVG Donut Chart -->
+                        <svg width="160" height="160" viewBox="0 0 160 160">
+                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border-light)" stroke-width="20"/>
+                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--green-mid)" stroke-width="20"
+                                    stroke-dasharray="264 113" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                            <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20"
+                                    stroke-dasharray="75 302" stroke-dashoffset="-264" transform="rotate(-90 80 80)"/>
+                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
+                                    stroke-dasharray="38 340" stroke-dashoffset="-339" transform="rotate(-90 80 80)"/>
+                            <text x="80" y="72" text-anchor="middle" style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;fill:var(--dark);">27</text>
+                            <text x="80" y="95" text-anchor="middle" style="font-family:var(--font-sans);font-size:0.7rem;fill:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">TOTAL</text>
+                        </svg>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex gap-3 mb-4">
-                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(244,114,182,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <span style="font-weight:800;color:var(--accent);font-size:0.85rem;">3</span>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Add Comments</div>
-                                <div style="font-size:0.82rem;color:var(--gray-2);">Collaborate with the team by adding comments to tickets.</div>
+                    <div class="col-7">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div style="width:10px;height:10px;border-radius:50%;background:var(--green-mid);"></div>
+                            <div style="flex:1;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Resolved</span><span>70%</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:70%;background:var(--green-mid);border-radius:4px;"></div></div>
                             </div>
                         </div>
-                        <div class="d-flex gap-3">
-                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <span style="font-weight:800;color:var(--warning);font-size:0.85rem;">4</span>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
+                            <div style="flex:1;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Pending</span><span>20%</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:20%;background:#f59e0b;border-radius:4px;"></div></div>
                             </div>
-                            <div>
-                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Resolve & Close</div>
-                                <div style="font-size:0.82rem;color:var(--gray-2);">Mark tickets as closed once the issue is resolved.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <div style="width:10px;height:10px;border-radius:50%;background:var(--coral);"></div>
+                            <div style="flex:1;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Open</span><span>10%</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:10%;background:var(--coral);border-radius:4px;"></div></div>
                             </div>
                         </div>
                     </div>
@@ -88,30 +112,78 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-info-circle-fill" style="color:var(--secondary);"></i>
-                System Info
+    <div class="col-lg-5">
+        <div class="card" style="height:100%;">
+            <div class="card-header">
+                <i class="bi bi-lightning-fill" style="color:#f59e0b;"></i>
+                <span>Recent Activity</span>
             </div>
-            <div class="card-body" style="font-size:0.88rem;">
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
-                    <span style="color:var(--gray-2);">Framework</span>
-                    <span style="font-weight:700;color:var(--dark);">ASP.NET Core 9</span>
+            <div class="card-body" style="padding:16px 24px;">
+                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--coral);margin-top:7px;flex-shrink:0;"></div>
+                    <div>
+                        <div style="font-size:0.88rem;"><strong style="color:var(--coral);">Sara Al-Harbi</strong> resolved <strong>#TK-20</strong></div>
+                        <div style="font-size:0.78rem;color:var(--text-light);">2 minutes ago • Network</div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
-                    <span style="color:var(--gray-2);">Database</span>
-                    <span style="font-weight:700;color:var(--dark);">SQL Server</span>
+                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-top:7px;flex-shrink:0;"></div>
+                    <div>
+                        <div style="font-size:0.88rem;"><strong style="color:#92400e;">System</strong> escalated <strong>#TK-15</strong></div>
+                        <div style="font-size:0.78rem;color:var(--text-light);">14 minutes ago • High Priority</div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
-                    <span style="color:var(--gray-2);">Data Access</span>
-                    <span style="font-weight:700;color:var(--dark);">ADO.NET</span>
+                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--green-mid);margin-top:7px;flex-shrink:0;"></div>
+                    <div>
+                        <div style="font-size:0.88rem;"><strong>Omar Khaled</strong> replied to <strong>#TK-11</strong></div>
+                        <div style="font-size:0.78rem;color:var(--text-light);">45 minutes ago • Software</div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <span style="color:var(--gray-2);">UI Framework</span>
-                    <span style="font-weight:700;color:var(--dark);">Bootstrap 5</span>
+                <div class="d-flex gap-3">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--border);margin-top:7px;flex-shrink:0;"></div>
+                    <div>
+                        <div style="font-size:0.88rem;">New ticket from <strong style="color:var(--coral);">Ahmad Mansour</strong></div>
+                        <div style="font-size:0.78rem;color:var(--text-light);">1 hour ago • Hardware</div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-4">
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none" style="border-left:4px solid var(--coral);">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-ticket-detailed" style="font-size:1.5rem;color:var(--coral);margin-bottom:8px;display:block;"></i>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Manage Tickets</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none" style="border-left:4px solid var(--green-mid);">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-collection" style="font-size:1.5rem;color:var(--green-mid);margin-bottom:8px;display:block;"></i>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Categories</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Users")" class="card text-decoration-none" style="border-left:4px solid #7c3aed;">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-people" style="font-size:1.5rem;color:#7c3aed;margin-bottom:8px;display:block;"></i>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Users</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none" style="border-left:4px solid #f59e0b;">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-chat-dots" style="font-size:1.5rem;color:#f59e0b;margin-bottom:8px;display:block;"></i>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">New Ticket</div>
+            </div>
+        </a>
     </div>
 </div>

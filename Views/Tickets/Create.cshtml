@@ -8,31 +8,31 @@
     <div class="col-md-8 col-lg-7">
         <div class="page-header">
             <div>
-                <h4 class="page-title">Create Ticket</h4>
-                <p class="page-subtitle">Submit a new support request</p>
+                <h4 class="page-title">Create New Ticket</h4>
+                <p class="page-subtitle">Submit a support request to the team.</p>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-body p-4">
+            <div class="card-body" style="padding:32px;">
                 <form asp-action="Create" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
-                        <label asp-for="Title" class="form-label"><i class="bi bi-type me-1" style="color:var(--primary);"></i> Title</label>
+                        <label asp-for="Title" class="form-label">Title</label>
                         <input asp-for="Title" class="form-control" placeholder="Brief summary of the issue" />
                         <span asp-validation-for="Title" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Description" class="form-label"><i class="bi bi-text-paragraph me-1" style="color:var(--primary);"></i> Description</label>
+                        <label asp-for="Description" class="form-label">Description</label>
                         <textarea asp-for="Description" class="form-control" rows="5" placeholder="Describe the issue in detail..." style="resize:vertical;"></textarea>
                         <span asp-validation-for="Description" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="CategoryId" class="form-label"><i class="bi bi-tag me-1" style="color:var(--primary);"></i> Category</label>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="CategoryId" class="form-label">Category</label>
                             <select asp-for="CategoryId" class="form-select">
                                 <option value="">Select a category</option>
                                 @if (categories != null)
@@ -45,8 +45,8 @@
                             </select>
                             <span asp-validation-for="CategoryId" class="text-danger" style="font-size:0.8rem;"></span>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Status" class="form-label"><i class="bi bi-flag me-1" style="color:var(--primary);"></i> Status</label>
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label">Status</label>
                             <select asp-for="Status" class="form-select">
                                 <option value="Open">Open</option>
                                 <option value="InProgress">In Progress</option>
@@ -55,11 +55,11 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 mt-3">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn-coral">
                             <i class="bi bi-send me-1"></i> Submit Ticket
                         </button>
-                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary" style="border-radius:8px;">Cancel</a>
+                        <a href="@Url.Action("Index")" class="btn-outline-dark">Cancel</a>
                     </div>
                 </form>
             </div>

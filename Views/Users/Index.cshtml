@@ -5,11 +5,11 @@
 
 <div class="page-header">
     <div>
-        <h4 class="page-title">Users</h4>
-        <p class="page-subtitle">Manage team members and access control</p>
+        <h4 class="page-title">Team Members</h4>
+        <p class="page-subtitle">Manage your support agents and access control.</p>
     </div>
-    <a href="@Url.Action("Create")" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> New User
+    <a href="@Url.Action("Create")" class="btn-coral">
+        <i class="bi bi-plus-lg"></i> New User
     </a>
 </div>
 
@@ -41,7 +41,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#06b6d4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;flex-shrink:0;">
+                                    <div style="width:38px;height:38px;border-radius:50%;background:var(--green-dark);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.75rem;flex-shrink:0;">
                                         @{
                                             var parts = user.FullName.Split(' ');
                                             var i = parts.Length >= 2
@@ -52,35 +52,35 @@
                                     </div>
                                     <div>
                                         <div style="font-weight:700;color:var(--dark);font-size:0.9rem;">@user.FullName</div>
-                                        <div style="font-size:0.78rem;color:var(--gray-3);">ID: @user.Id</div>
+                                        <div style="font-size:0.78rem;color:var(--text-light);">ID: @user.Id</div>
                                     </div>
                                 </div>
                             </td>
-                            <td style="color:var(--gray-2);">@user.Email</td>
+                            <td style="color:var(--text-muted);font-size:0.88rem;">@user.Email</td>
                             <td>
                                 @if (user.IsActive)
                                 {
-                                    <span class="badge badge-active"><i class="bi bi-check-circle me-1"></i>Active</span>
+                                    <span class="badge-status badge-active">Active</span>
                                 }
                                 else
                                 {
-                                    <span class="badge badge-inactive"><i class="bi bi-x-circle me-1"></i>Inactive</span>
+                                    <span class="badge-status badge-inactive">Inactive</span>
                                 }
                             </td>
-                            <td style="color:var(--gray-2);font-size:0.85rem;">@user.CreatedDate.ToString("MMM dd, yyyy")</td>
+                            <td style="color:var(--text-muted);font-size:0.85rem;">@user.CreatedDate.ToString("MMM dd, yyyy")</td>
                             <td>
                                 <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" style="display:inline;">
                                     @Html.AntiForgeryToken()
                                     @if (user.IsActive)
                                     {
-                                        <button type="submit" class="btn btn-sm btn-ghost" title="Deactivate" style="background:rgba(239,68,68,0.08);color:#ef4444;">
-                                            <i class="bi bi-toggle-on"></i>
+                                        <button type="submit" class="btn-ghost" title="Deactivate" style="color:var(--coral);">
+                                            <i class="bi bi-toggle-on" style="font-size:1.2rem;"></i>
                                         </button>
                                     }
                                     else
                                     {
-                                        <button type="submit" class="btn btn-sm btn-ghost" title="Activate">
-                                            <i class="bi bi-toggle-off"></i>
+                                        <button type="submit" class="btn-ghost" title="Activate">
+                                            <i class="bi bi-toggle-off" style="font-size:1.2rem;"></i>
                                         </button>
                                     }
                                 </form>
