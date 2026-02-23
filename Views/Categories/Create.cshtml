@@ -1,0 +1,43 @@
+@model HelpdeskApp.Models.Category
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="page-header">
+            <div>
+                <h4 class="page-title">Create Category</h4>
+                <p class="page-subtitle">Add a new ticket category</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"><i class="bi bi-tag me-1" style="color:var(--primary);"></i> Category Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="e.g., Software, Hardware, Network" />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size:0.8rem;"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" role="switch" />
+                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">Active</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i> Create Category
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary" style="border-radius:8px;">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

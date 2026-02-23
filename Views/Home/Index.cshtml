@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Stat Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <a href="@Url.Action("Index", "Tickets")" class="stat-card stat-purple d-block text-decoration-none">
+            <div class="stat-icon"><i class="bi bi-ticket-detailed-fill"></i></div>
+            <div class="stat-label">Tickets</div>
+            <div class="stat-value">Manage All Tickets</div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <a href="@Url.Action("Create", "Tickets")" class="stat-card stat-teal d-block text-decoration-none">
+            <div class="stat-icon"><i class="bi bi-plus-circle-fill"></i></div>
+            <div class="stat-label">New Ticket</div>
+            <div class="stat-value">Create Support Ticket</div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <a href="@Url.Action("Index", "Categories")" class="stat-card stat-pink d-block text-decoration-none">
+            <div class="stat-icon"><i class="bi bi-collection-fill"></i></div>
+            <div class="stat-label">Categories</div>
+            <div class="stat-value">Manage Categories</div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <a href="@Url.Action("Index", "Users")" class="stat-card stat-amber d-block text-decoration-none">
+            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-label">Team</div>
+            <div class="stat-value">Manage Users</div>
+        </a>
+    </div>
+</div>
+
+<!-- Quick Info -->
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-lightning-fill" style="color:var(--primary);"></i>
+                Quick Start Guide
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-4">
+                            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-glow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <span style="font-weight:800;color:var(--primary);font-size:0.85rem;">1</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Create a Ticket</div>
+                                <div style="font-size:0.82rem;color:var(--gray-2);">Submit a new support ticket with a title, description, and category.</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(6,182,212,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <span style="font-weight:800;color:var(--secondary);font-size:0.85rem;">2</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Track Progress</div>
+                                <div style="font-size:0.82rem;color:var(--gray-2);">Monitor ticket status: Open → In Progress → Closed.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-3 mb-4">
+                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(244,114,182,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <span style="font-weight:800;color:var(--accent);font-size:0.85rem;">3</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Add Comments</div>
+                                <div style="font-size:0.82rem;color:var(--gray-2);">Collaborate with the team by adding comments to tickets.</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <span style="font-weight:800;color:var(--warning);font-size:0.85rem;">4</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:700;font-size:0.9rem;color:var(--dark);margin-bottom:2px;">Resolve & Close</div>
+                                <div style="font-size:0.82rem;color:var(--gray-2);">Mark tickets as closed once the issue is resolved.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-info-circle-fill" style="color:var(--secondary);"></i>
+                System Info
+            </div>
+            <div class="card-body" style="font-size:0.88rem;">
+                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
+                    <span style="color:var(--gray-2);">Framework</span>
+                    <span style="font-weight:700;color:var(--dark);">ASP.NET Core 9</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
+                    <span style="color:var(--gray-2);">Database</span>
+                    <span style="font-weight:700;color:var(--dark);">SQL Server</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--gray-6);">
+                    <span style="color:var(--gray-2);">Data Access</span>
+                    <span style="font-weight:700;color:var(--dark);">ADO.NET</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span style="color:var(--gray-2);">UI Framework</span>
+                    <span style="font-weight:700;color:var(--dark);">Bootstrap 5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

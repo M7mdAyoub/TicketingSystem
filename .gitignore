@@ -1,0 +1,23 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+## IDE
+.vs/
+.vscode/
+*.swp
+*.sln.docstates
+
+## Build
+build_output.txt
+build2.txt
+
+## OS
+Thumbs.db
+.DS_Store
