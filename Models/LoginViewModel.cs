@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HelpdeskApp.Models
 {
-    /// <summary>
-    /// ViewModel used for the Login page.
-    /// </summary>
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Email is required.")]

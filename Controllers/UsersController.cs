@@ -6,14 +6,9 @@ using HelpdeskApp.Models;
 
 namespace HelpdeskApp.Controllers
 {
-    /// <summary>
-    /// Manages Users: List and Create.
-    /// All database access uses ADO.NET with parameterized queries.
-    /// </summary>
     [Authorize]
     public class UsersController : Controller
     {
-        // GET: /Users
         public IActionResult Index()
         {
             var users = new List<User>();
@@ -43,14 +38,12 @@ namespace HelpdeskApp.Controllers
             return View(users);
         }
 
-        // GET: /Users/Create
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(User user)
@@ -62,7 +55,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Business Rule: Check if email already exists (must be unique)
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email";
                 using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                 {
@@ -75,7 +67,6 @@ namespace HelpdeskApp.Controllers
                     }
                 }
 
-                // Insert the new user
                 string insertQuery = @"INSERT INTO Users (FullName, Email, PasswordHash, IsActive, CreatedDate)
                                        VALUES (@FullName, @Email, @PasswordHash, @IsActive, GETDATE())";
 
@@ -83,7 +74,7 @@ namespace HelpdeskApp.Controllers
                 {
                     cmd.Parameters.AddWithValue("@FullName", user.FullName);
                     cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash); // Stored as plain text for simplicity
+                    cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
                     cmd.Parameters.AddWithValue("@IsActive", user.IsActive);
                     cmd.ExecuteNonQuery();
                 }
@@ -93,7 +84,6 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: /Users/ToggleActive/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ToggleActive(int id)
@@ -102,7 +92,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Toggle IsActive flag
                 string query = "UPDATE Users SET IsActive = CASE WHEN IsActive = 1 THEN 0 ELSE 1 END WHERE Id = @Id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {

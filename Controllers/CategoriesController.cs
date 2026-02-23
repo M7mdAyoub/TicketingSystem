@@ -6,14 +6,9 @@ using HelpdeskApp.Models;
 
 namespace HelpdeskApp.Controllers
 {
-    /// <summary>
-    /// Manages Categories: List, Create, and Deactivate.
-    /// All database access uses ADO.NET with parameterized queries.
-    /// </summary>
     [Authorize]
     public class CategoriesController : Controller
     {
-        // GET: /Categories
         public IActionResult Index()
         {
             var categories = new List<Category>();
@@ -42,14 +37,12 @@ namespace HelpdeskApp.Controllers
             return View(categories);
         }
 
-        // GET: /Categories/Create
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
@@ -61,7 +54,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Business Rule: Category name must be unique
                 string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name";
                 using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                 {
@@ -74,7 +66,6 @@ namespace HelpdeskApp.Controllers
                     }
                 }
 
-                // Insert the new category
                 string insertQuery = @"INSERT INTO Categories (Name, IsActive, CreatedDate)
                                        VALUES (@Name, @IsActive, GETDATE())";
 
@@ -90,7 +81,6 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: /Categories/ToggleActive/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ToggleActive(int id)
@@ -99,7 +89,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Toggle IsActive flag
                 string query = "UPDATE Categories SET IsActive = CASE WHEN IsActive = 1 THEN 0 ELSE 1 END WHERE Id = @Id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {

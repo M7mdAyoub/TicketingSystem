@@ -2,10 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HelpdeskApp.Models
 {
-    /// <summary>
-    /// Represents a ticket category (e.g., Software, Hardware, Network).
-    /// Maps to the Categories table in the database.
-    /// </summary>
     public class Category
     {
         public int Id { get; set; }

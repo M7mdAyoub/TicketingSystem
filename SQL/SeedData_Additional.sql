@@ -1,12 +1,6 @@
--- ============================================
--- Helpdesk Seed Data - Arabic Names (English transliteration)
--- Adds users, tickets, and comments for pagination testing
--- ============================================
-
 USE HelpdeskDB;
 GO
 
--- Insert more users
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Mohammad Al-Ahmad', 'mohammad@helpdesk.com', 'Test@1234', 1);
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Fatima Al-Zahra', 'fatima@helpdesk.com', 'Test@1234', 1);
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Omar Khaled', 'omar@helpdesk.com', 'Test@1234', 1);
@@ -20,9 +14,6 @@ INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Khaled Abu 
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Rania Taha', 'rania@helpdesk.com', 'Test@1234', 0);
 INSERT INTO Users (FullName, Email, PasswordHash, IsActive) VALUES ('Hussein Al-Jabri', 'hussein@helpdesk.com', 'Test@1234', 1);
 GO
-
--- Insert more tickets (need 20+ so pagination shows multiple pages at pageSize=5)
--- Users IDs: 1=Admin, 2=Test, 3=Mohammad, 4=Fatima, 5=Omar, 6=Aya, 7=Yousef, 8=Nour, 9=Layla, 10=Ahmad, 11=Sara, 12=Khaled, 13=Rania, 14=Hussein
 
 INSERT INTO Tickets (Title, Description, CategoryId, CreatedBy, Status, CreatedDate)
 VALUES ('Printer not responding', 'The HP LaserJet printer on the 3rd floor is not responding to any print jobs. I tried restarting it but still nothing works.', 2, 3, 'Open', '2026-02-01 08:30:00');
@@ -93,9 +84,6 @@ VALUES ('Install Visual Studio', 'I need Visual Studio 2022 Professional install
 INSERT INTO Tickets (Title, Description, CategoryId, CreatedBy, Status, CreatedDate)
 VALUES ('UPS beeping continuously', 'The UPS under my desk is beeping non-stop. It might need a battery replacement.', 2, 8, 'Open', '2026-02-23 11:15:00');
 GO
-
--- Insert more comments on various tickets
--- Ticket IDs for new tickets start at 5 (since we had 4 from initial seed)
 
 INSERT INTO TicketComments (TicketId, CommentText, CreatedByU, CreatedDate)
 VALUES (5, 'I have checked the printer and it seems to be a paper jam issue. Cleared it now.', 1, '2026-02-01 10:00:00');

@@ -8,24 +8,15 @@ using HelpdeskApp.Models;
 
 namespace HelpdeskApp.Controllers
 {
-    /// <summary>
-    /// Manages Tickets: List (search + filter + pagination), Create, Details, Soft Delete.
-    /// Also handles adding comments to tickets.
-    /// All database access uses ADO.NET with parameterized queries.
-    /// </summary>
     [Authorize]
     public class TicketsController : Controller
     {
-        /// <summary>
-        /// Gets the logged-in user's ID from claims.
-        /// </summary>
         private int GetCurrentUserId()
         {
             var claim = User.FindFirst(ClaimTypes.NameIdentifier);
             return claim != null ? int.Parse(claim.Value) : 0;
         }
 
-        // GET: /Tickets
         public IActionResult Index(string? searchTerm, int? filterCategoryId, string? filterStatus, int page = 1)
         {
             int pageSize = 5;
@@ -38,15 +29,12 @@ namespace HelpdeskApp.Controllers
                 PageSize = pageSize
             };
 
-            // Load categories for dropdown filter
             model.Categories = GetAllActiveCategories();
 
             using (SqlConnection conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
-                // Build dynamic WHERE clause for search and filter
-                // Business Rule: Soft-deleted tickets must NOT appear in list
                 string whereClause = "WHERE t.IsDeleted = 0";
                 var parameters = new List<SqlParameter>();
 
@@ -68,7 +56,6 @@ namespace HelpdeskApp.Controllers
                     parameters.Add(new SqlParameter("@Status", filterStatus));
                 }
 
-                // Get total count for pagination
                 string countQuery = $"SELECT COUNT(*) FROM Tickets t {whereClause}";
                 using (SqlCommand countCmd = new SqlCommand(countQuery, conn))
                 {
@@ -77,8 +64,6 @@ namespace HelpdeskApp.Controllers
                     model.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
                 }
 
-                // Get tickets for current page
-                // Using OFFSET-FETCH for pagination (SQL Server 2012+)
                 string query = $@"
                     SELECT t.Id, t.Title, t.Description, t.CategoryId, t.CreatedBy,
                            t.Status, t.CreatedDate, c.Name AS CategoryName, u.FullName AS CreatedByName
@@ -89,7 +74,6 @@ namespace HelpdeskApp.Controllers
                     ORDER BY t.CreatedDate DESC
                     OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
-                // Need fresh parameters because the old ones are already attached to countCmd
                 var queryParams = new List<SqlParameter>();
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                     queryParams.Add(new SqlParameter("@SearchTerm", "%" + searchTerm + "%"));
@@ -129,21 +113,17 @@ namespace HelpdeskApp.Controllers
             return View(model);
         }
 
-        // GET: /Tickets/Create
         [HttpGet]
         public IActionResult Create()
         {
-            // Load active categories for the dropdown
             ViewBag.Categories = GetAllActiveCategories();
             return View();
         }
 
-        // POST: /Tickets/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Ticket ticket)
         {
-            // Remove validation for navigation properties
             ModelState.Remove("CategoryName");
             ModelState.Remove("CreatedByName");
             ModelState.Remove("Comments");
@@ -178,7 +158,6 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: /Tickets/Details/5
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -188,7 +167,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Get ticket details with category name and creator name
                 string query = @"SELECT t.Id, t.Title, t.Description, t.CategoryId, t.CreatedBy,
                                         t.Status, t.CreatedDate, t.IsDeleted,
                                         c.Name AS CategoryName, u.FullName AS CreatedByName
@@ -225,7 +203,6 @@ namespace HelpdeskApp.Controllers
                 if (ticket == null)
                     return NotFound();
 
-                // Load comments for this ticket
                 ticket.Comments = new List<TicketComment>();
                 string commentsQuery = @"SELECT tc.Id, tc.TicketId, tc.CommentText, tc.CreatedByU, tc.CreatedDate,
                                                 u.FullName AS CreatedByName
@@ -259,7 +236,6 @@ namespace HelpdeskApp.Controllers
             return View(ticket);
         }
 
-        // POST: /Tickets/AddComment
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddComment(int ticketId, string commentText)
@@ -274,7 +250,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Business Rule: Cannot add comments to Closed tickets
                 string statusQuery = "SELECT Status FROM Tickets WHERE Id = @Id";
                 using (SqlCommand statusCmd = new SqlCommand(statusQuery, conn))
                 {
@@ -288,7 +263,6 @@ namespace HelpdeskApp.Controllers
                     }
                 }
 
-                // Insert the comment
                 string query = @"INSERT INTO TicketComments (TicketId, CommentText, CreatedByU, CreatedDate)
                                  VALUES (@TicketId, @CommentText, @CreatedByU, GETDATE())";
 
@@ -305,7 +279,6 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Details", new { id = ticketId });
         }
 
-        // POST: /Tickets/SoftDelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SoftDelete(int id)
@@ -314,7 +287,6 @@ namespace HelpdeskApp.Controllers
             {
                 conn.Open();
 
-                // Soft delete: set IsDeleted = 1
                 string query = "UPDATE Tickets SET IsDeleted = 1 WHERE Id = @Id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -327,12 +299,10 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: /Tickets/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateStatus(int id, string status)
         {
-            // Validate status value
             if (status != "Open" && status != "InProgress" && status != "Closed")
             {
                 TempData["Error"] = "Invalid status value.";
@@ -356,9 +326,6 @@ namespace HelpdeskApp.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        /// <summary>
-        /// Helper method: returns all active categories for dropdown lists.
-        /// </summary>
         private List<Category> GetAllActiveCategories()
         {
             var categories = new List<Category>();

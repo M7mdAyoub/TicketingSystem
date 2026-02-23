@@ -38,8 +38,8 @@ dotnet run
 
 | Email | Password |
 |---|---|
-| `admin@helpdesk.com` | `Test@1234` |
-| `test@helpdesk.com` | `Test@1234` |
+| `mohammadayoub@helpdesk.com` | `Test@1234` |
+| `alimahmoud@helpdesk.com` | `Test@1234` |
 
 > **All users** share the same password: `Test@1234`
 

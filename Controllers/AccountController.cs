@@ -8,23 +8,17 @@ using HelpdeskApp.Models;
 
 namespace HelpdeskApp.Controllers
 {
-    /// <summary>
-    /// Handles user login and logout using cookie authentication.
-    /// </summary>
     public class AccountController : Controller
     {
-        // GET: /Account/Login
         [HttpGet]
         public IActionResult Login()
         {
-            // If already logged in, redirect to Home
             if (User.Identity != null && User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
             return View();
         }
 
-        // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -32,7 +26,6 @@ namespace HelpdeskApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Query the database for a user with matching email and password
             using (SqlConnection conn = DbHelper.GetConnection())
             {
                 conn.Open();
@@ -44,7 +37,7 @@ namespace HelpdeskApp.Controllers
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Email", model.Email);
-                    cmd.Parameters.AddWithValue("@Password", model.Password); // Plain text comparison for simplicity
+                    cmd.Parameters.AddWithValue("@Password", model.Password);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -52,7 +45,6 @@ namespace HelpdeskApp.Controllers
                         {
                             bool isActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
 
-                            // Business Rule: Inactive users cannot log in
                             if (!isActive)
                             {
                                 ModelState.AddModelError("", "Your account is deactivated. Contact an administrator.");
@@ -63,7 +55,6 @@ namespace HelpdeskApp.Controllers
                             string fullName = reader.GetString(reader.GetOrdinal("FullName"));
                             string email = reader.GetString(reader.GetOrdinal("Email"));
 
-                            // Create authentication claims
                             var claims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
@@ -74,7 +65,6 @@ namespace HelpdeskApp.Controllers
                             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             var principal = new ClaimsPrincipal(identity);
 
-                            // Sign in the user
                             await HttpContext.SignInAsync(
                                 CookieAuthenticationDefaults.AuthenticationScheme,
                                 principal);
@@ -91,7 +81,6 @@ namespace HelpdeskApp.Controllers
             }
         }
 
-        // POST: /Account/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

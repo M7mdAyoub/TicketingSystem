@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelpdeskApp.Controllers
 {
-    /// <summary>
-    /// Home page controller. Requires login.
-    /// </summary>
     [Authorize]
     public class HomeController : Controller
     {

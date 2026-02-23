@@ -2,10 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HelpdeskApp.Models
 {
-    /// <summary>
-    /// Represents a user in the Helpdesk system.
-    /// Maps to the Users table in the database.
-    /// </summary>
     public class User
     {
         public int Id { get; set; }
