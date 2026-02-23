@@ -966,9 +966,12 @@
                     </div>
                     @userName
                 </div>
-                <a href="@Url.Action("Logout", "Account")" class="btn-ghost" title="Sign Out">
-                    <i class="bi bi-box-arrow-right" style="font-size:1.1rem;"></i>
-                </a>
+                <form asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-ghost" title="Sign Out">
+                        <i class="bi bi-box-arrow-right" style="font-size:1.1rem;"></i>
+                    </button>
+                </form>
             </div>
         </nav>
 
