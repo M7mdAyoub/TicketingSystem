@@ -186,29 +186,6 @@ namespace HelpdeskApp.Controllers
             return Json(new { success = true, id = id, fullName = fullName.Trim(), email = email.Trim(), isActive = isActive, initials = initials });
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SendEmailAjax([FromForm] string email, [FromForm] string title, [FromForm] string subject)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return Json(new { success = false, error = "Email is required." });
-            if (string.IsNullOrWhiteSpace(title))
-                return Json(new { success = false, error = "Title is required." });
-            if (string.IsNullOrWhiteSpace(subject))
-                return Json(new { success = false, error = "Subject is required." });
-
-            try
-            {
-                // Here we simulate an immediate email send without popping open an email provider.
-                // In production, configure an SmtpClient or SendGrid API here.
-                System.Threading.Thread.Sleep(800);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, error = ex.Message });
-            }
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -33,27 +33,9 @@
         <div class="col-md-6 col-lg-3">
             <div class="card ui-st-2de8ef" >
                 <div class="user-status-badge badge-pos-@lang">
-                    <form class="d-inline" asp-action="ToggleActive" asp-route-id="@user.Id" method="post" >
-                        @Html.AntiForgeryToken()
-                        @if (user.IsActive)
-                        {
-                            <button class="ui-st-75d3a3" type="submit"  title="@Lang.T("active", lang)">
-                                <span class="ui-st-997d76" >@Lang.T("active", lang)</span>
-                                <div class="ui-st-a179fa" >
-                                    <div class="ui-st-118d23" ></div>
-                                </div>
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="ui-st-897909" type="submit"  title="@Lang.T("inactive", lang)">
-                                <span class="ui-st-9e8798" >@Lang.T("inactive", lang)</span>
-                                <div class="ui-st-5b4c9e" >
-                                    <div class="ui-st-0e9080" ></div>
-                                </div>
-                            </button>
-                        }
-                    </form>
+                    <div class="ui-st-5f46a9" style="cursor: pointer;" onclick="openEditUserModal('@user.Id', '@user.FullName.Replace("'", "\\'")', '@user.Email', @user.IsActive.ToString().ToLower())" title="@(lang == "ar" ? "تعديل" : "Edit")">
+                        <i class="bi bi-three-dots"></i>
+                    </div>
                 </div>
 
                 <div class="ui-st-3cee86" >
@@ -77,12 +59,27 @@
                 <div class="ui-st-6f22b7" >@user.Email</div>
 
                 <div class="d-flex justify-content-center gap-2">
-                    <div class="ui-st-c7eec0" style="cursor: pointer;" onclick="openEmailUserModal('@user.Email')" title="@Lang.T("email", lang)">
-                        <i class="bi bi-envelope"></i>
-                    </div>
-                    <div class="ui-st-5f46a9" style="cursor: pointer;" onclick="openEditUserModal('@user.Id', '@user.FullName.Replace("'", "\\'")', '@user.Email', @user.IsActive.ToString().ToLower())" title="@(lang == "ar" ? "تعديل" : "Edit")">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </div>
+                    <form class="d-inline" asp-action="ToggleActive" asp-route-id="@user.Id" method="post" >
+                        @Html.AntiForgeryToken()
+                        @if (user.IsActive)
+                        {
+                            <button class="ui-st-75d3a3 border-0" type="submit"  title="@Lang.T("active", lang)">
+                                <span class="ui-st-997d76" >@Lang.T("active", lang)</span>
+                                <div class="ui-st-a179fa" >
+                                    <div class="ui-st-118d23" ></div>
+                                </div>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="ui-st-897909 border-0" type="submit"  title="@Lang.T("inactive", lang)">
+                                <span class="ui-st-9e8798" >@Lang.T("inactive", lang)</span>
+                                <div class="ui-st-5b4c9e" >
+                                    <div class="ui-st-0e9080" ></div>
+                                </div>
+                            </button>
+                        }
+                    </form>
                 </div>
             </div>
         </div>
@@ -102,7 +99,7 @@
         <div class="ui-st-36b319" id="userModalError" >
         </div>
 
-        <form id="userForm" data-url="@Url.Action("CreateAjax", "Users")" data-token="@tokenValue" data-txt-active="@Lang.T("active", lang)" data-txt-inactive="@Lang.T("inactive", lang)" data-txt-team="@(lang == "ar" ? "عضو في الفريق" : "Team Member")" data-txt-email="@Lang.T("email", lang)" data-txt-more="@(lang == "ar" ? "خيارات أخرى" : "More Options")" data-lang="@lang">
+        <form id="userForm" data-url="@Url.Action("CreateAjax", "Users")" data-token="@tokenValue" data-txt-active="@Lang.T("active", lang)" data-txt-inactive="@Lang.T("inactive", lang)" data-txt-team="@(lang == "ar" ? "عضو في الفريق" : "Team Member")" data-txt-email="@Lang.T("email", lang)" data-txt-edit="@(lang == "ar" ? "تعديل" : "Edit")" data-lang="@lang" data-txt-network-error="@(lang == "ar" ? "خطأ في الشبكة." : "Network error.")">
             <div class="mb-3">
                 <label class="form-label">@Lang.T("full_name", lang)</label>
                 <input type="text" id="userFullName" class="form-control" placeholder="@(lang == "ar" ? "مثال: محمد أحمد" : "e.g., Mohammad Ahmad")" required />
@@ -129,7 +126,7 @@
                 </div>
             </div>
 
-            <div class="d-flex gap-3">
+            <div class="d-flex flex-column flex-sm-row gap-3">
                 <button type="submit" class="btn-coral" id="userSubmitBtn">
                     <i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)
                 </button>
@@ -148,7 +145,7 @@
             </button>
         </div>
         <div class="ui-st-36b319" id="editUserModalError"></div>
-        <form id="editUserForm" data-url="@Url.Action("EditAjax", "Users")">
+        <form id="editUserForm" data-url="@Url.Action("EditAjax", "Users")" data-txt-network-error="@(lang == "ar" ? "خطأ في الشبكة." : "Network error.")">
             <input type="hidden" id="editUserId" />
             <div class="mb-3">
                 <label class="form-label">@Lang.T("full_name", lang)</label>
@@ -164,7 +161,7 @@
                     <label class="form-check-label ui-st-a5d2ba">@Lang.T("active", lang)</label>
                 </div>
             </div>
-            <div class="d-flex gap-3">
+            <div class="d-flex flex-column flex-sm-row gap-3">
                 <button type="submit" class="btn-coral" id="editUserSubmitBtn">
                     <i class="bi bi-check-lg me-1"></i> @(lang == "ar" ? "حفظ التغييرات" : "Save Changes")
                 </button>
@@ -174,40 +171,7 @@
     </div>
 </div>
 
-<!-- Email User Modal -->
-<div class="ui-st-fed104" id="emailUserModal" onclick="if(event.target===this)closeEmailUserModal()">
-    <div class="ui-st-0a26e7">
-        <div class="ui-st-87d288">
-            <h3 class="ui-st-dcc926">@(lang == "ar" ? "إرسال بريد إلكتروني" : "Send Email")</h3>
-            <button class="ui-st-5a2acb" onclick="closeEmailUserModal()">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-        <div class="ui-st-36b319" id="emailUserModalError"></div>
-        <div class="alert alert-success d-none" id="emailUserModalSuccess">@(lang == "ar" ? "تم إرسال البريد الإلكتروني بنجاح!" : "Email sent successfully!")</div>
-        <form id="emailUserForm" data-url="@Url.Action("SendEmailAjax", "Users")">
-            <input type="hidden" id="emailUserAddress" />
-            <div class="mb-3">
-                <label class="form-label">@(lang == "ar" ? "إلى" : "To")</label>
-                <input type="text" id="emailUserAddressDisplay" class="form-control" disabled />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">@(lang == "ar" ? "العنوان" : "Subject")</label>
-                <input type="text" id="emailUserTitle" class="form-control" required />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">@(lang == "ar" ? "الموضوع" : "Body")</label>
-                <textarea id="emailUserSubject" class="form-control" rows="4" required></textarea>
-            </div>
-            <div class="d-flex gap-3 mt-4">
-                <button type="submit" class="btn-coral" id="emailUserSubmitBtn">
-                    <i class="bi bi-send me-1"></i> @(lang == "ar" ? "إرسال" : "Send")
-                </button>
-                <button type="button" class="btn-outline-dark" onclick="closeEmailUserModal()">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
-            </div>
-        </form>
-    </div>
-</div>
+
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/users.css" />
 }
