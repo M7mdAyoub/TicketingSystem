@@ -65,3 +65,6 @@ SQL/             → Database setup and seed data scripts
 - Parameterized SQL queries throughout
 - DataAnnotations validation
 - Strong password enforcement
+- **Multi-language Support (EN/AR)** with RTL/LTR layout handling
+- **AJAX Modals** for seamless Category and User creation
+- **Dynamic Dashboard** with SVG donut charts and live activity feed

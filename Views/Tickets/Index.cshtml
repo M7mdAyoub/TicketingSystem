@@ -1,31 +1,32 @@
 @model HelpdeskApp.Models.TicketListViewModel
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Tickets";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
 <div class="page-header">
     <div>
-        <h4 class="page-title">All Support Tickets</h4>
-        <p class="page-subtitle">Oversee the natural flow of client inquiries.</p>
+        <h4 class="page-title">@Lang.T("my_tickets", lang)</h4>
+        <p class="page-subtitle">@(lang == "ar" ? "إدارة التدفق الطبيعي لاستفسارات العملاء." : "Oversee the natural flow of client inquiries.")</p>
     </div>
     <a href="@Url.Action("Create")" class="btn-coral">
-        <i class="bi bi-plus-lg"></i> New Ticket
+        <i class="bi bi-plus-lg"></i> @Lang.T("create_new_ticket", lang)
     </a>
 </div>
 
-<!-- Filters -->
 <div class="card mb-4">
     <div class="card-body py-3 px-4">
         <form method="get" asp-action="Index">
             <div class="row g-3 align-items-end">
                 <div class="col-md-4">
-                    <label class="form-label" style="font-size:0.82rem;"><i class="bi bi-search me-1"></i>Search</label>
-                    <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search across all tickets..." />
+                    <label class="form-label" style="font-size:0.82rem;"><i class="bi bi-search me-1"></i>@(lang == "ar" ? "بحث" : "Search")</label>
+                    <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="@Lang.T("search_tickets", lang)" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" style="font-size:0.82rem;">Category</label>
+                    <label class="form-label" style="font-size:0.82rem;">@Lang.T("category", lang)</label>
                     <select name="filterCategoryId" class="form-select">
-                        <option value="">All Categories</option>
+                        <option value="">@Lang.T("all_categories", lang)</option>
                         @foreach (var cat in Model.Categories)
                         {
                             <option value="@cat.Id" selected="@(Model.FilterCategoryId == cat.Id)">@cat.Name</option>
@@ -33,12 +34,12 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" style="font-size:0.82rem;">Status</label>
+                    <label class="form-label" style="font-size:0.82rem;">@Lang.T("status", lang)</label>
                     <select name="filterStatus" class="form-select">
-                        <option value="">All Statuses</option>
-                        <option value="Open" selected="@(Model.FilterStatus == "Open")">Open</option>
-                        <option value="InProgress" selected="@(Model.FilterStatus == "InProgress")">In Progress</option>
-                        <option value="Closed" selected="@(Model.FilterStatus == "Closed")">Closed</option>
+                        <option value="">@Lang.T("all_statuses", lang)</option>
+                        <option value="Open" selected="@(Model.FilterStatus == "Open")">@Lang.T("open", lang)</option>
+                        <option value="InProgress" selected="@(Model.FilterStatus == "InProgress")">@Lang.T("in_progress", lang)</option>
+                        <option value="Closed" selected="@(Model.FilterStatus == "Closed")">@Lang.T("closed", lang)</option>
                     </select>
                 </div>
                 <div class="col-md-2 d-flex gap-2">
@@ -54,13 +55,12 @@
     </div>
 </div>
 
-<!-- Ticket Cards Grid -->
 @if (Model.Tickets.Count == 0)
 {
     <div class="card">
         <div class="empty-state">
             <i class="bi bi-inbox"></i>
-            <p>No tickets match your criteria.</p>
+            <p>@Lang.T("no_tickets_found", lang)</p>
         </div>
     </div>
 }
@@ -74,15 +74,15 @@ else
                     <div class="d-flex justify-content-between align-items-start" style="padding-left:12px;">
                         @if (ticket.Status == "Open")
                         {
-                            <span class="badge-status badge-open">NEW TICKET</span>
+                            <span class="badge-status badge-open">@(lang == "ar" ? "جديدة" : "NEW TICKET")</span>
                         }
                         else if (ticket.Status == "InProgress")
                         {
-                            <span class="badge-status badge-inprogress">IN PROGRESS</span>
+                            <span class="badge-status badge-inprogress">@(lang == "ar" ? "قيد التنفيذ" : "IN PROGRESS")</span>
                         }
                         else
                         {
-                            <span class="badge-status badge-resolved">RESOLVED</span>
+                            <span class="badge-status badge-resolved">@(lang == "ar" ? "محلولة" : "RESOLVED")</span>
                         }
                         <span style="font-size:0.78rem;color:var(--text-light);font-weight:600;">#TK-@ticket.Id</span>
                     </div>
@@ -111,11 +111,10 @@ else
     </div>
 }
 
-<!-- Pagination -->
 @if (Model.TotalPages > 1)
 {
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <span style="font-size:0.85rem;color:var(--text-muted);">Showing @((Model.CurrentPage - 1) * 5 + 1) to @Math.Min(Model.CurrentPage * 5, Model.TotalPages * 5) of @(Model.TotalPages * 5) tickets</span>
+        <span style="font-size:0.85rem;color:var(--text-muted);">@Lang.T("page", lang) @Model.CurrentPage @Lang.T("of", lang) @Model.TotalPages</span>
         <nav>
             <ul class="pagination">
                 @if (Model.CurrentPage > 1)

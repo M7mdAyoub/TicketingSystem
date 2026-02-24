@@ -16,7 +16,7 @@ namespace HelpdeskApp.Controllers
             using (SqlConnection conn = DbHelper.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT Id, Name, IsActive, CreatedDate FROM Categories ORDER BY CreatedDate DESC";
+                string query = "SELECT Id, Name, IsActive, CreatedDate FROM Categories ORDER BY Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -79,6 +79,54 @@ namespace HelpdeskApp.Controllers
 
             TempData["Success"] = "Category created successfully.";
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateAjax([FromForm] string name, [FromForm] bool isActive)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return Json(new { success = false, error = "Category name is required." });
+
+            using (SqlConnection conn = DbHelper.GetConnection())
+            {
+                conn.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name";
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@Name", name.Trim());
+                    int count = (int)checkCmd.ExecuteScalar();
+                    if (count > 0)
+                        return Json(new { success = false, error = "A category with this name already exists." });
+                }
+
+                string insertQuery = @"INSERT INTO Categories (Name, IsActive, CreatedDate)
+                                       OUTPUT INSERTED.Id, INSERTED.CreatedDate
+                                       VALUES (@Name, @IsActive, GETDATE())";
+
+                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Name", name.Trim());
+                    cmd.Parameters.AddWithValue("@IsActive", isActive);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return Json(new
+                            {
+                                success = true,
+                                id = reader.GetInt32(0),
+                                name = name.Trim(),
+                                isActive = isActive,
+                                createdDate = reader.GetDateTime(1).ToString("MMM dd, yyyy")
+                            });
+                        }
+                    }
+                }
+            }
+
+            return Json(new { success = false, error = "Failed to create category." });
         }
 
         [HttpPost]

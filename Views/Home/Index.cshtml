@@ -1,18 +1,41 @@
-﻿@{
+﻿@using HelpdeskApp.Data
+@{
     ViewData["Title"] = "Dashboard";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
+
+    int totalTickets = ViewBag.TotalTickets ?? 0;
+    int openCount = ViewBag.OpenCount ?? 0;
+    int inProgressCount = ViewBag.InProgressCount ?? 0;
+    int closedCount = ViewBag.ClosedCount ?? 0;
+    int totalUsers = ViewBag.TotalUsers ?? 0;
+    int totalCategories = ViewBag.TotalCategories ?? 0;
+    var recentTickets = ViewBag.RecentTickets as List<dynamic> ?? new List<dynamic>();
+
+    double openPct = totalTickets > 0 ? Math.Round((double)openCount / totalTickets * 100, 1) : 0;
+    double inProgressPct = totalTickets > 0 ? Math.Round((double)inProgressCount / totalTickets * 100, 1) : 0;
+    double closedPct = totalTickets > 0 ? Math.Round((double)closedCount / totalTickets * 100, 1) : 0;
+
+    // SVG donut calculations (circumference = 2 * PI * 60 ≈ 377)
+    double circumference = 377;
+    double closedArc = circumference * closedPct / 100;
+    double inProgressArc = circumference * inProgressPct / 100;
+    double openArc = circumference * openPct / 100;
+    double closedOffset = 0;
+    double inProgressOffset = -closedArc;
+    double openOffset = -(closedArc + inProgressArc);
 }
 
 <div class="page-header">
     <div>
-        <h4 class="page-title">Support Dashboard Overview</h4>
-        <p class="page-subtitle">Welcome back, @Context.User?.Identity?.Name. Your response time is 15% faster today.</p>
+        <h4 class="page-title">@Lang.T("dashboard", lang) @Lang.T("overview", lang)</h4>
+        <p class="page-subtitle">@(lang == "ar" ? "مرحباً بعودتك،" : "Welcome back,") @Context.User?.Identity?.Name</p>
     </div>
     <a href="@Url.Action("Create", "Tickets")" class="btn-coral">
-        <i class="bi bi-plus-lg"></i> New Ticket
+        <i class="bi bi-plus-lg"></i> @Lang.T("create_ticket", lang)
     </a>
 </div>
 
-<!-- Stat Cards -->
+
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="stat-card">
@@ -20,91 +43,92 @@
                 <i class="bi bi-ticket-detailed-fill"></i>
             </div>
             <div>
-                <div class="stat-value">27</div>
-                <div class="stat-label">Total Tickets</div>
+                <div class="stat-value">@totalTickets</div>
+                <div class="stat-label">@Lang.T("total_tickets", lang)</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#fef9c3;color:#92400e;">
-                <i class="bi bi-clock-fill"></i>
+                <i class="bi bi-exclamation-circle-fill"></i>
             </div>
             <div>
-                <div class="stat-value">14m</div>
-                <div class="stat-label">Avg Wait Time</div>
+                <div class="stat-value">@openCount</div>
+                <div class="stat-label">@Lang.T("open", lang)</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:var(--green-pale);color:var(--green-mid);">
-                <i class="bi bi-emoji-smile-fill"></i>
+                <i class="bi bi-people-fill"></i>
             </div>
             <div>
-                <div class="stat-value">94.8%</div>
-                <div class="stat-label">Satisfaction</div>
+                <div class="stat-value">@totalUsers</div>
+                <div class="stat-label">@Lang.T("users", lang)</div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon" style="background:#ede9fe;color:#7c3aed;">
-                <i class="bi bi-shield-check"></i>
+                <i class="bi bi-collection-fill"></i>
             </div>
             <div>
-                <div class="stat-value">99.2%</div>
-                <div class="stat-label">SLA Compliance</div>
+                <div class="stat-value">@totalCategories</div>
+                <div class="stat-label">@Lang.T("categories", lang)</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Distribution & Activity -->
+
 <div class="row g-4 mb-4">
     <div class="col-lg-7">
         <div class="card" style="height:100%;">
             <div class="card-header">
                 <i class="bi bi-pie-chart-fill" style="color:var(--coral);"></i>
-                <span>Ticket Distribution</span>
-                <span style="font-family:var(--font-serif);font-style:italic;color:var(--text-light);font-size:0.85rem;margin-left:4px;">Real-time status tracking</span>
+                <span>@Lang.T("ticket_status", lang)</span>
             </div>
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-5 text-center">
-                        <!-- SVG Donut Chart -->
                         <svg width="160" height="160" viewBox="0 0 160 160">
                             <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border-light)" stroke-width="20"/>
-                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--green-mid)" stroke-width="20"
-                                    stroke-dasharray="264 113" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-                            <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20"
-                                    stroke-dasharray="75 302" stroke-dashoffset="-264" transform="rotate(-90 80 80)"/>
-                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
-                                    stroke-dasharray="38 340" stroke-dashoffset="-339" transform="rotate(-90 80 80)"/>
-                            <text x="80" y="72" text-anchor="middle" style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;fill:var(--dark);">27</text>
-                            <text x="80" y="95" text-anchor="middle" style="font-family:var(--font-sans);font-size:0.7rem;fill:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">TOTAL</text>
+                            @if (totalTickets > 0)
+                            {
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--green-mid)" stroke-width="20"
+                                        stroke-dasharray="@closedArc @(circumference - closedArc)" stroke-dashoffset="@closedOffset" transform="rotate(-90 80 80)"/>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20"
+                                        stroke-dasharray="@inProgressArc @(circumference - inProgressArc)" stroke-dashoffset="@inProgressOffset" transform="rotate(-90 80 80)"/>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
+                                        stroke-dasharray="@openArc @(circumference - openArc)" stroke-dashoffset="@openOffset" transform="rotate(-90 80 80)"/>
+                            }
+                            <text x="80" y="72" text-anchor="middle" style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;fill:var(--dark);">@totalTickets</text>
+                            <text x="80" y="95" text-anchor="middle" style="font-family:var(--font-sans);font-size:0.7rem;fill:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">@(lang == "ar" ? "المجموع" : "TOTAL")</text>
                         </svg>
                     </div>
                     <div class="col-7">
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div style="width:10px;height:10px;border-radius:50%;background:var(--green-mid);"></div>
                             <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Resolved</span><span>70%</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:70%;background:var(--green-mid);border-radius:4px;"></div></div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("closed", lang)</span><span>@closedCount (@closedPct%)</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(closedPct)%;background:var(--green-mid);border-radius:4px;"></div></div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
                             <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Pending</span><span>20%</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:20%;background:#f59e0b;border-radius:4px;"></div></div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("in_progress", lang)</span><span>@inProgressCount (@inProgressPct%)</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(inProgressPct)%;background:#f59e0b;border-radius:4px;"></div></div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <div style="width:10px;height:10px;border-radius:50%;background:var(--coral);"></div>
                             <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>Open</span><span>10%</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:10%;background:var(--coral);border-radius:4px;"></div></div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("open", lang)</span><span>@openCount (@openPct%)</span></div>
+                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(openPct)%;background:var(--coral);border-radius:4px;"></div></div>
                             </div>
                         </div>
                     </div>
@@ -116,49 +140,66 @@
         <div class="card" style="height:100%;">
             <div class="card-header">
                 <i class="bi bi-lightning-fill" style="color:#f59e0b;"></i>
-                <span>Recent Activity</span>
+                <span>@Lang.T("recent_activity", lang)</span>
             </div>
             <div class="card-body" style="padding:16px 24px;">
-                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <div style="width:8px;height:8px;border-radius:50%;background:var(--coral);margin-top:7px;flex-shrink:0;"></div>
-                    <div>
-                        <div style="font-size:0.88rem;"><strong style="color:var(--coral);">Sara Al-Harbi</strong> resolved <strong>#TK-20</strong></div>
-                        <div style="font-size:0.78rem;color:var(--text-light);">2 minutes ago • Network</div>
+                @if (recentTickets.Count == 0)
+                {
+                    <div class="empty-state" style="padding:24px;">
+                        <i class="bi bi-inbox" style="font-size:2rem;"></i>
+                        <p>@(lang == "ar" ? "لا يوجد نشاط بعد." : "No activity yet.")</p>
                     </div>
-                </div>
-                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-top:7px;flex-shrink:0;"></div>
-                    <div>
-                        <div style="font-size:0.88rem;"><strong style="color:#92400e;">System</strong> escalated <strong>#TK-15</strong></div>
-                        <div style="font-size:0.78rem;color:var(--text-light);">14 minutes ago • High Priority</div>
-                    </div>
-                </div>
-                <div class="d-flex gap-3 mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <div style="width:8px;height:8px;border-radius:50%;background:var(--green-mid);margin-top:7px;flex-shrink:0;"></div>
-                    <div>
-                        <div style="font-size:0.88rem;"><strong>Omar Khaled</strong> replied to <strong>#TK-11</strong></div>
-                        <div style="font-size:0.78rem;color:var(--text-light);">45 minutes ago • Software</div>
-                    </div>
-                </div>
-                <div class="d-flex gap-3">
-                    <div style="width:8px;height:8px;border-radius:50%;background:var(--border);margin-top:7px;flex-shrink:0;"></div>
-                    <div>
-                        <div style="font-size:0.88rem;">New ticket from <strong style="color:var(--coral);">Ahmad Mansour</strong></div>
-                        <div style="font-size:0.78rem;color:var(--text-light);">1 hour ago • Hardware</div>
-                    </div>
-                </div>
+                }
+                else
+                {
+                    @for (int i = 0; i < recentTickets.Count; i++)
+                    {
+                        var ticket = recentTickets[i];
+                        string dotColor = ticket.Status == "Closed" ? "var(--green-mid)" : ticket.Status == "InProgress" ? "#f59e0b" : "var(--coral)";
+                        string statusText = ticket.Status == "Closed" ? Lang.T("closed", lang) :
+                                            ticket.Status == "InProgress" ? Lang.T("in_progress", lang) :
+                                            Lang.T("open", lang);
+                        var timeAgo = DateTime.Now - (DateTime)ticket.CreatedDate;
+                        string timeText;
+                        if (timeAgo.TotalMinutes < 60)
+                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalMinutes} دقيقة" : $"{(int)timeAgo.TotalMinutes}m ago";
+                        else if (timeAgo.TotalHours < 24)
+                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalHours} ساعة" : $"{(int)timeAgo.TotalHours}h ago";
+                        else
+                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalDays} يوم" : $"{(int)timeAgo.TotalDays}d ago";
+
+                        bool isLast = i == recentTickets.Count - 1;
+                        <div class="d-flex gap-3 @(isLast ? "" : "mb-3 pb-3")" style="@(isLast ? "" : "border-bottom:1px solid var(--border-light);")">
+                            <div style="width:8px;height:8px;border-radius:50%;background:@dotColor;margin-top:7px;flex-shrink:0;"></div>
+                            <div>
+                                <div style="font-size:0.88rem;">
+                                    <strong style="color:var(--dark);">@ticket.CreatedByName</strong>
+                                    <span style="color:var(--text-muted);">—</span>
+                                    <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })" style="color:var(--coral);text-decoration:none;font-weight:600;">#TK-@ticket.Id</a>
+                                </div>
+                                <div style="font-size:0.8rem;color:var(--text-light);margin-top:2px;">
+                                    @(ticket.Title.Length > 40 ? ((string)ticket.Title).Substring(0, 40) + "..." : ticket.Title)
+                                </div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                                    <span class="badge-status @(ticket.Status == "Open" ? "badge-open" : ticket.Status == "InProgress" ? "badge-inprogress" : "badge-resolved")" style="font-size:0.65rem;padding:2px 6px;">@statusText</span>
+                                    <span style="margin-left:6px;">@timeText</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
         </div>
     </div>
 </div>
 
-<!-- Quick Actions -->
+
 <div class="row g-4">
     <div class="col-md-3">
         <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none" style="border-left:4px solid var(--coral);">
             <div class="card-body text-center py-4">
                 <i class="bi bi-ticket-detailed" style="font-size:1.5rem;color:var(--coral);margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Manage Tickets</div>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("tickets", lang)</div>
             </div>
         </a>
     </div>
@@ -166,7 +207,7 @@
         <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none" style="border-left:4px solid var(--green-mid);">
             <div class="card-body text-center py-4">
                 <i class="bi bi-collection" style="font-size:1.5rem;color:var(--green-mid);margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Categories</div>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("categories", lang)</div>
             </div>
         </a>
     </div>
@@ -174,7 +215,7 @@
         <a href="@Url.Action("Index", "Users")" class="card text-decoration-none" style="border-left:4px solid #7c3aed;">
             <div class="card-body text-center py-4">
                 <i class="bi bi-people" style="font-size:1.5rem;color:#7c3aed;margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">Users</div>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("users", lang)</div>
             </div>
         </a>
     </div>
@@ -182,7 +223,7 @@
         <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none" style="border-left:4px solid #f59e0b;">
             <div class="card-body text-center py-4">
                 <i class="bi bi-chat-dots" style="font-size:1.5rem;color:#f59e0b;margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">New Ticket</div>
+                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("create_ticket", lang)</div>
             </div>
         </a>
     </div>

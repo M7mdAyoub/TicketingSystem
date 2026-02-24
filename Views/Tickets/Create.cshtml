@@ -1,38 +1,39 @@
 @model HelpdeskApp.Models.Ticket
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Create Ticket";
     var categories = ViewBag.Categories as List<HelpdeskApp.Models.Category>;
+    var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
-<!-- Breadcrumb -->
 <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;">
-    <a href="@Url.Action("Index")" style="color:var(--text-muted);text-decoration:none;">Tickets</a>
+    <a href="@Url.Action("Index")" style="color:var(--text-muted);text-decoration:none;">@Lang.T("tickets", lang)</a>
     <span style="margin:0 8px;">›</span>
-    <span style="color:var(--coral);font-weight:600;font-style:italic;">New Ticket</span>
+    <span style="color:var(--coral);font-weight:600;font-style:italic;">@Lang.T("create_new_ticket", lang)</span>
 </div>
 
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="card" style="padding:48px 40px;">
             <div class="text-center mb-4">
-                <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.8rem;color:var(--dark);">Create New Ticket</h2>
-                <p style="font-family:var(--font-serif);font-style:italic;color:var(--text-muted);font-size:0.95rem;">Submit your request and our nature-inspired support team will assist you shortly.</p>
+                <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.8rem;color:var(--dark);">@Lang.T("create_new_ticket", lang)</h2>
+                <p style="font-family:var(--font-serif);font-style:italic;color:var(--text-muted);font-size:0.95rem;">@(lang == "ar" ? "قدّم طلبك وسيقوم فريق الدعم بمساعدتك قريباً." : "Submit your request and our nature-inspired support team will assist you shortly.")</p>
             </div>
 
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
 
                 <div class="mb-4">
-                    <label asp-for="Title" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">Ticket Title</label>
-                    <input asp-for="Title" class="form-control" placeholder="Briefly describe the core issue" style="padding:14px 16px;" />
+                    <label asp-for="Title" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("title", lang)</label>
+                    <input asp-for="Title" class="form-control" placeholder="@Lang.T("ticket_title_ph", lang)" style="padding:14px 16px;" />
                     <span asp-validation-for="Title" class="text-danger" style="font-size:0.8rem;"></span>
                 </div>
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <label asp-for="CategoryId" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">Category</label>
+                        <label asp-for="CategoryId" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("category", lang)</label>
                         <select asp-for="CategoryId" class="form-select" style="padding:14px 16px;">
-                            <option value="">Select a category</option>
+                            <option value="">@Lang.T("select_category", lang)</option>
                             @if (categories != null)
                             {
                                 @foreach (var cat in categories)
@@ -44,43 +45,34 @@
                         <span asp-validation-for="CategoryId" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="Status" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">Priority Level</label>
+                        <label asp-for="Status" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("status", lang)</label>
                         <select asp-for="Status" class="form-select" style="padding:14px 16px;">
-                            <option value="Open">Open</option>
-                            <option value="InProgress">In Progress</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Open">@Lang.T("open", lang)</option>
+                            <option value="InProgress">@Lang.T("in_progress", lang)</option>
+                            <option value="Closed">@Lang.T("closed", lang)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="Description" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">Detailed Description</label>
-                    <textarea asp-for="Description" class="form-control" rows="6" placeholder="Provide as much detail as possible to help us resolve your issue faster..." style="resize:vertical;padding:14px 16px;"></textarea>
+                    <label asp-for="Description" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("description", lang)</label>
+                    <textarea asp-for="Description" class="form-control" rows="6" placeholder="@Lang.T("ticket_desc_ph", lang)" style="resize:vertical;padding:14px 16px;"></textarea>
                     <span asp-validation-for="Description" class="text-danger" style="font-size:0.8rem;"></span>
-                </div>
-
-                <!-- Decorative Upload Area -->
-                <div style="border:2px dashed var(--border);border-radius:var(--radius-lg);padding:32px;text-align:center;margin-bottom:32px;background:var(--cream);">
-                    <i class="bi bi-cloud-arrow-up" style="font-size:1.8rem;color:var(--green-mid);display:block;margin-bottom:8px;"></i>
-                    <div style="font-size:0.88rem;"><strong style="color:var(--coral);">Click to upload</strong> or drag and drop</div>
-                    <div style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">PNG, JPG OR PDF (MAX. 5MB)</div>
                 </div>
 
                 <hr style="border-color:var(--border-light);margin-bottom:24px;" />
 
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                    <a href="@Url.Action("Index")" style="color:var(--text-muted);font-weight:600;font-size:0.88rem;text-decoration:none;">Discard Draft</a>
+                    <a href="@Url.Action("Index")" style="color:var(--text-muted);font-weight:600;font-size:0.88rem;text-decoration:none;">@Lang.T("back_to_tickets", lang)</a>
                     <div class="d-flex gap-3">
-                        <button type="button" class="btn-outline-dark">Save as Draft</button>
                         <button type="submit" class="btn-coral" style="padding:12px 28px;">
-                            <i class="bi bi-send-fill me-1"></i> Create Ticket
+                            <i class="bi bi-send-fill me-1"></i> @Lang.T("submit", lang)
                         </button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Bottom Info Cards -->
         <div class="row g-4 mt-4">
             <div class="col-md-4">
                 <div class="d-flex align-items-start gap-3">
@@ -88,8 +80,8 @@
                         <i class="bi bi-stars"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">Smart Routing</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">Your ticket is automatically assigned to the best available expert.</div>
+                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "توجيه ذكي" : "Smart Routing")</div>
+                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "يتم تعيين تذكرتك تلقائياً لأفضل خبير متاح." : "Your ticket is automatically assigned to the best available expert.")</div>
                     </div>
                 </div>
             </div>
@@ -99,8 +91,8 @@
                         <i class="bi bi-clock-history"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">24h Response</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">We aim to respond to all standard inquiries within one business day.</div>
+                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "استجابة خلال 24 ساعة" : "24h Response")</div>
+                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "نهدف للرد على جميع الاستفسارات خلال يوم عمل واحد." : "We aim to respond to all standard inquiries within one business day.")</div>
                     </div>
                 </div>
             </div>
@@ -110,15 +102,11 @@
                         <i class="bi bi-shield-lock"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">Secure Handling</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">All data shared in this form is encrypted and strictly confidential.</div>
+                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "معالجة آمنة" : "Secure Handling")</div>
+                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "جميع البيانات المشاركة مشفرة وسرية تماماً." : "All data shared in this form is encrypted and strictly confidential.")</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="text-center mt-4" style="font-size:0.8rem;color:var(--text-light);">
-            © 2026 NatureDesk — Premium Support Solutions. Designed with nature in mind.
         </div>
     </div>
 </div>

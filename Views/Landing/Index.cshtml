@@ -1,39 +1,42 @@
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "NatureDesk - Customer Support, Naturally Refined";
     Layout = "_Layout";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
+    var isRtl = lang == "ar";
 }
 
-<!-- LANDING NAV -->
 <nav class="landing-nav">
     <a href="/" class="nav-brand">
         <img src="~/images/logo.png" alt="NatureDesk" style="width:36px;height:36px;border-radius:10px;object-fit:cover;" />
         <span class="nav-brand-text">NatureDesk</span>
     </a>
     <div class="d-flex align-items-center gap-3">
-        <a href="@Url.Action("Login", "Account")" class="btn-coral">Sign In</a>
+        <a href="@Url.Action("Switch", "Language", new { lang = isRtl ? "en" : "ar", returnUrl = "/" })" class="lang-toggle" title="@(isRtl ? "English" : "العربية")">
+            @(isRtl ? "EN" : "ع")
+        </a>
+        <a href="@Url.Action("Login", "Account")" class="btn-coral">@Lang.T("sign_in", lang)</a>
     </div>
 </nav>
 
-<!-- HERO -->
 <section class="landing-hero">
     <div class="landing-hero-inner">
         <div style="flex:1;">
             <div class="hero-badge">
-                <i class="bi bi-star-fill" style="font-size:0.65rem;"></i> TRUSTED BY 500+ PREMIUM BRANDS
+                <i class="bi bi-star-fill" style="font-size:0.65rem;"></i> @Lang.T("hero_badge", lang)
             </div>
             <h1 class="hero-title">
-                Customer support,<br>
-                <em>naturally refined.</em>
+                @Html.Raw(Lang.T("hero_title", lang))
             </h1>
             <p class="hero-desc">
-                An elegant ticketing ecosystem built for sophisticated teams who prioritize human connection over automated noise.
+                @Lang.T("hero_desc", lang)
             </p>
             <div class="d-flex gap-3 flex-wrap">
                 <a href="@Url.Action("Login", "Account")" class="btn-coral">
-                    <i class="bi bi-leaf me-1"></i> Elevate Your Desk
+                    <i class="bi bi-leaf me-1"></i> @Lang.T("elevate_desk", lang)
                 </a>
                 <a href="#features" class="btn-outline-dark">
-                    <i class="bi bi-play-circle me-1"></i> See the workflow
+                    <i class="bi bi-play-circle me-1"></i> @Lang.T("see_workflow", lang)
                 </a>
             </div>
         </div>
@@ -45,115 +48,111 @@
                     <div style="width:10px;height:10px;border-radius:50%;background:#22c55e;"></div>
                 </div>
                 <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:12px;">
-                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Active Ticket</div>
-                    <div style="font-family:var(--font-serif);font-size:1rem;font-weight:700;">Email server timeout</div>
-                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px;">Reported by Fatima Al-Zahra • 2h ago</div>
+                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">@Lang.T("active_ticket", lang)</div>
+                    <div style="font-family:var(--font-serif);font-size:1rem;font-weight:700;">@(lang == "ar" ? "انقطاع خادم البريد" : "Email server timeout")</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px;">@Lang.T("reported_by", lang) Fatima Al-Zahra • @(lang == "ar" ? "منذ ساعتين" : "2h ago")</div>
                 </div>
                 <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;">
-                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Response Time</div>
-                    <div style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;">1.4 min<span style="font-size:0.9rem;color:#22c55e;margin-left:8px;">↓ 23%</span></div>
+                    <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">@Lang.T("response_time", lang)</div>
+                    <div style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;">1.4 @(lang == "ar" ? "دقيقة" : "min")<span style="font-size:0.9rem;color:#22c55e;margin-left:8px;">↓ 23%</span></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- STATS BAR -->
 <div class="stats-bar">
     <div class="stats-bar-item">
         <div class="stats-bar-value">96%</div>
-        <div class="stats-bar-label">Resolution Rate</div>
+        <div class="stats-bar-label">@Lang.T("resolution_rate", lang)</div>
     </div>
     <div class="stats-bar-item">
         <div class="stats-bar-value" style="color:var(--coral);">4.9/5</div>
-        <div class="stats-bar-label">User Satisfaction</div>
+        <div class="stats-bar-label">@Lang.T("user_satisfaction", lang)</div>
     </div>
     <div class="stats-bar-item">
         <div class="stats-bar-value">92%</div>
-        <div class="stats-bar-label">SLA Compliance</div>
+        <div class="stats-bar-label">@Lang.T("sla_compliance", lang)</div>
     </div>
     <div class="stats-bar-item">
         <div class="stats-bar-value">50%</div>
-        <div class="stats-bar-label">Ticket Volume ↓</div>
+        <div class="stats-bar-label">@Lang.T("ticket_volume", lang)</div>
     </div>
 </div>
 
-<!-- FEATURES -->
 <section class="features-section" id="features">
-    <h2 class="features-title">Crafted for Excellence</h2>
-    <p class="features-subtitle">The intersection of organic efficiency and technological prowess.</p>
+    <h2 class="features-title">@Lang.T("crafted_excellence", lang)</h2>
+    <p class="features-subtitle">@Lang.T("features_subtitle", lang)</p>
 
     <div class="row g-4">
         <div class="col-md-4">
             <div class="feature-card">
                 <div class="feature-icon"><i class="bi bi-intersect"></i></div>
-                <h4>Unified Inflow</h4>
-                <p>Bring harmony to your channels — email, and live chat converged into a single, serene workspace.</p>
-                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
+                <h4>@Lang.T("unified_inflow", lang)</h4>
+                <p>@Lang.T("unified_desc", lang)</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">@Lang.T("learn_more", lang)</a>
             </div>
         </div>
         <div class="col-md-4">
             <div class="feature-card">
                 <div class="feature-icon"><i class="bi bi-cpu"></i></div>
-                <h4>Intelligent Roots</h4>
-                <p>Smart auto-suggestions that help your team provide the warmest, most accurate support responses.</p>
-                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
+                <h4>@Lang.T("intelligent_roots", lang)</h4>
+                <p>@Lang.T("intelligent_desc", lang)</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">@Lang.T("learn_more", lang)</a>
             </div>
         </div>
         <div class="col-md-4">
             <div class="feature-card">
                 <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
-                <h4>Organic Growth</h4>
-                <p>Deep analytics that reveal the health of your customer relations, not just the numbers in a database.</p>
-                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">Learn more →</a>
+                <h4>@Lang.T("organic_growth", lang)</h4>
+                <p>@Lang.T("organic_desc", lang)</p>
+                <a href="#" style="color:var(--dark);font-weight:600;font-size:0.85rem;text-decoration:none;margin-top:12px;display:inline-block;">@Lang.T("learn_more", lang)</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA -->
 <section class="cta-section">
-    <h2 class="cta-title" style="font-style:italic;">Ready to plant the seeds of<br>better support?</h2>
-    <p class="cta-desc">Join thousands of companies growing their customer loyalty with NatureDesk's premium ecosystem.</p>
+    <h2 class="cta-title" style="font-style:italic;">@Html.Raw(Lang.T("cta_title", lang))</h2>
+    <p class="cta-desc">@Lang.T("cta_desc", lang)</p>
     <div class="d-flex gap-3 justify-content-center flex-wrap">
-        <a href="@Url.Action("Login", "Account")" class="btn-coral" style="padding:14px 32px;">Get Started Free</a>
-        <a href="#" class="btn-outline-dark" style="padding:14px 32px;color:#fff;border-color:rgba(255,255,255,0.25);">Talk to Sales</a>
+        <a href="@Url.Action("Login", "Account")" class="btn-coral" style="padding:14px 32px;">@Lang.T("get_started", lang)</a>
+        <a href="#" class="btn-outline-dark" style="padding:14px 32px;color:#fff;border-color:rgba(255,255,255,0.25);">@Lang.T("talk_sales", lang)</a>
     </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="landing-footer">
     <div class="footer-col">
         <a href="/" class="nav-brand" style="margin-bottom:12px;">
             <img src="~/images/logo.png" alt="NatureDesk" style="width:36px;height:36px;border-radius:10px;object-fit:cover;" />
             <span class="nav-brand-text">NatureDesk</span>
         </a>
-        <p style="font-size:0.85rem;color:var(--text-muted);max-width:240px;margin-top:8px;">Redefining helpdesk standards through thoughtful design and organic efficiency.</p>
+        <p style="font-size:0.85rem;color:var(--text-muted);max-width:240px;margin-top:8px;">@Lang.T("footer_desc", lang)</p>
     </div>
     <div class="footer-col">
-        <h5>Product</h5>
-        <a href="#">Ticketing</a>
-        <a href="#">Automation</a>
-        <a href="#">Analytics</a>
+        <h5>@Lang.T("product", lang)</h5>
+        <a href="#">@Lang.T("ticketing", lang)</a>
+        <a href="#">@Lang.T("automation", lang)</a>
+        <a href="#">@Lang.T("analytics", lang)</a>
     </div>
     <div class="footer-col">
-        <h5>Company</h5>
-        <a href="#">About Us</a>
-        <a href="#">Our Story</a>
-        <a href="#">Careers</a>
+        <h5>@Lang.T("company", lang)</h5>
+        <a href="#">@Lang.T("about_us", lang)</a>
+        <a href="#">@Lang.T("our_story", lang)</a>
+        <a href="#">@Lang.T("careers", lang)</a>
     </div>
     <div class="footer-col">
-        <h5>Support</h5>
-        <a href="#">Help Center</a>
-        <a href="#">Documentation</a>
-        <a href="#">Contact</a>
+        <h5>@Lang.T("support", lang)</h5>
+        <a href="#">@Lang.T("help_center", lang)</a>
+        <a href="#">@Lang.T("documentation", lang)</a>
+        <a href="#">@Lang.T("contact", lang)</a>
     </div>
 </footer>
 
 <div class="footer-bottom">
-    <span>© 2026 NatureDesk Inc. All rights reserved.</span>
+    <span>@Lang.T("all_rights", lang)</span>
     <div class="d-flex gap-3">
-        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">Privacy Policy</a>
-        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">Terms of Service</a>
+        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">@Lang.T("privacy_policy", lang)</a>
+        <a href="#" style="color:var(--text-light);text-decoration:none;font-size:0.8rem;">@Lang.T("terms_of_service", lang)</a>
     </div>
 </div>

@@ -86,6 +86,66 @@ namespace HelpdeskApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult CreateAjax([FromForm] string fullName, [FromForm] string email, [FromForm] string password, [FromForm] bool isActive)
+        {
+            if (string.IsNullOrWhiteSpace(fullName))
+                return Json(new { success = false, error = "Full name is required." });
+            if (string.IsNullOrWhiteSpace(email))
+                return Json(new { success = false, error = "Email is required." });
+            if (string.IsNullOrWhiteSpace(password))
+                return Json(new { success = false, error = "Password is required." });
+            if (password.Length < 8)
+                return Json(new { success = false, error = "Password must be at least 8 characters." });
+
+            var regex = new System.Text.RegularExpressions.Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$");
+            if (!regex.IsMatch(password))
+                return Json(new { success = false, error = "Password must have uppercase, lowercase, number, and special character." });
+
+            using (SqlConnection conn = DbHelper.GetConnection())
+            {
+                conn.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email";
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@Email", email.Trim());
+                    int count = (int)checkCmd.ExecuteScalar();
+                    if (count > 0)
+                        return Json(new { success = false, error = "This email is already registered." });
+                }
+
+                string insertQuery = @"INSERT INTO Users (FullName, Email, PasswordHash, IsActive, CreatedDate)
+                                       OUTPUT INSERTED.Id
+                                       VALUES (@FullName, @Email, @PasswordHash, @IsActive, GETDATE())";
+
+                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@FullName", fullName.Trim());
+                    cmd.Parameters.AddWithValue("@Email", email.Trim());
+                    cmd.Parameters.AddWithValue("@PasswordHash", password);
+                    cmd.Parameters.AddWithValue("@IsActive", isActive);
+                    int newId = (int)cmd.ExecuteScalar();
+
+                    var parts = fullName.Trim().Split(' ');
+                    var initials = parts.Length >= 2
+                        ? parts[0].Substring(0, 1).ToUpper() + parts[^1].Substring(0, 1).ToUpper()
+                        : fullName.Trim().Substring(0, 1).ToUpper();
+
+                    return Json(new
+                    {
+                        success = true,
+                        id = newId,
+                        fullName = fullName.Trim(),
+                        email = email.Trim(),
+                        isActive = isActive,
+                        initials = initials
+                    });
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ToggleActive(int id)
         {
             using (SqlConnection conn = DbHelper.GetConnection())

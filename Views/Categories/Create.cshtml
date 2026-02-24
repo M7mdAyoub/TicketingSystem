@@ -1,14 +1,16 @@
 @model HelpdeskApp.Models.Category
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Create Category";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
         <div class="page-header">
             <div>
-                <h4 class="page-title">Create Category</h4>
-                <p class="page-subtitle">Add a new ticket category.</p>
+                <h4 class="page-title">@Lang.T("create_new_category", lang)</h4>
+                <p class="page-subtitle">@(lang == "ar" ? "إضافة فئة تذاكر جديدة." : "Add a new ticket category.")</p>
             </div>
         </div>
 
@@ -18,23 +20,23 @@
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
-                        <label asp-for="Name" class="form-label">Category Name</label>
-                        <input asp-for="Name" class="form-control" placeholder="e.g., Software, Hardware, Network" />
+                        <label asp-for="Name" class="form-label">@Lang.T("category_name", lang)</label>
+                        <input asp-for="Name" class="form-control" placeholder="@(lang == "ar" ? "مثال: برمجيات، أجهزة، شبكات" : "e.g., Software, Hardware, Network")" />
                         <span asp-validation-for="Name" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-4">
                         <div class="form-check form-switch">
                             <input asp-for="IsActive" class="form-check-input" role="switch" />
-                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">Active</label>
+                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
                         </div>
                     </div>
 
                     <div class="d-flex gap-3">
                         <button type="submit" class="btn-coral">
-                            <i class="bi bi-check-lg me-1"></i> Create Category
+                            <i class="bi bi-check-lg me-1"></i> @Lang.T("create_category", lang)
                         </button>
-                        <a href="@Url.Action("Index")" class="btn-outline-dark">Cancel</a>
+                        <a href="@Url.Action("Index")" class="btn-outline-dark">@Lang.T("back_to_categories", lang)</a>
                     </div>
                 </form>
             </div>

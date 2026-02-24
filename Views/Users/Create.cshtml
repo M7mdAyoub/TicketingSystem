@@ -1,14 +1,16 @@
 @model HelpdeskApp.Models.User
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Create User";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
 <div class="row justify-content-center">
     <div class="col-md-7 col-lg-6">
         <div class="page-header">
             <div>
-                <h4 class="page-title">Create User</h4>
-                <p class="page-subtitle">Add a new team member to the system.</p>
+                <h4 class="page-title">@Lang.T("create_new_user", lang)</h4>
+                <p class="page-subtitle">@(lang == "ar" ? "إضافة عضو جديد للفريق." : "Add a new team member to the system.")</p>
             </div>
         </div>
 
@@ -18,39 +20,39 @@
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
-                        <label asp-for="FullName" class="form-label">Full Name</label>
-                        <input asp-for="FullName" class="form-control" placeholder="e.g., Mohammad Ahmad" />
+                        <label asp-for="FullName" class="form-label">@Lang.T("full_name", lang)</label>
+                        <input asp-for="FullName" class="form-control" placeholder="@(lang == "ar" ? "مثال: محمد أحمد" : "e.g., Mohammad Ahmad")" />
                         <span asp-validation-for="FullName" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Email" class="form-label">Email</label>
+                        <label asp-for="Email" class="form-label">@Lang.T("email", lang)</label>
                         <input asp-for="Email" class="form-control" placeholder="user@@example.com" />
                         <span asp-validation-for="Email" class="text-danger" style="font-size:0.8rem;"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="PasswordHash" class="form-label">Password</label>
-                        <input asp-for="PasswordHash" class="form-control" type="password" placeholder="Min 8 chars, Aa1@@" />
+                        <label asp-for="PasswordHash" class="form-label">@Lang.T("password", lang)</label>
+                        <input asp-for="PasswordHash" class="form-control" type="password" placeholder="@(lang == "ar" ? "8 أحرف على الأقل" : "Min 8 chars, Aa1@@")" />
                         <span asp-validation-for="PasswordHash" class="text-danger" style="font-size:0.8rem;"></span>
                         <div style="margin-top:8px;padding:10px 14px;background:var(--green-pale);border-radius:8px;font-size:0.78rem;color:var(--green-dark);">
                             <i class="bi bi-shield-check me-1"></i>
-                            Requires: 8+ chars, uppercase, lowercase, number, special character
+                            @Lang.T("password_hint", lang)
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <div class="form-check form-switch">
                             <input asp-for="IsActive" class="form-check-input" role="switch" />
-                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">Active</label>
+                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
                         </div>
                     </div>
 
                     <div class="d-flex gap-3">
                         <button type="submit" class="btn-coral">
-                            <i class="bi bi-check-lg me-1"></i> Create User
+                            <i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)
                         </button>
-                        <a href="@Url.Action("Index")" class="btn-outline-dark">Cancel</a>
+                        <a href="@Url.Action("Index")" class="btn-outline-dark">@Lang.T("back_to_users", lang)</a>
                     </div>
                 </form>
             </div>

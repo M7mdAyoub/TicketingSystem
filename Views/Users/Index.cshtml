@@ -1,93 +1,260 @@
 @model List<HelpdeskApp.Models.User>
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Users";
+    var lang = Context.Request.Cookies["lang"] ?? "en";
+    var token = Html.AntiForgeryToken().ToString();
+    var tokenValue = System.Text.RegularExpressions.Regex.Match(token, "value=\"([^\"]+)\"").Groups[1].Value;
 }
 
 <div class="page-header">
     <div>
-        <h4 class="page-title">Organization Members</h4>
-        <p class="page-subtitle">Manage your organization's team members and their access status.</p>
+        <h4 class="page-title">@Lang.T("users", lang)</h4>
+        <p class="page-subtitle">@(lang == "ar" ? "إدارة أعضاء فريقك وحالة وصولهم." : "Manage your organization's team members and their access status.")</p>
     </div>
-    <a href="@Url.Action("Create")" class="btn-coral">
-        <i class="bi bi-person-plus me-1"></i> Add Member
-    </a>
+    <button type="button" class="btn-coral" onclick="openUserModal()">
+        <i class="bi bi-person-plus me-1"></i> @Lang.T("create_new_user", lang)
+    </button>
 </div>
 
-<!-- User Cards Grid -->
 @if (Model.Count == 0)
 {
-    <div class="card">
+    <div class="card" id="emptyUsers">
         <div class="empty-state">
             <i class="bi bi-people"></i>
-            <p>No users found yet.</p>
+            <p>@(lang == "ar" ? "لم يتم العثور على مستخدمين." : "No users found yet.")</p>
         </div>
     </div>
 }
-else
-{
-    <div class="row g-4">
-        @foreach (var user in Model)
-        {
-            <div class="col-md-6 col-lg-3">
-                <div class="card" style="text-align:center;padding:24px 20px;position:relative;">
-                    <!-- Active/Inactive Toggle -->
-                    <div style="position:absolute;top:12px;right:12px;">
-                        <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            @if (user.IsActive)
-                            {
-                                <button type="submit" style="background:var(--coral-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="Active — Click to deactivate">
-                                    <span style="font-size:0.65rem;font-weight:700;color:var(--coral);text-transform:uppercase;">Active</span>
-                                    <div style="width:28px;height:16px;background:var(--coral);border-radius:10px;position:relative;">
-                                        <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div>
-                                    </div>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" style="background:var(--border-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="Inactive — Click to activate">
-                                    <span style="font-size:0.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;">Inactive</span>
-                                    <div style="width:28px;height:16px;background:var(--text-light);border-radius:10px;position:relative;">
-                                        <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;"></div>
-                                    </div>
-                                </button>
-                            }
-                        </form>
-                    </div>
 
-                    <!-- Avatar -->
-                    <div style="margin:16px auto 16px;position:relative;width:80px;">
-                        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;margin:0 auto;box-shadow:0 4px 16px rgba(11,61,44,0.2);">
-                            @{
-                                var parts = user.FullName.Split(' ');
-                                var initials = parts.Length >= 2
-                                    ? parts[0].Substring(0,1).ToUpper() + parts[^1].Substring(0,1).ToUpper()
-                                    : user.FullName.Substring(0,1).ToUpper();
-                            }
-                            @initials
-                        </div>
+<div class="row g-4" id="usersGrid">
+    @foreach (var user in Model)
+    {
+        <div class="col-md-6 col-lg-3">
+            <div class="card" style="text-align:center;padding:24px 20px;position:relative;">
+                <div style="position:absolute;top:12px;@(lang == "ar" ? "left" : "right"):12px;">
+                    <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
                         @if (user.IsActive)
                         {
-                            <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;border:3px solid var(--white);position:absolute;bottom:2px;left:2px;"></div>
+                            <button type="submit" style="background:var(--coral-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="@Lang.T("active", lang)">
+                                <span style="font-size:0.65rem;font-weight:700;color:var(--coral);text-transform:uppercase;">@Lang.T("active", lang)</span>
+                                <div style="width:28px;height:16px;background:var(--coral);border-radius:10px;position:relative;">
+                                    <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div>
+                                </div>
+                            </button>
                         }
+                        else
+                        {
+                            <button type="submit" style="background:var(--border-light);border:none;padding:4px 8px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="@Lang.T("inactive", lang)">
+                                <span style="font-size:0.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;">@Lang.T("inactive", lang)</span>
+                                <div style="width:28px;height:16px;background:var(--text-light);border-radius:10px;position:relative;">
+                                    <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;"></div>
+                                </div>
+                            </button>
+                        }
+                    </form>
+                </div>
+
+                <div style="margin:16px auto 16px;position:relative;width:80px;">
+                    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;margin:0 auto;box-shadow:0 4px 16px rgba(11,61,44,0.2);">
+                        @{
+                            var parts = user.FullName.Split(' ');
+                            var initials = parts.Length >= 2
+                                ? parts[0].Substring(0,1).ToUpper() + parts[^1].Substring(0,1).ToUpper()
+                                : user.FullName.Substring(0,1).ToUpper();
+                        }
+                        @initials
                     </div>
+                    @if (user.IsActive)
+                    {
+                        <div style="width:14px;height:14px;border-radius:50%;background:#22c55e;border:3px solid var(--white);position:absolute;bottom:2px;left:2px;"></div>
+                    }
+                </div>
 
-                    <!-- Name & Info -->
-                    <h5 style="font-family:var(--font-serif);font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:2px;">@user.FullName</h5>
-                    <div style="font-size:0.78rem;color:var(--coral);font-weight:600;font-style:italic;margin-bottom:4px;">Team Member</div>
-                    <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:16px;">@user.Email</div>
+                <h5 style="font-family:var(--font-serif);font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:2px;">@user.FullName</h5>
+                <div style="font-size:0.78rem;color:var(--coral);font-weight:600;font-style:italic;margin-bottom:4px;">@(lang == "ar" ? "عضو في الفريق" : "Team Member")</div>
+                <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:16px;">@user.Email</div>
 
-                    <!-- Action Buttons -->
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="mailto:@user.Email" style="width:36px;height:36px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);text-decoration:none;transition:all 0.2s ease;" title="Send Email">
-                            <i class="bi bi-envelope"></i>
-                        </a>
-                        <div style="width:36px;height:36px;border-radius:10px;background:var(--border-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;" title="More Options">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </div>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="mailto:@user.Email" style="width:36px;height:36px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);text-decoration:none;transition:all 0.2s ease;" title="@Lang.T("email", lang)">
+                        <i class="bi bi-envelope"></i>
+                    </a>
+                    <div style="width:36px;height:36px;border-radius:10px;background:var(--border-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;" title="@(lang == "ar" ? "خيارات أخرى" : "More Options")">
+                        <i class="bi bi-three-dots-vertical"></i>
                     </div>
                 </div>
             </div>
-        }
+        </div>
+    }
+</div>
+
+
+<div id="userModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;backdrop-filter:blur(4px);transition:opacity 0.3s ease;" onclick="if(event.target===this)closeUserModal()">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--white);border-radius:var(--radius-xl);padding:36px;width:100%;max-width:500px;box-shadow:var(--shadow-lg);animation:modalIn 0.3s ease;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <h3 style="font-family:var(--font-serif);font-weight:800;font-size:1.3rem;color:var(--dark);margin:0;">@Lang.T("create_new_user", lang)</h3>
+            <button onclick="closeUserModal()" style="background:none;border:none;font-size:1.3rem;color:var(--text-light);cursor:pointer;padding:4px;">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div id="userModalError" style="display:none;padding:10px 16px;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);color:#dc2626;font-size:0.85rem;margin-bottom:16px;">
+        </div>
+
+        <form id="userForm" onsubmit="submitUser(event)">
+            <div class="mb-3">
+                <label class="form-label">@Lang.T("full_name", lang)</label>
+                <input type="text" id="userFullName" class="form-control" placeholder="@(lang == "ar" ? "مثال: محمد أحمد" : "e.g., Mohammad Ahmad")" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@Lang.T("email", lang)</label>
+                <input type="email" id="userEmail" class="form-control" placeholder="user@@example.com" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@Lang.T("password", lang)</label>
+                <input type="password" id="userPassword" class="form-control" placeholder="@(lang == "ar" ? "8 أحرف على الأقل" : "Min 8 chars, Aa1@@")" required />
+                <div style="margin-top:8px;padding:10px 14px;background:var(--green-pale);border-radius:8px;font-size:0.78rem;color:var(--green-dark);">
+                    <i class="bi bi-shield-check me-1"></i>
+                    @Lang.T("password_hint", lang)
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-check form-switch">
+                    <input type="checkbox" id="userIsActive" class="form-check-input" role="switch" checked />
+                    <label class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn-coral" id="userSubmitBtn">
+                    <i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)
+                </button>
+                <button type="button" class="btn-outline-dark" onclick="closeUserModal()">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+            </div>
+        </form>
     </div>
-}
+</div>
+
+<style>
+    @@keyframes modalIn {
+        from { opacity: 0; transform: translate(-50%, -48%); }
+        to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+</style>
+
+<script>
+    var userToken = '@tokenValue';
+    var activeTxt = '@Lang.T("active", lang)';
+    var inactiveTxt = '@Lang.T("inactive", lang)';
+    var teamTxt = '@(lang == "ar" ? "عضو في الفريق" : "Team Member")';
+    var emailTip = '@Lang.T("email", lang)';
+    var moreTip = '@(lang == "ar" ? "خيارات أخرى" : "More Options")';
+    var currentLang = '@lang';
+
+    function openUserModal() {
+        document.getElementById('userModal').style.display = 'block';
+        document.getElementById('userFullName').value = '';
+        document.getElementById('userEmail').value = '';
+        document.getElementById('userPassword').value = '';
+        document.getElementById('userIsActive').checked = true;
+        document.getElementById('userModalError').style.display = 'none';
+        setTimeout(function() { document.getElementById('userFullName').focus(); }, 100);
+    }
+
+    function closeUserModal() {
+        document.getElementById('userModal').style.display = 'none';
+    }
+
+    function submitUser(e) {
+        e.preventDefault();
+        var btn = document.getElementById('userSubmitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> ...';
+        document.getElementById('userModalError').style.display = 'none';
+
+        var formData = new FormData();
+        formData.append('fullName', document.getElementById('userFullName').value);
+        formData.append('email', document.getElementById('userEmail').value);
+        formData.append('password', document.getElementById('userPassword').value);
+        formData.append('isActive', document.getElementById('userIsActive').checked);
+        formData.append('__RequestVerificationToken', userToken);
+
+        fetch('@Url.Action("CreateAjax", "Users")', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    var emptyDiv = document.getElementById('emptyUsers');
+                    if (emptyDiv) emptyDiv.remove();
+
+                    var grid = document.getElementById('usersGrid');
+                    var col = document.createElement('div');
+                    col.className = 'col-md-6 col-lg-3';
+                    col.style.animation = 'modalIn 0.4s ease';
+
+                    var statusSide = currentLang === 'ar' ? 'left' : 'right';
+                    var statusHtml = data.isActive
+                        ? `<div style="position:absolute;top:12px;${statusSide}:12px;">
+                             <span style="background:var(--coral-light);padding:4px 8px;border-radius:20px;display:flex;align-items:center;gap:4px;">
+                               <span style="font-size:0.65rem;font-weight:700;color:var(--coral);text-transform:uppercase;">${activeTxt}</span>
+                               <div style="width:28px;height:16px;background:var(--coral);border-radius:10px;position:relative;">
+                                 <div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div>
+                               </div>
+                             </span>
+                           </div>`
+                        : `<div style="position:absolute;top:12px;${statusSide}:12px;">
+                             <span style="background:var(--border-light);padding:4px 8px;border-radius:20px;display:flex;align-items:center;gap:4px;">
+                               <span style="font-size:0.65rem;font-weight:700;color:var(--text-light);text-transform:uppercase;">${inactiveTxt}</span>
+                             </span>
+                           </div>`;
+
+                    var onlineDot = data.isActive
+                        ? '<div style="width:14px;height:14px;border-radius:50%;background:#22c55e;border:3px solid var(--white);position:absolute;bottom:2px;left:2px;"></div>'
+                        : '';
+
+                    col.innerHTML = `
+                        <div class="card" style="text-align:center;padding:24px 20px;position:relative;">
+                            ${statusHtml}
+                            <div style="margin:16px auto 16px;position:relative;width:80px;">
+                                <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.4rem;margin:0 auto;box-shadow:0 4px 16px rgba(11,61,44,0.2);">
+                                    ${data.initials}
+                                </div>
+                                ${onlineDot}
+                            </div>
+                            <h5 style="font-family:var(--font-serif);font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:2px;">${data.fullName}</h5>
+                            <div style="font-size:0.78rem;color:var(--coral);font-weight:600;font-style:italic;margin-bottom:4px;">${teamTxt}</div>
+                            <div style="font-size:0.78rem;color:var(--text-light);margin-bottom:16px;">${data.email}</div>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="mailto:${data.email}" style="width:36px;height:36px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);text-decoration:none;" title="${emailTip}">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                                <div style="width:36px;height:36px;border-radius:10px;background:var(--border-light);display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;" title="${moreTip}">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(col);
+                    closeUserModal();
+                } else {
+                    document.getElementById('userModalError').textContent = data.error;
+                    document.getElementById('userModalError').style.display = 'block';
+                }
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)';
+            })
+            .catch(() => {
+                document.getElementById('userModalError').textContent = 'Network error.';
+                document.getElementById('userModalError').style.display = 'block';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)';
+            });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeUserModal();
+    });
+</script>
