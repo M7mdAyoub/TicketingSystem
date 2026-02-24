@@ -22,14 +22,9 @@
 
         <div class="d-flex align-items-center gap-3 mb-4">
             <div class="ui-st-206e94" >
-                @{
-                    var dParts = Model.CreatedByName?.Split(' ') ?? new[] { "U" };
-                    var dInit = dParts.Length >= 2
-                        ? dParts[0].Substring(0,1).ToUpper() + dParts[^1].Substring(0,1).ToUpper()
-                        : (Model.CreatedByName ?? "U").Substring(0,1).ToUpper();
-                }
-                @dInit
+                @Model.CreatedByInitials
             </div>
+
             <div>
                 <span class="ui-st-1e8514" >@Lang.T("reported_by", lang) </span>
                 <strong class="ui-st-6206b4" >@Model.CreatedByName</strong>
@@ -59,14 +54,9 @@
                             @if (!isCurrentUser)
                             {
                                 <div class="ui-st-dad2fe" >
-                                    @{
-                                        var cParts = comment.CreatedByName?.Split(' ') ?? new[] { "U" };
-                                        var cInit = cParts.Length >= 2
-                                            ? cParts[0].Substring(0,1).ToUpper() + cParts[^1].Substring(0,1).ToUpper()
-                                            : (comment.CreatedByName ?? "U").Substring(0,1).ToUpper();
-                                    }
-                                    @cInit
+                                    @comment.Initials
                                 </div>
+
                             }
                             <div class="comment-bubble @(isCurrentUser ? "right" : "left")">
                                 <div class="comment-author ui-st-25aea1" >@comment.CreatedByName</div>
@@ -76,14 +66,9 @@
                             @if (isCurrentUser)
                             {
                                 <div class="ui-st-1fdb36" >
-                                    @{
-                                        var mParts = comment.CreatedByName?.Split(' ') ?? new[] { "U" };
-                                        var mInit = mParts.Length >= 2
-                                            ? mParts[0].Substring(0,1).ToUpper() + mParts[^1].Substring(0,1).ToUpper()
-                                            : (comment.CreatedByName ?? "U").Substring(0,1).ToUpper();
-                                    }
-                                    @mInit
+                                    @comment.Initials
                                 </div>
+
                             }
                         </div>
                     }

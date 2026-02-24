@@ -36,5 +36,18 @@ namespace HelpdeskApp.Models
         public string? CreatedByName { get; set; }
 
         public List<TicketComment>? Comments { get; set; }
+
+        public string CreatedByInitials
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(CreatedByName)) return "U";
+                var parts = CreatedByName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2)
+                    return (parts[0][0].ToString() + parts[^1][0].ToString()).ToUpper();
+                return CreatedByName.Substring(0, 1).ToUpper();
+            }
+        }
     }
 }
+

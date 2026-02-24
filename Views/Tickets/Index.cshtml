@@ -93,14 +93,9 @@ else
                     <div class="ticket-card-footer ui-st-ae304b" >
                         <div class="d-flex align-items-center gap-2">
                             <div class="ui-st-e535dd" >
-                                @{
-                                    var tParts = ticket.CreatedByName?.Split(' ') ?? new[] { "U" };
-                                    var tInit = tParts.Length >= 2
-                                        ? tParts[0].Substring(0,1).ToUpper() + tParts[^1].Substring(0,1).ToUpper()
-                                        : (ticket.CreatedByName ?? "U").Substring(0,1).ToUpper();
-                                }
-                                @tInit
+                                @ticket.CreatedByInitials
                             </div>
+
                             <span class="ui-st-5384c2" >@(ticket.CreatedByName?.Split(' ')[0]) @(ticket.CreatedByName?.Split(' ').Length > 1 ? ticket.CreatedByName.Split(' ')[^1].Substring(0,1) + "." : "")</span>
                         </div>
                         <span class="ui-st-45df8c" >@ticket.CreatedDate.ToString("MMM dd")</span>

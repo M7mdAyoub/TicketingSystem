@@ -1,28 +1,8 @@
-﻿@using HelpdeskApp.Data
+﻿@model HelpdeskApp.Models.DashboardViewModel
+@using HelpdeskApp.Data
 @{
     ViewData["Title"] = "Dashboard";
     var lang = Context.Request.Cookies["lang"] ?? "en";
-
-    int totalTickets = ViewBag.TotalTickets ?? 0;
-    int openCount = ViewBag.OpenCount ?? 0;
-    int inProgressCount = ViewBag.InProgressCount ?? 0;
-    int closedCount = ViewBag.ClosedCount ?? 0;
-    int totalUsers = ViewBag.TotalUsers ?? 0;
-    int totalCategories = ViewBag.TotalCategories ?? 0;
-    var recentTickets = ViewBag.RecentTickets as List<dynamic> ?? new List<dynamic>();
-
-    double openPct = totalTickets > 0 ? Math.Round((double)openCount / totalTickets * 100, 1) : 0;
-    double inProgressPct = totalTickets > 0 ? Math.Round((double)inProgressCount / totalTickets * 100, 1) : 0;
-    double closedPct = totalTickets > 0 ? Math.Round((double)closedCount / totalTickets * 100, 1) : 0;
-
-    // SVG donut calculations (circumference = 2 * PI * 60 ≈ 377)
-    double circumference = 377;
-    double closedArc = circumference * closedPct / 100;
-    double inProgressArc = circumference * inProgressPct / 100;
-    double openArc = circumference * openPct / 100;
-    double closedOffset = 0;
-    double inProgressOffset = -closedArc;
-    double openOffset = -(closedArc + inProgressArc);
 }
 
 <div class="page-header">
@@ -43,7 +23,7 @@
                 <i class="bi bi-ticket-detailed-fill"></i>
             </div>
             <div>
-                <div class="stat-value">@totalTickets</div>
+                <div class="stat-value">@Model.TotalTickets</div>
                 <div class="stat-label">@Lang.T("total_tickets", lang)</div>
             </div>
         </div>
@@ -54,34 +34,34 @@
                 <i class="bi bi-exclamation-circle-fill"></i>
             </div>
             <div>
-                <div class="stat-value">@openCount</div>
+                <div class="stat-value">@Model.OpenCount</div>
                 <div class="stat-label">@Lang.T("open", lang)</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card">
-            <div class="stat-icon ui-st-2303ca" >
-                <i class="bi bi-people-fill"></i>
-            </div>
-            <div>
-                <div class="stat-value">@totalUsers</div>
-                <div class="stat-label">@Lang.T("users", lang)</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card">
-            <div class="stat-icon ui-st-42dcc0" >
-                <i class="bi bi-collection-fill"></i>
-            </div>
-            <div>
-                <div class="stat-value">@totalCategories</div>
-                <div class="stat-label">@Lang.T("categories", lang)</div>
-            </div>
-        </div>
-    </div>
-</div>
++            </div>
++        </div>
++    </div>
++    <div class="col-md-3">
++        <div class="stat-card">
++            <div class="stat-icon ui-st-2303ca" >
++                <i class="bi bi-people-fill"></i>
++            </div>
++            <div>
++                <div class="stat-value">@Model.TotalUsers</div>
++                <div class="stat-label">@Lang.T("users", lang)</div>
++            </div>
++        </div>
++    </div>
++    <div class="col-md-3">
++        <div class="stat-card">
++            <div class="stat-icon ui-st-42dcc0" >
++                <i class="bi bi-collection-fill"></i>
++            </div>
++            <div>
++                <div class="stat-value">@Model.TotalCategories</div>
++                <div class="stat-label">@Lang.T("categories", lang)</div>
++            </div>
++        </div>
++    </div>
++</div>
 
 
 <div class="row g-4 mb-4">
@@ -90,132 +70,122 @@
             <div class="card-header">
                 <i class="bi bi-pie-chart-fill ui-st-bc7c44" ></i>
                 <span>@Lang.T("ticket_status", lang)</span>
-            </div>
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-5 text-center">
-                        <svg width="160" height="160" viewBox="0 0 160 160">
-                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border-light)" stroke-width="20"/>
-                            @if (totalTickets > 0)
-                            {
-                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--green-mid)" stroke-width="20"
-                                        stroke-dasharray="@closedArc @(circumference - closedArc)" stroke-dashoffset="@closedOffset" transform="rotate(-90 80 80)"/>
-                                <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20"
-                                        stroke-dasharray="@inProgressArc @(circumference - inProgressArc)" stroke-dashoffset="@inProgressOffset" transform="rotate(-90 80 80)"/>
-                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
-                                        stroke-dasharray="@openArc @(circumference - openArc)" stroke-dashoffset="@openOffset" transform="rotate(-90 80 80)"/>
-                            }
-                            <text class="ui-st-e6d3b9" x="80" y="72" text-anchor="middle" >@totalTickets</text>
-                            <text class="ui-st-88c0cd" x="80" y="95" text-anchor="middle" >@(lang == "ar" ? "المجموع" : "TOTAL")</text>
-                        </svg>
-                    </div>
-                    <div class="col-7">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="ui-st-9220b3" ></div>
-                            <div class="ui-st-d5e8c5" >
-                                <div class="ui-st-5ada67" ><span>@Lang.T("closed", lang)</span><span>@closedCount (@closedPct%)</span></div>
-                                <div class="ui-st-cdd888"><div class="progress-bar-closed w-@(Math.Round(closedPct))"></div></div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="ui-st-f6af85" ></div>
-                            <div class="ui-st-d5e8c5" >
-                                <div class="ui-st-5ada67" ><span>@Lang.T("in_progress", lang)</span><span>@inProgressCount (@inProgressPct%)</span></div>
-                                <div class="ui-st-cdd888"><div class="progress-bar-inprogress w-@(Math.Round(inProgressPct))"></div></div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="ui-st-5d4f6b" ></div>
-                            <div class="ui-st-d5e8c5" >
-                                <div class="ui-st-5ada67" ><span>@Lang.T("open", lang)</span><span>@openCount (@openPct%)</span></div>
-                                <div class="ui-st-cdd888"><div class="progress-bar-open w-@(Math.Round(openPct))"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row g-4 mt-1">
-            <div class="col-6">
-                <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none quick-action-card ui-st-381285" >
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-ticket-detailed ui-st-dbf5ef" ></i>
-                        <div class="ui-st-3d9d18" >@Lang.T("tickets", lang)</div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none quick-action-card ui-st-aab0cb" >
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-collection ui-st-55b323" ></i>
-                        <div class="ui-st-3d9d18" >@Lang.T("categories", lang)</div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Index", "Users")" class="card text-decoration-none quick-action-card ui-st-5a4c70" >
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-people ui-st-ee0ea5" ></i>
-                        <div class="ui-st-3d9d18" >@Lang.T("users", lang)</div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none quick-action-card ui-st-8fc746" >
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-chat-dots ui-st-9c4d68" ></i>
-                        <div class="ui-st-3d9d18" >@Lang.T("create_ticket", lang)</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-5">
-        <div class="card" >
-            <div class="card-header">
-                <i class="bi bi-lightning-fill ui-st-953f8f" ></i>
-                <span>@Lang.T("recent_activity", lang)</span>
-            </div>
-            <div class="card-body ui-st-4845c9" >
-                @if (recentTickets.Count == 0)
-                {
-                    <div class="empty-state ui-st-b2fca5" >
-                        <i class="bi bi-inbox ui-st-ba2c5c" ></i>
-                        <p>@(lang == "ar" ? "لا يوجد نشاط بعد." : "No activity yet.")</p>
-                    </div>
-                }
-                else
-                {
-                    @for (int i = 0; i < recentTickets.Count; i++)
-                    {
-                        var ticket = recentTickets[i];
-                        string dotClass = ticket.Status == "Closed" ? "dot-closed" : ticket.Status == "InProgress" ? "dot-inprogress" : "dot-open";
-                        string statusText = ticket.Status == "Closed" ? Lang.T("closed", lang) :
-                                            ticket.Status == "InProgress" ? Lang.T("in_progress", lang) :
-                                            Lang.T("open", lang);
-                        var timeAgo = DateTime.Now - (DateTime)ticket.CreatedDate;
-                        string timeText;
-                        if (timeAgo.TotalMinutes < 60)
-                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalMinutes} دقيقة" : $"{(int)timeAgo.TotalMinutes}m ago";
-                        else if (timeAgo.TotalHours < 24)
-                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalHours} ساعة" : $"{(int)timeAgo.TotalHours}h ago";
-                        else
-                            timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalDays} يوم" : $"{(int)timeAgo.TotalDays}d ago";
++            </div>
++            <div class="card-body">
++                <div class="row align-items-center">
++                    <div class="col-5 text-center">
++                        <svg width="160" height="160" viewBox="0 0 160 160">
++                            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--border-light)" stroke-width="20"/>
++                            @if (Model.TotalTickets > 0)
++                            {
++                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--green-mid)" stroke-width="20"
++                                        stroke-dasharray="@Model.ClosedArc @(Model.Circumference - Model.ClosedArc)" stroke-dashoffset="@Model.ClosedOffset" transform="rotate(-90 80 80)"/>
++                                <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20"
++                                        stroke-dasharray="@Model.InProgressArc @(Model.Circumference - Model.InProgressArc)" stroke-dashoffset="@Model.InProgressOffset" transform="rotate(-90 80 80)"/>
++                                <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
++                                        stroke-dasharray="@Model.OpenArc @(Model.Circumference - Model.OpenArc)" stroke-dashoffset="@Model.OpenOffset" transform="rotate(-90 80 80)"/>
++                            }
++                            <text class="ui-st-e6d3b9" x="80" y="72" text-anchor="middle" >@Model.TotalTickets</text>
++                            <text class="ui-st-88c0cd" x="80" y="95" text-anchor="middle" >@(lang == "ar" ? "المجموع" : "TOTAL")</text>
++                        </svg>
++                    </div>
++                    <div class="col-7">
++                        <div class="d-flex align-items-center gap-3 mb-3">
++                            <div class="ui-st-9220b3" ></div>
++                            <div class="ui-st-d5e8c5" >
++                                <div class="ui-st-5ada67" ><span>@Lang.T("closed", lang)</span><span>@Model.ClosedCount (@Model.ClosedPct%)</span></div>
++                                <div class="ui-st-cdd888"><div class="progress-bar-closed" style="width: @Model.ClosedPct%;"></div></div>
++                            </div>
++                        </div>
++                        <div class="d-flex align-items-center gap-3 mb-3">
++                            <div class="ui-st-f6af85" ></div>
++                            <div class="ui-st-d5e8c5" >
++                                <div class="ui-st-5ada67" ><span>@Lang.T("in_progress", lang)</span><span>@Model.InProgressCount (@Model.InProgressPct%)</span></div>
++                                <div class="ui-st-cdd888"><div class="progress-bar-inprogress" style="width: @Model.InProgressPct%;"></div></div>
++                            </div>
++                        </div>
++                        <div class="d-flex align-items-center gap-3">
++                            <div class="ui-st-5d4f6b" ></div>
++                            <div class="ui-st-d5e8c5" >
++                                <div class="ui-st-5ada67" ><span>@Lang.T("open", lang)</span><span>@Model.OpenCount (@Model.OpenPct%)</span></div>
++                                <div class="ui-st-cdd888"><div class="progress-bar-open" style="width: @Model.OpenPct%;"></div></div>
++                            </div>
++                        </div>
++                    </div>
++                </div>
++            </div>
++        </div>
++        <div class="row g-4 mt-1">
++            <div class="col-6">
++                <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none quick-action-card ui-st-381285" >
++                    <div class="card-body text-center py-4">
++                        <i class="bi bi-ticket-detailed ui-st-dbf5ef" ></i>
++                        <div class="ui-st-3d9d18" >@Lang.T("tickets", lang)</div>
++                    </div>
++                </a>
++            </div>
++            <div class="col-6">
++                <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none quick-action-card ui-st-aab0cb" >
++                    <div class="card-body text-center py-4">
++                        <i class="bi bi-collection ui-st-55b323" ></i>
++                        <div class="ui-st-3d9d18" >@Lang.T("categories", lang)</div>
++                    </div>
++                </a>
++            </div>
++            <div class="col-6">
++                <a href="@Url.Action("Index", "Users")" class="card text-decoration-none quick-action-card ui-st-5a4c70" >
++                    <div class="card-body text-center py-4">
++                        <i class="bi bi-people ui-st-ee0ea5" ></i>
++                        <div class="ui-st-3d9d18" >@Lang.T("users", lang)</div>
++                    </div>
++                </a>
++            </div>
++            <div class="col-6">
++                <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none quick-action-card ui-st-8fc746" >
++                    <div class="card-body text-center py-4">
++                        <i class="bi bi-chat-dots ui-st-9c4d68" ></i>
++                        <div class="ui-st-3d9d18" >@Lang.T("create_ticket", lang)</div>
++                    </div>
++                </a>
++            </div>
++        </div>
++    </div>
++    <div class="col-lg-5">
++        <div class="card" >
++            <div class="card-header">
++                <i class="bi bi-lightning-fill ui-st-953f8f" ></i>
++                <span>@Lang.T("recent_activity", lang)</span>
++            </div>
++            <div class="card-body ui-st-4845c9" >
++                @if (Model.RecentActivity.Count == 0)
++                {
++                    <div class="empty-state ui-st-b2fca5" >
++                        <i class="bi bi-inbox ui-st-ba2c5c" ></i>
++                        <p>@(lang == "ar" ? "لا يوجد نشاط بعد." : "No activity yet.")</p>
++                    </div>
++                }
++                else
++                {
++                    @for (int i = 0; i < Model.RecentActivity.Count; i++)
++                    {
++                        var item = Model.RecentActivity[i];
++                        string statusText = lang == "ar" ? item.StatusTextAr : item.StatusTextEn;
++                        string timeText = lang == "ar" ? item.TimeAgoAr : item.TimeAgoEn;
 
-                        bool isLast = i == recentTickets.Count - 1;
+                        bool isLast = i == Model.RecentActivity.Count - 1;
                         <div class="d-flex gap-3 @(isLast ? "" : "mb-3 pb-3 timeline-border")">
-                            <div class="timeline-dot @dotClass"></div>
+                            <div class="timeline-dot @item.DotClass"></div>
                             <div>
                                 <div class="ui-st-7df75a" >
-                                    <strong class="ui-st-c053b6" >@ticket.CreatedByName</strong>
+                                    <strong class="ui-st-c053b6" >@item.CreatedByName</strong>
                                     <span class="ui-st-697a24" >—</span>
-                                    <a class="ui-st-278047" href="@Url.Action("Details", "Tickets", new { id = ticket.Id })" >#TK-@ticket.Id</a>
+                                    <a class="ui-st-278047" href="@Url.Action("Details", "Tickets", new { id = item.Id })" >#TK-@item.Id</a>
                                 </div>
                                 <div class="ui-st-24206e" >
-                                    @(ticket.Title.Length > 40 ? ((string)ticket.Title).Substring(0, 40) + "..." : ticket.Title)
+                                    @(item.Title.Length > 40 ? item.Title.Substring(0, 40) + "..." : item.Title)
                                 </div>
                                 <div class="ui-st-aafcdf" >
-                                    <span class="badge-status @(ticket.Status == "Open" ? "badge-open" : ticket.Status == "InProgress" ? "badge-inprogress" : "badge-resolved")" >@statusText</span>
+                                    <span class="badge-status @item.StatusBadgeClass" >@statusText</span>
                                     <span class="ui-st-dace2f" >@timeText</span>
                                 </div>
                             </div>
@@ -231,3 +201,4 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/home.css" />
 }
+

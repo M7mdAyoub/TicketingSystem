@@ -47,14 +47,9 @@
 
                 <div class="ui-st-3cee86" >
                     <div class="ui-st-79535c" >
-                        @{
-                            var parts = user.FullName.Split(' ');
-                            var initials = parts.Length >= 2
-                                ? parts[0].Substring(0,1).ToUpper() + parts[^1].Substring(0,1).ToUpper()
-                                : user.FullName.Substring(0,1).ToUpper();
-                        }
-                        @initials
+                        @user.Initials
                     </div>
+
                     @if (user.IsActive)
                     {
                         <div class="ui-st-4c1056" ></div>

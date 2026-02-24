@@ -28,5 +28,18 @@ namespace HelpdeskApp.Models
 
         [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        public string Initials
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(FullName)) return "U";
+                var parts = FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2)
+                    return (parts[0][0].ToString() + parts[^1][0].ToString()).ToUpper();
+                return FullName.Substring(0, 1).ToUpper();
+            }
+        }
     }
 }
+
