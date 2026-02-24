@@ -12,10 +12,11 @@
         <h4 class="page-title">@Lang.T("users", lang)</h4>
         <p class="page-subtitle">@(lang == "ar" ? "إدارة أعضاء فريقك وحالة وصولهم." : "Manage your organization's team members and their access status.")</p>
     </div>
-    <button type="button" class="btn-coral" onclick="openUserModal()">
+    <button type="button" class="btn-coral" id="openUserModalBtn">
         <i class="bi bi-person-plus me-1"></i> @Lang.T("create_new_user", lang)
     </button>
 </div>
+
 
 @if (Model.Count == 0)
 {
@@ -33,10 +34,16 @@
         <div class="col-md-6 col-lg-3">
             <div class="card ui-st-2de8ef" >
                 <div class="user-status-badge badge-pos-@lang">
-                    <div class="ui-st-5f46a9" style="cursor: pointer;" onclick="openEditUserModal('@user.Id', '@user.FullName.Replace("'", "\\'")', '@user.Email', @user.IsActive.ToString().ToLower())" title="@(lang == "ar" ? "تعديل" : "Edit")">
+                    <div class="ui-st-5f46a9 cursor-pointer edit-user-trigger" 
+                         data-id="@user.Id" 
+                         data-fullname="@user.FullName.Replace("'", "\\'")" 
+                         data-email="@user.Email" 
+                         data-active="@user.IsActive.ToString().ToLower()" 
+                         title="@(lang == "ar" ? "تعديل" : "Edit")">
                         <i class="bi bi-three-dots"></i>
                     </div>
                 </div>
+
 
                 <div class="ui-st-3cee86" >
                     <div class="ui-st-79535c" >
@@ -87,11 +94,13 @@
 </div>
 
 
-<div class="ui-st-fed104" id="userModal"  onclick="if(event.target===this)closeUserModal()">
+<div class="ui-st-fed104 modal-overlay-trigger" id="userModal">
+
     <div class="ui-st-0a26e7" >
         <div class="ui-st-87d288" >
             <h3 class="ui-st-dcc926" >@Lang.T("create_new_user", lang)</h3>
-            <button class="ui-st-5a2acb" onclick="closeUserModal()" >
+            <button class="ui-st-5a2acb close-user-modal-btn">
+
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -130,17 +139,19 @@
                 <button type="submit" class="btn-coral" id="userSubmitBtn">
                     <i class="bi bi-check-lg me-1"></i> @Lang.T("create_user", lang)
                 </button>
-                <button type="button" class="btn-outline-dark" onclick="closeUserModal()">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+                <button type="button" class="btn-outline-dark close-user-modal-btn">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+
             </div>
         </form>
     </div>
 </div>
 <!-- Edit User Modal -->
-<div class="ui-st-fed104" id="editUserModal" onclick="if(event.target===this)closeEditUserModal()">
+<div class="ui-st-fed104 modal-overlay-trigger" id="editUserModal">
     <div class="ui-st-0a26e7">
         <div class="ui-st-87d288">
             <h3 class="ui-st-dcc926">@(lang == "ar" ? "تعديل المستخدم" : "Edit User")</h3>
-            <button class="ui-st-5a2acb" onclick="closeEditUserModal()">
+            <button class="ui-st-5a2acb close-edit-user-modal-btn">
+
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -165,7 +176,8 @@
                 <button type="submit" class="btn-coral" id="editUserSubmitBtn">
                     <i class="bi bi-check-lg me-1"></i> @(lang == "ar" ? "حفظ التغييرات" : "Save Changes")
                 </button>
-                <button type="button" class="btn-outline-dark" onclick="closeEditUserModal()">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+                <button type="button" class="btn-outline-dark close-edit-user-modal-btn">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+
             </div>
         </form>
     </div>
@@ -175,6 +187,4 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/users.css" />
 }
-@section Scripts {
-    <script src="~/js/pages/users.js"></script>
-}
+

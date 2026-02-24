@@ -40,7 +40,7 @@
                     <span class="nav-brand-text">NatureDesk</span>
                 </a>
 
-                <ul class="nav-links">
+                <ul class="nav-links nav-links-desktop">
                     <li><a href="@Url.Action("Index", "Home")" class="@(currentController == "Home" ? "active" : "")">@Lang.T("dashboard", lang)</a></li>
                     <li><a href="@Url.Action("Index", "Tickets")" class="@(currentController == "Tickets" ? "active" : "")">@Lang.T("tickets", lang)</a></li>
                     <li><a href="@Url.Action("Index", "Categories")" class="@(currentController == "Categories" ? "active" : "")">@Lang.T("categories", lang)</a></li>
@@ -48,7 +48,7 @@
                 </ul>
             </div>
 
-            <div class="nav-right">
+            <div class="nav-right nav-right-desktop">
                 <a href="@Url.Action("Switch", "Language", new { lang = isRtl ? "en" : "ar", returnUrl = Context.Request.Path + Context.Request.QueryString })" class="btn-ghost lang-toggle" title="@(isRtl ? "English" : "العربية")">
                     @(isRtl ? "EN" : "ع")
                 </a>
@@ -71,7 +71,52 @@
                     </button>
                 </form>
             </div>
+
+            <button class="hamburger-btn" aria-label="Menu">
+                <i class="bi bi-list"></i>
+            </button>
         </nav>
+
+        <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+        <div class="mobile-nav-drawer" id="mobileNavDrawer">
+            <div class="mobile-nav-header">
+                <a href="@Url.Action("Index", "Home")" class="nav-brand">
+                    <img class="ui-st-113f88" src="~/images/logo.png" alt="NatureDesk"  />
+                    <span class="nav-brand-text">NatureDesk</span>
+                </a>
+                <button class="hamburger-close-btn" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+
+            <div class="mobile-nav-user">
+                <div class="nav-avatar">@initials</div>
+                <span>@userName</span>
+            </div>
+
+            <ul class="mobile-nav-links">
+                <li><a href="@Url.Action("Index", "Home")" class="@(currentController == "Home" ? "active" : "")"><i class="bi bi-grid me-2"></i>@Lang.T("dashboard", lang)</a></li>
+                <li><a href="@Url.Action("Index", "Tickets")" class="@(currentController == "Tickets" ? "active" : "")"><i class="bi bi-ticket-detailed me-2"></i>@Lang.T("tickets", lang)</a></li>
+                <li><a href="@Url.Action("Index", "Categories")" class="@(currentController == "Categories" ? "active" : "")"><i class="bi bi-tag me-2"></i>@Lang.T("categories", lang)</a></li>
+                <li><a href="@Url.Action("Index", "Users")" class="@(currentController == "Users" ? "active" : "")"><i class="bi bi-people me-2"></i>@Lang.T("users", lang)</a></li>
+            </ul>
+
+            <div class="mobile-nav-footer">
+                <a href="@Url.Action("Switch", "Language", new { lang = isRtl ? "en" : "ar", returnUrl = Context.Request.Path + Context.Request.QueryString })" class="mobile-nav-action">
+                    <i class="bi bi-translate me-2"></i> @(isRtl ? "English" : "العربية")
+                </a>
+                <form asp-action="Logout" asp-controller="Account" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="mobile-nav-action mobile-nav-logout">
+                        <i class="bi bi-box-arrow-right me-2"></i> @Lang.T("sign_out", lang)
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+
 
         <div class="main-content">
             @RenderBody()
@@ -84,6 +129,14 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @{
+        var controllerName = ViewContext.RouteData.Values["controller"]?.ToString().ToLower();
+    }
+    <script src="~/js/pages/@(controllerName).js" asp-append-version="true" onerror="this.remove()"></script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

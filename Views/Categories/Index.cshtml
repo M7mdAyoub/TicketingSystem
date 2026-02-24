@@ -12,10 +12,11 @@
         <h4 class="page-title">@Lang.T("categories", lang)</h4>
         <p class="page-subtitle">@(lang == "ar" ? "تنظيم التذاكر حسب الفئة." : "Organize tickets by category for natural workflow.")</p>
     </div>
-    <button type="button" class="btn-coral" onclick="openCategoryModal()">
+    <button type="button" class="btn-coral" id="openCategoryModalBtn">
         <i class="bi bi-plus-lg"></i> @Lang.T("create_new_category", lang)
     </button>
 </div>
+
 
 <div class="card">
     <div class="card-body p-0">
@@ -90,11 +91,13 @@
 </div>
 
 
-<div class="ui-st-fed104" id="categoryModal"  onclick="if(event.target===this)closeCategoryModal()">
+<div class="ui-st-fed104 modal-overlay-trigger" id="categoryModal">
+
     <div class="ui-st-baaffb" >
         <div class="ui-st-87d288" >
             <h3 class="ui-st-dcc926" >@Lang.T("create_new_category", lang)</h3>
-            <button class="ui-st-5a2acb" onclick="closeCategoryModal()" >
+            <button class="ui-st-5a2acb close-category-modal-btn">
+
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
@@ -119,7 +122,8 @@
                 <button type="submit" class="btn-coral" id="catSubmitBtn">
                     <i class="bi bi-check-lg me-1"></i> @Lang.T("create_category", lang)
                 </button>
-                <button type="button" class="btn-outline-dark" onclick="closeCategoryModal()">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+                <button type="button" class="btn-outline-dark close-category-modal-btn">@(lang == "ar" ? "إلغاء" : "Cancel")</button>
+
             </div>
         </form>
     </div>
@@ -132,6 +136,4 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/categories.css" />
 }
-@section Scripts {
-    <script src="~/js/pages/categories.js"></script>
-}
+

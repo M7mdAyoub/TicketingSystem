@@ -149,3 +149,18 @@
     position: absolute;
     top: 12px;
 }
+
+.badge-pos-en,
+.status-right {
+    right: 12px;
+}
+
+.badge-pos-ar,
+.status-left {
+    left: 12px;
+}
+
+.user-action-btn-wrapper {
+    position: absolute;
+    top: 12px;
+}

@@ -152,8 +152,8 @@
 
                 <hr class="ui-st-b52610"  />
 
-                <form asp-action="SoftDelete" asp-route-id="@Model.Id" method="post" id="deleteForm"
-                      onsubmit="return confirm('@Lang.T("delete_confirm", lang)');">
+                <form asp-action="SoftDelete" asp-route-id="@Model.Id" method="post" id="deleteForm" data-confirm="@Lang.T("delete_confirm", lang)">
+
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn-ghost ui-st-ae7fde" >
                         <i class="bi bi-trash3 me-1"></i> @Lang.T("delete_ticket", lang)

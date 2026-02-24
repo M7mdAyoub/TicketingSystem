@@ -1,12 +1,28 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const openBtn = document.getElementById('openCategoryModalBtn');
+    if (openBtn) {
+        openBtn.addEventListener('click', openCategoryModal);
+    }
 
-document.addEventListener('DOMContentLoaded', function() {
+    const closeBtns = document.querySelectorAll('.close-category-modal-btn');
+    closeBtns.forEach(btn => btn.addEventListener('click', closeCategoryModal));
+
+    const overlayTriggers = document.querySelectorAll('.modal-overlay-trigger');
+    overlayTriggers.forEach(overlay => {
+        overlay.addEventListener('click', function (e) {
+            if (e.target === this) {
+                if (this.id === 'categoryModal') closeCategoryModal();
+            }
+        });
+    });
+
     var catForm = document.getElementById('catForm');
     if (catForm) {
-        catForm.addEventListener('submit', function(e) {
+        catForm.addEventListener('submit', function (e) {
             e.preventDefault();
             var btn = document.getElementById('catSubmitBtn');
             btn.disabled = true;
-            
+
             var originalBtnHtml = btn.innerHTML;
             btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> ...';
             document.getElementById('catModalError').style.display = 'none';
@@ -26,10 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         var tbody = document.getElementById('categoriesBody');
                         var tr = document.createElement('tr');
                         tr.className = 'fade-in-row';
-                        
+
                         var badgeClass = data.isActive ? 'badge-active' : 'badge-inactive';
                         var badgeText = data.isActive ? catForm.dataset.txtActive : catForm.dataset.txtInactive;
-                        
+
                         tr.innerHTML = `
                             <td>
                                 <div class="d-flex align-items-center gap-3">
@@ -63,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeCategoryModal();
         });
     }
@@ -71,16 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function openCategoryModal() {
     var modal = document.getElementById('categoryModal');
-    if(modal) {
+    if (modal) {
         modal.className = "modal-overlay modal-active";
         document.getElementById('catName').value = '';
         document.getElementById('catIsActive').checked = true;
         document.getElementById('catModalError').style.display = 'none';
-        setTimeout(function() { document.getElementById('catName').focus(); }, 100);
+        setTimeout(function () { document.getElementById('catName').focus(); }, 100);
     }
 }
 
 function closeCategoryModal() {
     var modal = document.getElementById('categoryModal');
-    if(modal) modal.className = "modal-overlay";
+    if (modal) modal.className = "modal-overlay";
 }

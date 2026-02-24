@@ -1,4 +1,36 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const openUserModalBtn = document.getElementById('openUserModalBtn');
+    if (openUserModalBtn) {
+        openUserModalBtn.addEventListener('click', openUserModal);
+    }
+
+    const closeUserModalBtns = document.querySelectorAll('.close-user-modal-btn');
+    closeUserModalBtns.forEach(btn => btn.addEventListener('click', closeUserModal));
+
+    const closeEditUserModalBtns = document.querySelectorAll('.close-edit-user-modal-btn');
+    closeEditUserModalBtns.forEach(btn => btn.addEventListener('click', closeEditUserModal));
+
+    const modalOverlayTriggers = document.querySelectorAll('.modal-overlay-trigger');
+    modalOverlayTriggers.forEach(overlay => {
+        overlay.addEventListener('click', function (e) {
+            if (e.target === this) {
+                if (this.id === 'userModal') closeUserModal();
+                if (this.id === 'editUserModal') closeEditUserModal();
+            }
+        });
+    });
+
+    document.addEventListener('click', function (e) {
+        const trigger = e.target.closest('.edit-user-trigger');
+        if (trigger) {
+            const id = trigger.dataset.id;
+            const fullname = trigger.dataset.fullname;
+            const email = trigger.dataset.email;
+            const active = trigger.dataset.active === 'true';
+            openEditUserModal(id, fullname, email, active);
+        }
+    });
+
     var userForm = document.getElementById('userForm');
     if (userForm) {
         userForm.addEventListener('submit', function (e) {
@@ -28,12 +60,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         var col = document.createElement('div');
                         col.className = 'col-md-6 col-lg-3 fade-in-row';
 
-                        var statusSide = userForm.dataset.lang === 'ar' ? 'left' : 'right';
-                        var abstractStyle = `position:absolute;top:12px;${statusSide}:12px;`;
+                        var statusSideClass = userForm.dataset.lang === 'ar' ? 'status-left' : 'status-right';
 
                         var statusHtml = `
-                            <div style="${abstractStyle}">
-                                <div class="user-action-btn-secondary" style="cursor: pointer;" onclick="openEditUserModal('${data.id}', '${data.fullName.replace(/'/g, "\\'")}', '${data.email}', ${data.isActive})" title="${userForm.dataset.txtEdit}">
+                            <div class="user-action-btn-wrapper ${statusSideClass}">
+                                <div class="user-action-btn-secondary cursor-pointer edit-user-trigger" 
+                                     data-id="${data.id}" 
+                                     data-fullname="${data.fullName.replace(/'/g, "\\'")}" 
+                                     data-email="${data.email}" 
+                                     data-active="${data.isActive}"
+                                     title="${userForm.dataset.txtEdit}">
                                     <i class="bi bi-three-dots"></i>
                                 </div>
                             </div>
@@ -67,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="user-card-team">${userForm.dataset.txtTeam}</div>
                                 <div class="user-card-email">${data.email}</div>
                                 <div class="d-flex justify-content-center gap-2">
-                                    <form action="/Users/ToggleActive" method="post" style="margin:0;">
+                                    <form action="/Users/ToggleActive" method="post" class="m-0">
                                         <input type="hidden" name="__RequestVerificationToken" value="${userForm.dataset.token}" />
                                         <input type="hidden" name="id" value="${data.id}" />
                                         ${bottomAction}
@@ -176,4 +212,3 @@ function closeEditUserModal() {
     var modal = document.getElementById('editUserModal');
     if (modal) modal.className = "modal-overlay";
 }
-
