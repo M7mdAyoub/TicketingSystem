@@ -1,0 +1,151 @@
+.user-card-wrap {
+    text-align: center;
+    padding: 24px 20px;
+    position: relative;
+}
+
+.user-badge-active-span {
+    background: var(--coral-light);
+    padding: 4px 8px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.user-badge-text-active {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--coral);
+    text-transform: uppercase;
+}
+
+.user-badge-dot-container-active {
+    width: 28px;
+    height: 16px;
+    background: var(--coral);
+    border-radius: 10px;
+    position: relative;
+}
+
+.user-badge-dot-inner-active {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+
+.user-badge-inactive-span {
+    background: var(--border-light);
+    padding: 4px 8px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.user-badge-text-inactive {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+}
+
+
+.user-avatar-wrap {
+    margin: 16px auto 16px;
+    position: relative;
+    width: 80px;
+}
+
+.user-avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin: 0 auto;
+    box-shadow: 0 4px 16px rgba(11, 61, 44, 0.2);
+}
+
+.user-avatar-online-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #22c55e;
+    border: 3px solid var(--white);
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+}
+
+
+.user-card-name {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--dark);
+    margin-bottom: 2px;
+}
+
+.user-card-team {
+    font-size: 0.78rem;
+    color: var(--coral);
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 4px;
+}
+
+.user-card-email {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+
+.user-action-btn-primary {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--green-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-dark);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.user-action-btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.user-action-btn-secondary {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.user-action-btn-secondary:hover {
+    background: var(--border);
+}
+
+.user-status-badge {
+    position: absolute;
+    top: 12px;
+}

@@ -9,12 +9,12 @@
 
 <div class="login-page">
     <div class="login-left">
-        <a href="@Url.Action("Index", "Landing")" class="nav-brand" style="position:relative;z-index:2;">
-            <img src="~/images/logo.png" alt="NatureDesk" style="width:36px;height:36px;border-radius:10px;object-fit:cover;" />
-            <span class="nav-brand-text" style="color:#fff;">NatureDesk</span>
+        <a href="@Url.Action("Index", "Landing")" class="nav-brand ui-st-cb751e" >
+            <img class="ui-st-113f88" src="~/images/logo.png" alt="NatureDesk"  />
+            <span class="nav-brand-text ui-st-b59271" >NatureDesk</span>
         </a>
 
-        <div style="position:relative;z-index:2;">
+        <div class="ui-st-cb751e" >
             <h1 class="login-left-title">
                 @Html.Raw(Lang.T("experience_serene", lang))
             </h1>
@@ -22,14 +22,14 @@
                 @Lang.T("login_left_desc", lang)
             </p>
 
-            <div style="display:flex;align-items:center;gap:12px;margin-top:40px;">
-                <div style="display:flex;">
-                    <div style="width:32px;height:32px;border-radius:50%;background:#2d8f65;border:2px solid var(--green-dark);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">MA</div>
-                    <div style="width:32px;height:32px;border-radius:50%;background:#e8465a;border:2px solid var(--green-dark);margin-left:-8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">FZ</div>
+            <div class="ui-st-f78c33" >
+                <div class="ui-st-cdaa18" >
+                    <div class="ui-st-a0d849" >MA</div>
+                    <div class="ui-st-0171f4" >FZ</div>
                 </div>
                 <div>
-                    <div style="font-weight:700;font-size:0.85rem;">@Lang.T("teams_count", lang)</div>
-                    <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">@Lang.T("trust_today", lang)</div>
+                    <div class="ui-st-70d5b9" >@Lang.T("teams_count", lang)</div>
+                    <div class="ui-st-e2e8f4" >@Lang.T("trust_today", lang)</div>
                 </div>
             </div>
         </div>
@@ -37,17 +37,17 @@
 
     <div class="login-right">
         <div class="login-form-wrap">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.7rem;color:var(--dark);margin:0;">@Lang.T("welcome_back", lang)</h2>
+            <div class="ui-st-403b84" >
+                <h2 class="ui-st-bc4ebb" >@Lang.T("welcome_back", lang)</h2>
                 <a href="@Url.Action("Switch", "Language", new { lang = isRtl ? "en" : "ar", returnUrl = "/Account/Login" })" class="lang-toggle" title="@(isRtl ? "English" : "العربية")">
                     @(isRtl ? "EN" : "ع")
                 </a>
             </div>
-            <p style="color:var(--text-muted);margin-bottom:32px;">@Lang.T("enter_details", lang)</p>
+            <p class="ui-st-31fac4" >@Lang.T("enter_details", lang)</p>
 
             @if (!ViewData.ModelState.IsValid)
             {
-                <div asp-validation-summary="All" class="alert alert-danger" style="font-size:0.85rem;margin-bottom:20px;"></div>
+                <div asp-validation-summary="All" class="alert alert-danger ui-st-73b81e" ></div>
             }
 
             <form asp-action="Login" asp-controller="Account" method="post">
@@ -56,39 +56,43 @@
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label">@Lang.T("email_address", lang)</label>
                     <div class="input-group">
-                        <span class="input-group-text" style="border-radius:12px 0 0 12px;border:1.5px solid var(--border);border-right:none;background:var(--cream);color:var(--text-light);">
+                        <span class="input-group-text ui-st-13e7df" >
                             <i class="bi bi-envelope"></i>
                         </span>
-                        <input asp-for="Email" class="form-control" placeholder="@Lang.T("enter_email", lang)" style="border-left:none;" />
+                        <input asp-for="Email" class="form-control ui-st-adb0ac" placeholder="@Lang.T("enter_email", lang)"  />
                     </div>
-                    <span asp-validation-for="Email" class="text-danger" style="font-size:0.78rem;"></span>
+                    <span asp-validation-for="Email" class="text-danger ui-st-c4ad98" ></span>
                 </div>
 
                 <div class="mb-4">
                     <label asp-for="Password" class="form-label">@Lang.T("password", lang)</label>
                     <div class="input-group">
-                        <span class="input-group-text" style="border-radius:12px 0 0 12px;border:1.5px solid var(--border);border-right:none;background:var(--cream);color:var(--text-light);">
+                        <span class="input-group-text ui-st-13e7df" >
                             <i class="bi bi-lock"></i>
                         </span>
-                        <input asp-for="Password" class="form-control" type="password" placeholder="••••••••" style="border-left:none;" />
+                        <input asp-for="Password" class="form-control ui-st-adb0ac" type="password" placeholder="••••••••"  />
                     </div>
-                    <span asp-validation-for="Password" class="text-danger" style="font-size:0.78rem;"></span>
+                    <span asp-validation-for="Password" class="text-danger ui-st-c4ad98" ></span>
                 </div>
 
-                <button type="submit" style="width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--green-dark);color:#fff;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.25s ease;">
+                <button class="ui-st-65c61b" type="submit" >
                     @Lang.T("sign_in", lang) <i class="bi bi-arrow-right ms-1"></i>
                 </button>
             </form>
 
             <div class="text-center mt-4">
-                <small style="color:var(--text-light);">@Lang.T("default_hint", lang) <strong>mohammadayoub@@helpdesk.com</strong> / <strong>Test@@1234</strong></small>
+                <small class="ui-st-74de57" >@Lang.T("default_hint", lang) <strong>mohammadayoub@@helpdesk.com</strong> / <strong>Test@@1234</strong></small>
             </div>
 
-            <div class="text-center mt-3" style="padding-top:20px;border-top:1px solid var(--border-light);">
-                <a href="@Url.Action("Index", "Landing")" style="color:var(--coral);font-size:0.85rem;font-weight:600;text-decoration:none;">
+            <div class="text-center mt-3 ui-st-3b349f" >
+                <a class="ui-st-66a022" href="@Url.Action("Index", "Landing")" >
                     <i class="bi bi-arrow-left me-1"></i> @Lang.T("back_to_home", lang)
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/login.css" />
+}

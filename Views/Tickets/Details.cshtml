@@ -6,22 +6,22 @@
     var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
-<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;">
-    <a href="@Url.Action("Index")" style="color:var(--coral);text-decoration:none;font-weight:600;">@Lang.T("tickets", lang)</a>
-    <span style="margin:0 8px;">›</span>
-    <span style="color:var(--text-light);">@Model.CategoryName</span>
-    <span style="margin:0 8px;">›</span>
-    <strong style="color:var(--dark);">INC-@Model.Id</strong>
+<div class="ui-st-e99b56" >
+    <a class="ui-st-278047" href="@Url.Action("Index")" >@Lang.T("tickets", lang)</a>
+    <span class="ui-st-bbaacd" >›</span>
+    <span class="ui-st-74de57" >@Model.CategoryName</span>
+    <span class="ui-st-bbaacd" >›</span>
+    <strong class="ui-st-c053b6" >INC-@Model.Id</strong>
 </div>
 
 <div class="row g-4">
     <div class="col-lg-8">
         <div class="d-flex align-items-start justify-content-between mb-3">
-            <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.6rem;color:var(--dark);line-height:1.3;max-width:80%;">@Model.Title</h2>
+            <h2 class="ui-st-5bf720" >@Model.Title</h2>
         </div>
 
         <div class="d-flex align-items-center gap-3 mb-4">
-            <div style="width:36px;height:36px;border-radius:50%;background:var(--green-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;">
+            <div class="ui-st-206e94" >
                 @{
                     var dParts = Model.CreatedByName?.Split(' ') ?? new[] { "U" };
                     var dInit = dParts.Length >= 2
@@ -31,22 +31,22 @@
                 @dInit
             </div>
             <div>
-                <span style="font-size:0.85rem;color:var(--text-muted);">@Lang.T("reported_by", lang) </span>
-                <strong style="color:var(--dark);font-size:0.88rem;">@Model.CreatedByName</strong>
-                <span style="font-size:0.85rem;color:var(--text-light);"> • @Model.CreatedDate.ToString("MMM dd, yyyy")</span>
+                <span class="ui-st-1e8514" >@Lang.T("reported_by", lang) </span>
+                <strong class="ui-st-6206b4" >@Model.CreatedByName</strong>
+                <span class="ui-st-545d10" > • @Model.CreatedDate.ToString("MMM dd, yyyy")</span>
             </div>
         </div>
 
         <div class="card mb-4">
             <div class="card-body">
-                <h5 style="font-family:var(--font-serif);font-weight:700;margin-bottom:14px;font-size:1rem;">@Lang.T("description", lang)</h5>
-                <p style="white-space:pre-line;color:var(--text);line-height:1.8;font-size:0.92rem;margin:0;">@Model.Description</p>
+                <h5 class="ui-st-471d13" >@Lang.T("description", lang)</h5>
+                <p class="ui-st-282f7a" >@Model.Description</p>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <i class="bi bi-chat-dots-fill" style="color:var(--coral);"></i>
+                <i class="bi bi-chat-dots-fill ui-st-bc7c44" ></i>
                 <span>@Lang.T("comments", lang)</span>
             </div>
             <div class="card-body">
@@ -55,10 +55,10 @@
                     @foreach (var comment in Model.Comments)
                     {
                         var isCurrentUser = comment.CreatedByU == currentUserId;
-                        <div class="d-flex gap-3 mb-3" style="flex-direction:@(isCurrentUser ? "row-reverse" : "row");">
+                        <div class="d-flex gap-3 mb-3 flex-dir-@(isCurrentUser ? "reverse" : "normal")">
                             @if (!isCurrentUser)
                             {
-                                <div style="width:36px;height:36px;border-radius:50%;background:var(--green-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0;">
+                                <div class="ui-st-dad2fe" >
                                     @{
                                         var cParts = comment.CreatedByName?.Split(' ') ?? new[] { "U" };
                                         var cInit = cParts.Length >= 2
@@ -69,13 +69,13 @@
                                 </div>
                             }
                             <div class="comment-bubble @(isCurrentUser ? "right" : "left")">
-                                <div class="comment-author" style="margin-bottom:6px;">@comment.CreatedByName</div>
-                                <p style="margin:0;font-size:0.88rem;line-height:1.6;">@comment.CommentText</p>
+                                <div class="comment-author ui-st-25aea1" >@comment.CreatedByName</div>
+                                <p class="ui-st-da0d7d" >@comment.CommentText</p>
                                 <div class="comment-date">@comment.CreatedDate.ToString("MMM dd, yyyy hh:mm tt")</div>
                             </div>
                             @if (isCurrentUser)
                             {
-                                <div style="width:36px;height:36px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0;">
+                                <div class="ui-st-1fdb36" >
                                     @{
                                         var mParts = comment.CreatedByName?.Split(' ') ?? new[] { "U" };
                                         var mInit = mParts.Length >= 2
@@ -90,19 +90,19 @@
                 }
                 else
                 {
-                    <div class="empty-state" style="padding:32px;">
-                        <i class="bi bi-chat" style="font-size:2.5rem;"></i>
+                    <div class="empty-state ui-st-c0e4fb" >
+                        <i class="bi bi-chat ui-st-cf44b5" ></i>
                         <p>@Lang.T("no_comments", lang)</p>
                     </div>
                 }
 
                 @if (Model.Status != "Closed")
                 {
-                    <div style="margin-top:20px;padding-top:20px;border-top:1px dashed var(--border);">
+                    <div class="ui-st-40f66d" >
                         <form asp-action="AddComment" method="post">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="ticketId" value="@Model.Id" />
-                            <textarea name="commentText" class="form-control" rows="3" placeholder="@Lang.T("write_comment", lang)" required style="resize:vertical;margin-bottom:12px;"></textarea>
+                            <textarea name="commentText" class="form-control ui-st-82922d" rows="3" placeholder="@Lang.T("write_comment", lang)" required ></textarea>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn-coral btn-sm">
                                     <i class="bi bi-send me-1"></i> @Lang.T("post_comment", lang)
@@ -113,7 +113,7 @@
                 }
                 else
                 {
-                    <div style="margin-top:16px;padding:14px 20px;background:#fefce8;border:1px solid #fde68a;border-radius:var(--radius);color:#92400e;font-size:0.88rem;">
+                    <div class="ui-st-df93df" >
                         <i class="bi bi-lock-fill me-1"></i> @Lang.T("ticket_closed_msg", lang)
                     </div>
                 }
@@ -124,12 +124,12 @@
     <div class="col-lg-4">
         <div class="card mb-4">
             <div class="card-header">
-                <i class="bi bi-sliders" style="color:var(--green-mid);"></i>
+                <i class="bi bi-sliders ui-st-91d6b3" ></i>
                 @(lang == "ar" ? "التحكم بالتذكرة" : "Ticket Controls")
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--coral);font-weight:700;margin-bottom:6px;">@Lang.T("status", lang)</div>
+                    <div class="ui-st-ee964e" >@Lang.T("status", lang)</div>
                     <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
                         @Html.AntiForgeryToken()
                         <div class="d-flex gap-2">
@@ -138,24 +138,24 @@
                                 <option value="InProgress" selected="@(Model.Status == "InProgress")">🟡 @Lang.T("in_progress", lang)</option>
                                 <option value="Closed" selected="@(Model.Status == "Closed")">⚫ @Lang.T("closed", lang)</option>
                             </select>
-                            <button type="submit" class="btn-coral btn-sm" style="white-space:nowrap;">@Lang.T("update_status", lang)</button>
+                            <button type="submit" class="btn-coral btn-sm ui-st-8b2da0" >@Lang.T("update_status", lang)</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="mb-3">
-                    <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--coral);font-weight:700;margin-bottom:6px;">@Lang.T("category", lang)</div>
-                    <div style="padding:8px 14px;background:var(--cream);border-radius:8px;font-weight:600;font-size:0.88rem;display:flex;align-items:center;gap:8px;">
-                        <i class="bi bi-tag-fill" style="color:var(--green-mid);"></i> @Model.CategoryName
+                    <div class="ui-st-ee964e" >@Lang.T("category", lang)</div>
+                    <div class="ui-st-d14ba8" >
+                        <i class="bi bi-tag-fill ui-st-91d6b3" ></i> @Model.CategoryName
                     </div>
                 </div>
 
-                <hr style="border-color:var(--border-light);" />
+                <hr class="ui-st-b52610"  />
 
                 <form asp-action="SoftDelete" asp-route-id="@Model.Id" method="post" id="deleteForm"
                       onsubmit="return confirm('@Lang.T("delete_confirm", lang)');">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn-ghost" style="width:100%;text-align:center;color:var(--text-muted);font-weight:600;">
+                    <button type="submit" class="btn-ghost ui-st-ae7fde" >
                         <i class="bi bi-trash3 me-1"></i> @Lang.T("delete_ticket", lang)
                     </button>
                 </form>
@@ -164,31 +164,31 @@
 
         <div class="card">
             <div class="card-header">
-                <i class="bi bi-info-circle-fill" style="color:var(--coral);"></i>
+                <i class="bi bi-info-circle-fill ui-st-bc7c44" ></i>
                 @Lang.T("ticket_details", lang)
             </div>
-            <div class="card-body" style="font-size:0.88rem;">
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <span style="color:var(--text-muted);">@(lang == "ar" ? "رقم التذكرة" : "Ticket ID")</span>
-                    <strong style="color:var(--dark);">#INC-@Model.Id</strong>
+            <div class="card-body ui-st-7df75a" >
+                <div class="d-flex justify-content-between mb-3 pb-3 ui-st-4fc1ed" >
+                    <span class="ui-st-697a24" >@(lang == "ar" ? "رقم التذكرة" : "Ticket ID")</span>
+                    <strong class="ui-st-c053b6" >#INC-@Model.Id</strong>
                 </div>
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <span style="color:var(--text-muted);">@Lang.T("status", lang)</span>
+                <div class="d-flex justify-content-between mb-3 pb-3 ui-st-4fc1ed" >
+                    <span class="ui-st-697a24" >@Lang.T("status", lang)</span>
                     @if (Model.Status == "Open") { <span class="badge-status badge-open">@Lang.T("open", lang)</span> }
                     else if (Model.Status == "InProgress") { <span class="badge-status badge-inprogress">@Lang.T("in_progress", lang)</span> }
                     else { <span class="badge-status badge-resolved">@Lang.T("closed", lang)</span> }
                 </div>
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <span style="color:var(--text-muted);">@Lang.T("category", lang)</span>
-                    <strong style="color:var(--dark);">@Model.CategoryName</strong>
+                <div class="d-flex justify-content-between mb-3 pb-3 ui-st-4fc1ed" >
+                    <span class="ui-st-697a24" >@Lang.T("category", lang)</span>
+                    <strong class="ui-st-c053b6" >@Model.CategoryName</strong>
                 </div>
-                <div class="d-flex justify-content-between mb-3 pb-3" style="border-bottom:1px solid var(--border-light);">
-                    <span style="color:var(--text-muted);">@Lang.T("created_by", lang)</span>
-                    <strong style="color:var(--dark);">@Model.CreatedByName</strong>
+                <div class="d-flex justify-content-between mb-3 pb-3 ui-st-4fc1ed" >
+                    <span class="ui-st-697a24" >@Lang.T("created_by", lang)</span>
+                    <strong class="ui-st-c053b6" >@Model.CreatedByName</strong>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <span style="color:var(--text-muted);">@Lang.T("created_date", lang)</span>
-                    <strong style="color:var(--dark);">@Model.CreatedDate.ToString("MMM dd, yyyy")</strong>
+                    <span class="ui-st-697a24" >@Lang.T("created_date", lang)</span>
+                    <strong class="ui-st-c053b6" >@Model.CreatedDate.ToString("MMM dd, yyyy")</strong>
                 </div>
             </div>
         </div>

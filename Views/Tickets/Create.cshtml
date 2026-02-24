@@ -6,33 +6,33 @@
     var lang = Context.Request.Cookies["lang"] ?? "en";
 }
 
-<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px;">
-    <a href="@Url.Action("Index")" style="color:var(--text-muted);text-decoration:none;">@Lang.T("tickets", lang)</a>
-    <span style="margin:0 8px;">›</span>
-    <span style="color:var(--coral);font-weight:600;font-style:italic;">@Lang.T("create_new_ticket", lang)</span>
+<div class="ui-st-e99b56" >
+    <a class="ui-st-761126" href="@Url.Action("Index")" >@Lang.T("tickets", lang)</a>
+    <span class="ui-st-bbaacd" >›</span>
+    <span class="ui-st-d5315c" >@Lang.T("create_new_ticket", lang)</span>
 </div>
 
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <div class="card" style="padding:48px 40px;">
+        <div class="card ui-st-b5d011" >
             <div class="text-center mb-4">
-                <h2 style="font-family:var(--font-serif);font-weight:800;font-size:1.8rem;color:var(--dark);">@Lang.T("create_new_ticket", lang)</h2>
-                <p style="font-family:var(--font-serif);font-style:italic;color:var(--text-muted);font-size:0.95rem;">@(lang == "ar" ? "قدّم طلبك وسيقوم فريق الدعم بمساعدتك قريباً." : "Submit your request and our nature-inspired support team will assist you shortly.")</p>
+                <h2 class="ui-st-3f1afd" >@Lang.T("create_new_ticket", lang)</h2>
+                <p class="ui-st-c26419" >@(lang == "ar" ? "قدّم طلبك وسيقوم فريق الدعم بمساعدتك قريباً." : "Submit your request and our nature-inspired support team will assist you shortly.")</p>
             </div>
 
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
 
                 <div class="mb-4">
-                    <label asp-for="Title" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("title", lang)</label>
-                    <input asp-for="Title" class="form-control" placeholder="@Lang.T("ticket_title_ph", lang)" style="padding:14px 16px;" />
-                    <span asp-validation-for="Title" class="text-danger" style="font-size:0.8rem;"></span>
+                    <label asp-for="Title" class="form-label ui-st-116c07" >@Lang.T("title", lang)</label>
+                    <input asp-for="Title" class="form-control ui-st-398f57" placeholder="@Lang.T("ticket_title_ph", lang)"  />
+                    <span asp-validation-for="Title" class="text-danger ui-st-f257e1" ></span>
                 </div>
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <label asp-for="CategoryId" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("category", lang)</label>
-                        <select asp-for="CategoryId" class="form-select" style="padding:14px 16px;">
+                        <label asp-for="CategoryId" class="form-label ui-st-116c07" >@Lang.T("category", lang)</label>
+                        <select asp-for="CategoryId" class="form-select ui-st-398f57" >
                             <option value="">@Lang.T("select_category", lang)</option>
                             @if (categories != null)
                             {
@@ -42,11 +42,11 @@
                                 }
                             }
                         </select>
-                        <span asp-validation-for="CategoryId" class="text-danger" style="font-size:0.8rem;"></span>
+                        <span asp-validation-for="CategoryId" class="text-danger ui-st-f257e1" ></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="Status" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("status", lang)</label>
-                        <select asp-for="Status" class="form-select" style="padding:14px 16px;">
+                        <label asp-for="Status" class="form-label ui-st-116c07" >@Lang.T("status", lang)</label>
+                        <select asp-for="Status" class="form-select ui-st-398f57" >
                             <option value="Open">@Lang.T("open", lang)</option>
                             <option value="InProgress">@Lang.T("in_progress", lang)</option>
                             <option value="Closed">@Lang.T("closed", lang)</option>
@@ -55,17 +55,17 @@
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="Description" class="form-label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--dark);">@Lang.T("description", lang)</label>
-                    <textarea asp-for="Description" class="form-control" rows="6" placeholder="@Lang.T("ticket_desc_ph", lang)" style="resize:vertical;padding:14px 16px;"></textarea>
-                    <span asp-validation-for="Description" class="text-danger" style="font-size:0.8rem;"></span>
+                    <label asp-for="Description" class="form-label ui-st-116c07" >@Lang.T("description", lang)</label>
+                    <textarea asp-for="Description" class="form-control ui-st-56f8c7" rows="6" placeholder="@Lang.T("ticket_desc_ph", lang)" ></textarea>
+                    <span asp-validation-for="Description" class="text-danger ui-st-f257e1" ></span>
                 </div>
 
-                <hr style="border-color:var(--border-light);margin-bottom:24px;" />
+                <hr class="ui-st-9456dc"  />
 
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                    <a href="@Url.Action("Index")" style="color:var(--text-muted);font-weight:600;font-size:0.88rem;text-decoration:none;">@Lang.T("back_to_tickets", lang)</a>
+                    <a class="ui-st-2ef33c" href="@Url.Action("Index")" >@Lang.T("back_to_tickets", lang)</a>
                     <div class="d-flex gap-3">
-                        <button type="submit" class="btn-coral" style="padding:12px 28px;">
+                        <button type="submit" class="btn-coral ui-st-1c07ff" >
                             <i class="bi bi-send-fill me-1"></i> @Lang.T("submit", lang)
                         </button>
                     </div>
@@ -76,34 +76,34 @@
         <div class="row g-4 mt-4">
             <div class="col-md-4">
                 <div class="d-flex align-items-start gap-3">
-                    <div style="width:42px;height:42px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:1rem;flex-shrink:0;">
+                    <div class="ui-st-797857" >
                         <i class="bi bi-stars"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "توجيه ذكي" : "Smart Routing")</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "يتم تعيين تذكرتك تلقائياً لأفضل خبير متاح." : "Your ticket is automatically assigned to the best available expert.")</div>
+                        <div class="ui-st-af04c1" >@(lang == "ar" ? "توجيه ذكي" : "Smart Routing")</div>
+                        <div class="ui-st-b91605" >@(lang == "ar" ? "يتم تعيين تذكرتك تلقائياً لأفضل خبير متاح." : "Your ticket is automatically assigned to the best available expert.")</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="d-flex align-items-start gap-3">
-                    <div style="width:42px;height:42px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:1rem;flex-shrink:0;">
+                    <div class="ui-st-797857" >
                         <i class="bi bi-clock-history"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "استجابة خلال 24 ساعة" : "24h Response")</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "نهدف للرد على جميع الاستفسارات خلال يوم عمل واحد." : "We aim to respond to all standard inquiries within one business day.")</div>
+                        <div class="ui-st-af04c1" >@(lang == "ar" ? "استجابة خلال 24 ساعة" : "24h Response")</div>
+                        <div class="ui-st-b91605" >@(lang == "ar" ? "نهدف للرد على جميع الاستفسارات خلال يوم عمل واحد." : "We aim to respond to all standard inquiries within one business day.")</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="d-flex align-items-start gap-3">
-                    <div style="width:42px;height:42px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:1rem;flex-shrink:0;">
+                    <div class="ui-st-797857" >
                         <i class="bi bi-shield-lock"></i>
                     </div>
                     <div>
-                        <div style="font-weight:700;font-size:0.88rem;color:var(--dark);">@(lang == "ar" ? "معالجة آمنة" : "Secure Handling")</div>
-                        <div style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;">@(lang == "ar" ? "جميع البيانات المشاركة مشفرة وسرية تماماً." : "All data shared in this form is encrypted and strictly confidential.")</div>
+                        <div class="ui-st-af04c1" >@(lang == "ar" ? "معالجة آمنة" : "Secure Handling")</div>
+                        <div class="ui-st-b91605" >@(lang == "ar" ? "جميع البيانات المشاركة مشفرة وسرية تماماً." : "All data shared in this form is encrypted and strictly confidential.")</div>
                     </div>
                 </div>
             </div>

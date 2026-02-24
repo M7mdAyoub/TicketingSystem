@@ -20,11 +20,11 @@
         <form method="get" asp-action="Index">
             <div class="row g-3 align-items-end">
                 <div class="col-md-4">
-                    <label class="form-label" style="font-size:0.82rem;"><i class="bi bi-search me-1"></i>@(lang == "ar" ? "بحث" : "Search")</label>
+                    <label class="form-label ui-st-6b7c28" ><i class="bi bi-search me-1"></i>@(lang == "ar" ? "بحث" : "Search")</label>
                     <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="@Lang.T("search_tickets", lang)" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" style="font-size:0.82rem;">@Lang.T("category", lang)</label>
+                    <label class="form-label ui-st-6b7c28" >@Lang.T("category", lang)</label>
                     <select name="filterCategoryId" class="form-select">
                         <option value="">@Lang.T("all_categories", lang)</option>
                         @foreach (var cat in Model.Categories)
@@ -34,7 +34,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" style="font-size:0.82rem;">@Lang.T("status", lang)</label>
+                    <label class="form-label ui-st-6b7c28" >@Lang.T("status", lang)</label>
                     <select name="filterStatus" class="form-select">
                         <option value="">@Lang.T("all_statuses", lang)</option>
                         <option value="Open" selected="@(Model.FilterStatus == "Open")">@Lang.T("open", lang)</option>
@@ -43,7 +43,7 @@
                     </select>
                 </div>
                 <div class="col-md-2 d-flex gap-2">
-                    <button type="submit" class="btn-coral btn-sm flex-grow-1" style="justify-content:center;">
+                    <button type="submit" class="btn-coral btn-sm flex-grow-1 ui-st-c157e3" >
                         <i class="bi bi-search"></i>
                     </button>
                     <a href="@Url.Action("Index")" class="btn-outline-dark btn-sm" title="Clear">
@@ -71,7 +71,7 @@ else
         {
             <div class="col-md-6 col-lg-4">
                 <div class="ticket-card status-@ticket.Status">
-                    <div class="d-flex justify-content-between align-items-start" style="padding-left:12px;">
+                    <div class="d-flex justify-content-between align-items-start ui-st-69a0d1" >
                         @if (ticket.Status == "Open")
                         {
                             <span class="badge-status badge-open">@(lang == "ar" ? "جديدة" : "NEW TICKET")</span>
@@ -84,15 +84,15 @@ else
                         {
                             <span class="badge-status badge-resolved">@(lang == "ar" ? "محلولة" : "RESOLVED")</span>
                         }
-                        <span style="font-size:0.78rem;color:var(--text-light);font-weight:600;">#TK-@ticket.Id</span>
+                        <span class="ui-st-33eb74" >#TK-@ticket.Id</span>
                     </div>
-                    <a href="@Url.Action("Details", new { id = ticket.Id })" class="text-decoration-none" style="padding-left:12px;">
+                    <a href="@Url.Action("Details", new { id = ticket.Id })" class="text-decoration-none ui-st-69a0d1" >
                         <div class="ticket-card-title">@(ticket.Title.Length > 35 ? ticket.Title.Substring(0, 35) + "..." : ticket.Title)</div>
                     </a>
-                    <div class="ticket-card-desc" style="padding-left:12px;">@(ticket.Description.Length > 90 ? ticket.Description.Substring(0, 90) + "..." : ticket.Description)</div>
-                    <div class="ticket-card-footer" style="margin-left:12px;">
+                    <div class="ticket-card-desc ui-st-69a0d1" >@(ticket.Description.Length > 90 ? ticket.Description.Substring(0, 90) + "..." : ticket.Description)</div>
+                    <div class="ticket-card-footer ui-st-ae304b" >
                         <div class="d-flex align-items-center gap-2">
-                            <div style="width:26px;height:26px;border-radius:50%;background:var(--green-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;">
+                            <div class="ui-st-e535dd" >
                                 @{
                                     var tParts = ticket.CreatedByName?.Split(' ') ?? new[] { "U" };
                                     var tInit = tParts.Length >= 2
@@ -101,9 +101,9 @@ else
                                 }
                                 @tInit
                             </div>
-                            <span style="font-weight:600;font-size:0.8rem;color:var(--dark);">@(ticket.CreatedByName?.Split(' ')[0]) @(ticket.CreatedByName?.Split(' ').Length > 1 ? ticket.CreatedByName.Split(' ')[^1].Substring(0,1) + "." : "")</span>
+                            <span class="ui-st-5384c2" >@(ticket.CreatedByName?.Split(' ')[0]) @(ticket.CreatedByName?.Split(' ').Length > 1 ? ticket.CreatedByName.Split(' ')[^1].Substring(0,1) + "." : "")</span>
                         </div>
-                        <span style="font-size:0.78rem;font-weight:600;color:var(--text-light);text-transform:uppercase;">@ticket.CreatedDate.ToString("MMM dd")</span>
+                        <span class="ui-st-45df8c" >@ticket.CreatedDate.ToString("MMM dd")</span>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@ else
 @if (Model.TotalPages > 1)
 {
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <span style="font-size:0.85rem;color:var(--text-muted);">@Lang.T("page", lang) @Model.CurrentPage @Lang.T("of", lang) @Model.TotalPages</span>
+        <span class="ui-st-1e8514" >@Lang.T("page", lang) @Model.CurrentPage @Lang.T("of", lang) @Model.TotalPages</span>
         <nav>
             <ul class="pagination">
                 @if (Model.CurrentPage > 1)

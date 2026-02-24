@@ -39,7 +39,7 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:var(--coral-light);color:var(--coral);">
+            <div class="stat-icon ui-st-7d6097" >
                 <i class="bi bi-ticket-detailed-fill"></i>
             </div>
             <div>
@@ -50,7 +50,7 @@
     </div>
     <div class="col-md-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#fef9c3;color:#92400e;">
+            <div class="stat-icon ui-st-3aecbc" >
                 <i class="bi bi-exclamation-circle-fill"></i>
             </div>
             <div>
@@ -61,7 +61,7 @@
     </div>
     <div class="col-md-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:var(--green-pale);color:var(--green-mid);">
+            <div class="stat-icon ui-st-2303ca" >
                 <i class="bi bi-people-fill"></i>
             </div>
             <div>
@@ -72,7 +72,7 @@
     </div>
     <div class="col-md-3">
         <div class="stat-card">
-            <div class="stat-icon" style="background:#ede9fe;color:#7c3aed;">
+            <div class="stat-icon ui-st-42dcc0" >
                 <i class="bi bi-collection-fill"></i>
             </div>
             <div>
@@ -86,9 +86,9 @@
 
 <div class="row g-4 mb-4">
     <div class="col-lg-7">
-        <div class="card" style="height:100%;">
+        <div class="card" >
             <div class="card-header">
-                <i class="bi bi-pie-chart-fill" style="color:var(--coral);"></i>
+                <i class="bi bi-pie-chart-fill ui-st-bc7c44" ></i>
                 <span>@Lang.T("ticket_status", lang)</span>
             </div>
             <div class="card-body">
@@ -105,48 +105,82 @@
                                 <circle cx="80" cy="80" r="60" fill="none" stroke="var(--coral)" stroke-width="20"
                                         stroke-dasharray="@openArc @(circumference - openArc)" stroke-dashoffset="@openOffset" transform="rotate(-90 80 80)"/>
                             }
-                            <text x="80" y="72" text-anchor="middle" style="font-family:var(--font-serif);font-size:1.8rem;font-weight:800;fill:var(--dark);">@totalTickets</text>
-                            <text x="80" y="95" text-anchor="middle" style="font-family:var(--font-sans);font-size:0.7rem;fill:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">@(lang == "ar" ? "المجموع" : "TOTAL")</text>
+                            <text class="ui-st-e6d3b9" x="80" y="72" text-anchor="middle" >@totalTickets</text>
+                            <text class="ui-st-88c0cd" x="80" y="95" text-anchor="middle" >@(lang == "ar" ? "المجموع" : "TOTAL")</text>
                         </svg>
                     </div>
                     <div class="col-7">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div style="width:10px;height:10px;border-radius:50%;background:var(--green-mid);"></div>
-                            <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("closed", lang)</span><span>@closedCount (@closedPct%)</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(closedPct)%;background:var(--green-mid);border-radius:4px;"></div></div>
+                            <div class="ui-st-9220b3" ></div>
+                            <div class="ui-st-d5e8c5" >
+                                <div class="ui-st-5ada67" ><span>@Lang.T("closed", lang)</span><span>@closedCount (@closedPct%)</span></div>
+                                <div class="ui-st-cdd888"><div class="progress-bar-closed w-@(Math.Round(closedPct))"></div></div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></div>
-                            <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("in_progress", lang)</span><span>@inProgressCount (@inProgressPct%)</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(inProgressPct)%;background:#f59e0b;border-radius:4px;"></div></div>
+                            <div class="ui-st-f6af85" ></div>
+                            <div class="ui-st-d5e8c5" >
+                                <div class="ui-st-5ada67" ><span>@Lang.T("in_progress", lang)</span><span>@inProgressCount (@inProgressPct%)</span></div>
+                                <div class="ui-st-cdd888"><div class="progress-bar-inprogress w-@(Math.Round(inProgressPct))"></div></div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <div style="width:10px;height:10px;border-radius:50%;background:var(--coral);"></div>
-                            <div style="flex:1;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:600;color:var(--dark);"><span>@Lang.T("open", lang)</span><span>@openCount (@openPct%)</span></div>
-                                <div style="height:6px;background:var(--border-light);border-radius:4px;margin-top:4px;"><div style="height:100%;width:@(openPct)%;background:var(--coral);border-radius:4px;"></div></div>
+                            <div class="ui-st-5d4f6b" ></div>
+                            <div class="ui-st-d5e8c5" >
+                                <div class="ui-st-5ada67" ><span>@Lang.T("open", lang)</span><span>@openCount (@openPct%)</span></div>
+                                <div class="ui-st-cdd888"><div class="progress-bar-open w-@(Math.Round(openPct))"></div></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row g-4 mt-1">
+            <div class="col-6">
+                <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none quick-action-card ui-st-381285" >
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-ticket-detailed ui-st-dbf5ef" ></i>
+                        <div class="ui-st-3d9d18" >@Lang.T("tickets", lang)</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none quick-action-card ui-st-aab0cb" >
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-collection ui-st-55b323" ></i>
+                        <div class="ui-st-3d9d18" >@Lang.T("categories", lang)</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Index", "Users")" class="card text-decoration-none quick-action-card ui-st-5a4c70" >
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-people ui-st-ee0ea5" ></i>
+                        <div class="ui-st-3d9d18" >@Lang.T("users", lang)</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none quick-action-card ui-st-8fc746" >
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-chat-dots ui-st-9c4d68" ></i>
+                        <div class="ui-st-3d9d18" >@Lang.T("create_ticket", lang)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="col-lg-5">
-        <div class="card" style="height:100%;">
+        <div class="card" >
             <div class="card-header">
-                <i class="bi bi-lightning-fill" style="color:#f59e0b;"></i>
+                <i class="bi bi-lightning-fill ui-st-953f8f" ></i>
                 <span>@Lang.T("recent_activity", lang)</span>
             </div>
-            <div class="card-body" style="padding:16px 24px;">
+            <div class="card-body ui-st-4845c9" >
                 @if (recentTickets.Count == 0)
                 {
-                    <div class="empty-state" style="padding:24px;">
-                        <i class="bi bi-inbox" style="font-size:2rem;"></i>
+                    <div class="empty-state ui-st-b2fca5" >
+                        <i class="bi bi-inbox ui-st-ba2c5c" ></i>
                         <p>@(lang == "ar" ? "لا يوجد نشاط بعد." : "No activity yet.")</p>
                     </div>
                 }
@@ -155,7 +189,7 @@
                     @for (int i = 0; i < recentTickets.Count; i++)
                     {
                         var ticket = recentTickets[i];
-                        string dotColor = ticket.Status == "Closed" ? "var(--green-mid)" : ticket.Status == "InProgress" ? "#f59e0b" : "var(--coral)";
+                        string dotClass = ticket.Status == "Closed" ? "dot-closed" : ticket.Status == "InProgress" ? "dot-inprogress" : "dot-open";
                         string statusText = ticket.Status == "Closed" ? Lang.T("closed", lang) :
                                             ticket.Status == "InProgress" ? Lang.T("in_progress", lang) :
                                             Lang.T("open", lang);
@@ -169,20 +203,20 @@
                             timeText = lang == "ar" ? $"منذ {(int)timeAgo.TotalDays} يوم" : $"{(int)timeAgo.TotalDays}d ago";
 
                         bool isLast = i == recentTickets.Count - 1;
-                        <div class="d-flex gap-3 @(isLast ? "" : "mb-3 pb-3")" style="@(isLast ? "" : "border-bottom:1px solid var(--border-light);")">
-                            <div style="width:8px;height:8px;border-radius:50%;background:@dotColor;margin-top:7px;flex-shrink:0;"></div>
+                        <div class="d-flex gap-3 @(isLast ? "" : "mb-3 pb-3 timeline-border")">
+                            <div class="timeline-dot @dotClass"></div>
                             <div>
-                                <div style="font-size:0.88rem;">
-                                    <strong style="color:var(--dark);">@ticket.CreatedByName</strong>
-                                    <span style="color:var(--text-muted);">—</span>
-                                    <a href="@Url.Action("Details", "Tickets", new { id = ticket.Id })" style="color:var(--coral);text-decoration:none;font-weight:600;">#TK-@ticket.Id</a>
+                                <div class="ui-st-7df75a" >
+                                    <strong class="ui-st-c053b6" >@ticket.CreatedByName</strong>
+                                    <span class="ui-st-697a24" >—</span>
+                                    <a class="ui-st-278047" href="@Url.Action("Details", "Tickets", new { id = ticket.Id })" >#TK-@ticket.Id</a>
                                 </div>
-                                <div style="font-size:0.8rem;color:var(--text-light);margin-top:2px;">
+                                <div class="ui-st-24206e" >
                                     @(ticket.Title.Length > 40 ? ((string)ticket.Title).Substring(0, 40) + "..." : ticket.Title)
                                 </div>
-                                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
-                                    <span class="badge-status @(ticket.Status == "Open" ? "badge-open" : ticket.Status == "InProgress" ? "badge-inprogress" : "badge-resolved")" style="font-size:0.65rem;padding:2px 6px;">@statusText</span>
-                                    <span style="margin-left:6px;">@timeText</span>
+                                <div class="ui-st-aafcdf" >
+                                    <span class="badge-status @(ticket.Status == "Open" ? "badge-open" : ticket.Status == "InProgress" ? "badge-inprogress" : "badge-resolved")" >@statusText</span>
+                                    <span class="ui-st-dace2f" >@timeText</span>
                                 </div>
                             </div>
                         </div>
@@ -193,38 +227,7 @@
     </div>
 </div>
 
-
-<div class="row g-4">
-    <div class="col-md-3">
-        <a href="@Url.Action("Index", "Tickets")" class="card text-decoration-none" style="border-left:4px solid var(--coral);">
-            <div class="card-body text-center py-4">
-                <i class="bi bi-ticket-detailed" style="font-size:1.5rem;color:var(--coral);margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("tickets", lang)</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-3">
-        <a href="@Url.Action("Index", "Categories")" class="card text-decoration-none" style="border-left:4px solid var(--green-mid);">
-            <div class="card-body text-center py-4">
-                <i class="bi bi-collection" style="font-size:1.5rem;color:var(--green-mid);margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("categories", lang)</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-3">
-        <a href="@Url.Action("Index", "Users")" class="card text-decoration-none" style="border-left:4px solid #7c3aed;">
-            <div class="card-body text-center py-4">
-                <i class="bi bi-people" style="font-size:1.5rem;color:#7c3aed;margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("users", lang)</div>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-3">
-        <a href="@Url.Action("Create", "Tickets")" class="card text-decoration-none" style="border-left:4px solid #f59e0b;">
-            <div class="card-body text-center py-4">
-                <i class="bi bi-chat-dots" style="font-size:1.5rem;color:#f59e0b;margin-bottom:8px;display:block;"></i>
-                <div style="font-weight:700;color:var(--dark);font-size:0.88rem;">@Lang.T("create_ticket", lang)</div>
-            </div>
-        </a>
-    </div>
 </div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/home.css" />
+}

@@ -15,27 +15,27 @@
         </div>
 
         <div class="card">
-            <div class="card-body" style="padding:32px;">
+            <div class="card-body ui-st-c0e4fb" >
                 <form asp-action="Create" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
                         <label asp-for="FullName" class="form-label">@Lang.T("full_name", lang)</label>
                         <input asp-for="FullName" class="form-control" placeholder="@(lang == "ar" ? "مثال: محمد أحمد" : "e.g., Mohammad Ahmad")" />
-                        <span asp-validation-for="FullName" class="text-danger" style="font-size:0.8rem;"></span>
+                        <span asp-validation-for="FullName" class="text-danger ui-st-f257e1" ></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="Email" class="form-label">@Lang.T("email", lang)</label>
                         <input asp-for="Email" class="form-control" placeholder="user@@example.com" />
-                        <span asp-validation-for="Email" class="text-danger" style="font-size:0.8rem;"></span>
+                        <span asp-validation-for="Email" class="text-danger ui-st-f257e1" ></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="PasswordHash" class="form-label">@Lang.T("password", lang)</label>
                         <input asp-for="PasswordHash" class="form-control" type="password" placeholder="@(lang == "ar" ? "8 أحرف على الأقل" : "Min 8 chars, Aa1@@")" />
-                        <span asp-validation-for="PasswordHash" class="text-danger" style="font-size:0.8rem;"></span>
-                        <div style="margin-top:8px;padding:10px 14px;background:var(--green-pale);border-radius:8px;font-size:0.78rem;color:var(--green-dark);">
+                        <span asp-validation-for="PasswordHash" class="text-danger ui-st-f257e1" ></span>
+                        <div class="ui-st-7bfe38" >
                             <i class="bi bi-shield-check me-1"></i>
                             @Lang.T("password_hint", lang)
                         </div>
@@ -44,7 +44,7 @@
                     <div class="mb-4">
                         <div class="form-check form-switch">
                             <input asp-for="IsActive" class="form-check-input" role="switch" />
-                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
+                            <label asp-for="IsActive" class="form-check-label ui-st-a5d2ba" >@Lang.T("active", lang)</label>
                         </div>
                     </div>
 

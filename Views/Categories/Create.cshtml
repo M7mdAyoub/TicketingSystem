@@ -15,20 +15,20 @@
         </div>
 
         <div class="card">
-            <div class="card-body" style="padding:32px;">
+            <div class="card-body ui-st-c0e4fb" >
                 <form asp-action="Create" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="mb-3">
                         <label asp-for="Name" class="form-label">@Lang.T("category_name", lang)</label>
                         <input asp-for="Name" class="form-control" placeholder="@(lang == "ar" ? "مثال: برمجيات، أجهزة، شبكات" : "e.g., Software, Hardware, Network")" />
-                        <span asp-validation-for="Name" class="text-danger" style="font-size:0.8rem;"></span>
+                        <span asp-validation-for="Name" class="text-danger ui-st-f257e1" ></span>
                     </div>
 
                     <div class="mb-4">
                         <div class="form-check form-switch">
                             <input asp-for="IsActive" class="form-check-input" role="switch" />
-                            <label asp-for="IsActive" class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
+                            <label asp-for="IsActive" class="form-check-label ui-st-a5d2ba" >@Lang.T("active", lang)</label>
                         </div>
                     </div>
 

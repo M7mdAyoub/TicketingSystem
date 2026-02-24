@@ -26,7 +26,7 @@
                         <th>@Lang.T("category", lang)</th>
                         <th>@Lang.T("status", lang)</th>
                         <th>@Lang.T("created_date", lang)</th>
-                        <th style="width:100px;">@Lang.T("actions", lang)</th>
+                        <th class="ui-st-513467" >@Lang.T("actions", lang)</th>
                     </tr>
                 </thead>
                 <tbody id="categoriesBody">
@@ -44,12 +44,12 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <div style="width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:0.9rem;flex-shrink:0;">
+                                    <div class="ui-st-811086" >
                                         <i class="bi bi-tag-fill"></i>
                                     </div>
                                     <div>
-                                        <div style="font-weight:700;color:var(--dark);font-size:0.9rem;">@cat.Name</div>
-                                        <div style="font-size:0.78rem;color:var(--text-light);">ID: @cat.Id</div>
+                                        <div class="ui-st-84e012" >@cat.Name</div>
+                                        <div class="ui-st-1542fc" >ID: @cat.Id</div>
                                     </div>
                                 </div>
                             </td>
@@ -63,20 +63,20 @@
                                     <span class="badge-status badge-inactive">@Lang.T("inactive", lang)</span>
                                 }
                             </td>
-                            <td style="color:var(--text-muted);font-size:0.85rem;">@cat.CreatedDate.ToString("MMM dd, yyyy")</td>
+                            <td class="ui-st-79c561" >@cat.CreatedDate.ToString("MMM dd, yyyy")</td>
                             <td>
-                                <form asp-action="ToggleActive" asp-route-id="@cat.Id" method="post" style="display:inline;">
+                                <form class="d-inline" asp-action="ToggleActive" asp-route-id="@cat.Id" method="post" >
                                     @Html.AntiForgeryToken()
                                     @if (cat.IsActive)
                                     {
-                                        <button type="submit" class="btn-ghost" title="@(lang == "ar" ? "تعطيل" : "Deactivate")" style="color:var(--coral);">
-                                            <i class="bi bi-toggle-on" style="font-size:1.2rem;"></i>
+                                        <button type="submit" class="btn-ghost ui-st-bc7c44" title="@(lang == "ar" ? "تعطيل" : "Deactivate")" >
+                                            <i class="bi bi-toggle-on ui-st-ebc214" ></i>
                                         </button>
                                     }
                                     else
                                     {
                                         <button type="submit" class="btn-ghost" title="@(lang == "ar" ? "تفعيل" : "Activate")">
-                                            <i class="bi bi-toggle-off" style="font-size:1.2rem;"></i>
+                                            <i class="bi bi-toggle-off ui-st-ebc214" ></i>
                                         </button>
                                     }
                                 </form>
@@ -90,19 +90,19 @@
 </div>
 
 
-<div id="categoryModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;backdrop-filter:blur(4px);transition:opacity 0.3s ease;" onclick="if(event.target===this)closeCategoryModal()">
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--white);border-radius:var(--radius-xl);padding:36px;width:100%;max-width:460px;box-shadow:var(--shadow-lg);animation:modalIn 0.3s ease;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-            <h3 style="font-family:var(--font-serif);font-weight:800;font-size:1.3rem;color:var(--dark);margin:0;">@Lang.T("create_new_category", lang)</h3>
-            <button onclick="closeCategoryModal()" style="background:none;border:none;font-size:1.3rem;color:var(--text-light);cursor:pointer;padding:4px;">
+<div class="ui-st-fed104" id="categoryModal"  onclick="if(event.target===this)closeCategoryModal()">
+    <div class="ui-st-baaffb" >
+        <div class="ui-st-87d288" >
+            <h3 class="ui-st-dcc926" >@Lang.T("create_new_category", lang)</h3>
+            <button class="ui-st-5a2acb" onclick="closeCategoryModal()" >
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
 
-        <div id="catModalError" style="display:none;padding:10px 16px;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius);color:#dc2626;font-size:0.85rem;margin-bottom:16px;">
+        <div class="ui-st-36b319" id="catModalError" >
         </div>
 
-        <form id="catForm" onsubmit="submitCategory(event)">
+        <form id="catForm" data-url="@Url.Action("CreateAjax", "Categories")" data-token="@tokenValue" data-txt-active="@Lang.T("active", lang)" data-txt-inactive="@Lang.T("inactive", lang)">
             <div class="mb-3">
                 <label class="form-label">@Lang.T("category_name", lang)</label>
                 <input type="text" id="catName" class="form-control" placeholder="@(lang == "ar" ? "مثال: برمجيات، أجهزة، شبكات" : "e.g., Software, Hardware, Network")" required />
@@ -111,7 +111,7 @@
             <div class="mb-4">
                 <div class="form-check form-switch">
                     <input type="checkbox" id="catIsActive" class="form-check-input" role="switch" checked />
-                    <label class="form-check-label" style="font-weight:600;">@Lang.T("active", lang)</label>
+                    <label class="form-check-label ui-st-a5d2ba" >@Lang.T("active", lang)</label>
                 </div>
             </div>
 
@@ -125,88 +125,13 @@
     </div>
 </div>
 
-<style>
-    @@keyframes modalIn {
-        from { opacity: 0; transform: translate(-50%, -48%); }
-        to { opacity: 1; transform: translate(-50%, -50%); }
-    }
-</style>
 
-<script>
-    var catToken = '@tokenValue';
-    var activeTxt = '@Lang.T("active", lang)';
-    var inactiveTxt = '@Lang.T("inactive", lang)';
 
-    function openCategoryModal() {
-        document.getElementById('categoryModal').style.display = 'block';
-        document.getElementById('catName').value = '';
-        document.getElementById('catIsActive').checked = true;
-        document.getElementById('catModalError').style.display = 'none';
-        setTimeout(function() { document.getElementById('catName').focus(); }, 100);
-    }
 
-    function closeCategoryModal() {
-        document.getElementById('categoryModal').style.display = 'none';
-    }
 
-    function submitCategory(e) {
-        e.preventDefault();
-        var btn = document.getElementById('catSubmitBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> ...';
-        document.getElementById('catModalError').style.display = 'none';
-
-        var formData = new FormData();
-        formData.append('name', document.getElementById('catName').value);
-        formData.append('isActive', document.getElementById('catIsActive').checked);
-        formData.append('__RequestVerificationToken', catToken);
-
-        fetch('@Url.Action("CreateAjax", "Categories")', { method: 'POST', body: formData })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    var emptyRow = document.getElementById('emptyRow');
-                    if (emptyRow) emptyRow.remove();
-
-                    var tbody = document.getElementById('categoriesBody');
-                    var tr = document.createElement('tr');
-                    tr.style.animation = 'modalIn 0.4s ease';
-                    var badgeClass = data.isActive ? 'badge-active' : 'badge-inactive';
-                    var badgeText = data.isActive ? activeTxt : inactiveTxt;
-                    tr.innerHTML = `
-                        <td>
-                            <div class="d-flex align-items-center gap-3">
-                                <div style="width:38px;height:38px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green-dark);font-size:0.9rem;flex-shrink:0;">
-                                    <i class="bi bi-tag-fill"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight:700;color:var(--dark);font-size:0.9rem;">${data.name}</div>
-                                    <div style="font-size:0.78rem;color:var(--text-light);">ID: ${data.id}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge-status ${badgeClass}">${badgeText}</span></td>
-                        <td style="color:var(--text-muted);font-size:0.85rem;">${data.createdDate}</td>
-                        <td><span style="font-size:0.78rem;color:var(--text-light);">↻</span></td>
-                    `;
-                    tbody.appendChild(tr);
-                    closeCategoryModal();
-                } else {
-                    document.getElementById('catModalError').textContent = data.error;
-                    document.getElementById('catModalError').style.display = 'block';
-                }
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i> @Lang.T("create_category", lang)';
-            })
-            .catch(() => {
-                document.getElementById('catModalError').textContent = 'Network error.';
-                document.getElementById('catModalError').style.display = 'block';
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i> @Lang.T("create_category", lang)';
-            });
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeCategoryModal();
-    });
-</script>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/categories.css" />
+}
+@section Scripts {
+    <script src="~/js/pages/categories.js"></script>
+}
