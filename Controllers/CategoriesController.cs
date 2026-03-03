@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HelpdeskApp.Data;
@@ -13,22 +13,22 @@ namespace HelpdeskApp.Controllers
         {
             var categories = new List<Category>();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
                 string query = "SELECT Id, Name, IsActive, CreatedDate FROM Categories ORDER BY Id";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var cmd = new SqliteCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         categories.Add(new Category
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
-                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-                            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+                            IsActive = reader.GetInt64(reader.GetOrdinal("IsActive")) == 1,
+                            CreatedDate = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedDate")))
                         });
                     }
                 }
@@ -50,15 +50,15 @@ namespace HelpdeskApp.Controllers
             if (!ModelState.IsValid)
                 return View(category);
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                using (var checkCmd = new SqliteCommand(checkQuery, conn))
                 {
                     checkCmd.Parameters.AddWithValue("@Name", category.Name);
-                    int count = (int)checkCmd.ExecuteScalar();
+                    long count = (long)checkCmd.ExecuteScalar()!;
                     if (count > 0)
                     {
                         ModelState.AddModelError("Name", "A category with this name already exists.");
@@ -67,12 +67,12 @@ namespace HelpdeskApp.Controllers
                 }
 
                 string insertQuery = @"INSERT INTO Categories (Name, IsActive, CreatedDate)
-                                       VALUES (@Name, @IsActive, GETDATE())";
+                                       VALUES (@Name, @IsActive, datetime('now'))";
 
-                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                using (var cmd = new SqliteCommand(insertQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@Name", category.Name);
-                    cmd.Parameters.AddWithValue("@IsActive", category.IsActive);
+                    cmd.Parameters.AddWithValue("@IsActive", category.IsActive ? 1 : 0);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -88,57 +88,55 @@ namespace HelpdeskApp.Controllers
             if (string.IsNullOrWhiteSpace(name))
                 return Json(new { success = false, error = "Category name is required." });
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM Categories WHERE Name = @Name";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                using (var checkCmd = new SqliteCommand(checkQuery, conn))
                 {
                     checkCmd.Parameters.AddWithValue("@Name", name.Trim());
-                    int count = (int)checkCmd.ExecuteScalar();
+                    long count = (long)checkCmd.ExecuteScalar()!;
                     if (count > 0)
                         return Json(new { success = false, error = "A category with this name already exists." });
                 }
 
                 string insertQuery = @"INSERT INTO Categories (Name, IsActive, CreatedDate)
-                                       OUTPUT INSERTED.Id, INSERTED.CreatedDate
-                                       VALUES (@Name, @IsActive, GETDATE())";
+                                       VALUES (@Name, @IsActive, datetime('now'))";
 
-                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                using (var cmd = new SqliteCommand(insertQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@Name", name.Trim());
-                    cmd.Parameters.AddWithValue("@IsActive", isActive);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@IsActive", isActive ? 1 : 0);
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Get the inserted row
+                using (var idCmd = new SqliteCommand("SELECT last_insert_rowid()", conn))
+                {
+                    long newId = (long)idCmd.ExecuteScalar()!;
+                    return Json(new
                     {
-                        if (reader.Read())
-                        {
-                            return Json(new
-                            {
-                                success = true,
-                                id = reader.GetInt32(0),
-                                name = name.Trim(),
-                                isActive = isActive,
-                                createdDate = reader.GetDateTime(1).ToString("MMM dd, yyyy")
-                            });
-                        }
-                    }
+                        success = true,
+                        id = (int)newId,
+                        name = name.Trim(),
+                        isActive = isActive,
+                        createdDate = DateTime.UtcNow.ToString("MMM dd, yyyy")
+                    });
                 }
             }
-
-            return Json(new { success = false, error = "Failed to create category." });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ToggleActive(int id)
         {
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string query = "UPDATE Categories SET IsActive = CASE WHEN IsActive = 1 THEN 0 ELSE 1 END WHERE Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();

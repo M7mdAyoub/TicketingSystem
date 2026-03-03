@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using HelpdeskApp.Data;
 using HelpdeskApp.Models;
 using System.Collections.Generic;
@@ -15,11 +15,11 @@ namespace HelpdeskApp.Controllers
         {
             var model = new DashboardViewModel();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
-                using (SqlCommand cmd = new SqlCommand(
+                using (var cmd = new SqliteCommand(
                     @"SELECT 
                         COUNT(*) AS Total,
                         SUM(CASE WHEN Status = 'Open' THEN 1 ELSE 0 END) AS OpenCount,
@@ -31,38 +31,40 @@ namespace HelpdeskApp.Controllers
                     {
                         if (reader.Read())
                         {
-                            model.TotalTickets = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
-                            model.OpenCount = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
-                            model.InProgressCount = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
-                            model.ClosedCount = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
+                            model.TotalTickets = reader.IsDBNull(0) ? 0 : (int)reader.GetInt64(0);
+                            model.OpenCount = reader.IsDBNull(1) ? 0 : (int)reader.GetInt64(1);
+                            model.InProgressCount = reader.IsDBNull(2) ? 0 : (int)reader.GetInt64(2);
+                            model.ClosedCount = reader.IsDBNull(3) ? 0 : (int)reader.GetInt64(3);
                         }
                     }
                 }
 
-                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Users", conn))
-                    model.TotalUsers = (int)cmd.ExecuteScalar();
+                using (var cmd = new SqliteCommand("SELECT COUNT(*) FROM Users", conn))
+                    model.TotalUsers = (int)(long)cmd.ExecuteScalar()!;
 
-                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Categories WHERE IsActive = 1", conn))
-                    model.TotalCategories = (int)cmd.ExecuteScalar();
+                using (var cmd = new SqliteCommand("SELECT COUNT(*) FROM Categories WHERE IsActive = 1", conn))
+                    model.TotalCategories = (int)(long)cmd.ExecuteScalar()!;
 
-                using (SqlCommand cmd = new SqlCommand(
-                    @"SELECT TOP 5 t.Id, t.Title, t.Status, t.CreatedDate, u.FullName
+                using (var cmd = new SqliteCommand(
+                    @"SELECT t.Id, t.Title, t.Status, t.CreatedDate, u.FullName
                       FROM Tickets t
                       INNER JOIN Users u ON t.CreatedBy = u.Id
                       WHERE t.IsDeleted = 0
-                      ORDER BY t.CreatedDate DESC", conn))
+                      ORDER BY t.CreatedDate DESC
+                      LIMIT 5", conn))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            var createdDate = reader.GetDateTime(3);
+                            var createdDateStr = reader.GetString(reader.GetOrdinal("CreatedDate"));
+                            var createdDate = DateTime.Parse(createdDateStr);
                             var fullName = reader.GetString(reader.GetOrdinal("FullName"));
                             var status = reader.GetString(reader.GetOrdinal("Status"));
                             
                             var item = new RecentActivityItem
                             {
-                                Id = reader.GetInt32(0),
+                                Id = (int)reader.GetInt64(0),
                                 Title = reader.GetString(1),
                                 Status = status,
                                 CreatedDate = createdDate,
@@ -126,4 +128,3 @@ namespace HelpdeskApp.Controllers
         }
     }
 }
-

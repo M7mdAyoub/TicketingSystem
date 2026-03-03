@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,7 +26,7 @@ namespace HelpdeskApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
@@ -34,16 +34,16 @@ namespace HelpdeskApp.Controllers
                                  FROM Users 
                                  WHERE Email = @Email AND PasswordHash = @Password";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Email", model.Email);
                     cmd.Parameters.AddWithValue("@Password", model.Password);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            bool isActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
+                            bool isActive = reader.GetInt64(reader.GetOrdinal("IsActive")) == 1;
 
                             if (!isActive)
                             {
@@ -51,7 +51,7 @@ namespace HelpdeskApp.Controllers
                                 return View(model);
                             }
 
-                            int userId = reader.GetInt32(reader.GetOrdinal("Id"));
+                            int userId = (int)reader.GetInt64(reader.GetOrdinal("Id"));
                             string fullName = reader.GetString(reader.GetOrdinal("FullName"));
                             string email = reader.GetString(reader.GetOrdinal("Email"));
 

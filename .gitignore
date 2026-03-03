@@ -17,6 +17,12 @@ obj/
 ## Build
 build_output.txt
 build2.txt
+build3.txt
+build_temp.txt
+run_temp.txt
+
+## SQLite
+*.db
 
 ## OS
 Thumbs.db

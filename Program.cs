@@ -26,6 +26,9 @@ HelpdeskApp.Data.DbHelper.ConnectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in appsettings.json.");
 
+// Auto-initialize database on startup
+HelpdeskApp.Data.DbHelper.InitializeDatabase();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

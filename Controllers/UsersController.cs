@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HelpdeskApp.Data;
@@ -13,23 +13,23 @@ namespace HelpdeskApp.Controllers
         {
             var users = new List<User>();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
                 string query = "SELECT Id, FullName, Email, IsActive, CreatedDate FROM Users ORDER BY CreatedDate DESC";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var cmd = new SqliteCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         users.Add(new User
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
                             FullName = reader.GetString(reader.GetOrdinal("FullName")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
-                            IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-                            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+                            IsActive = reader.GetInt64(reader.GetOrdinal("IsActive")) == 1,
+                            CreatedDate = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedDate")))
                         });
                     }
                 }
@@ -51,15 +51,15 @@ namespace HelpdeskApp.Controllers
             if (!ModelState.IsValid)
                 return View(user);
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                using (var checkCmd = new SqliteCommand(checkQuery, conn))
                 {
                     checkCmd.Parameters.AddWithValue("@Email", user.Email);
-                    int count = (int)checkCmd.ExecuteScalar();
+                    long count = (long)checkCmd.ExecuteScalar()!;
                     if (count > 0)
                     {
                         ModelState.AddModelError("Email", "This email is already registered.");
@@ -68,14 +68,14 @@ namespace HelpdeskApp.Controllers
                 }
 
                 string insertQuery = @"INSERT INTO Users (FullName, Email, PasswordHash, IsActive, CreatedDate)
-                                       VALUES (@FullName, @Email, @PasswordHash, @IsActive, GETDATE())";
+                                       VALUES (@FullName, @Email, @PasswordHash, @IsActive, datetime('now'))";
 
-                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                using (var cmd = new SqliteCommand(insertQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@FullName", user.FullName);
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
-                    cmd.Parameters.AddWithValue("@IsActive", user.IsActive);
+                    cmd.Parameters.AddWithValue("@IsActive", user.IsActive ? 1 : 0);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -101,30 +101,34 @@ namespace HelpdeskApp.Controllers
             if (!regex.IsMatch(password))
                 return Json(new { success = false, error = "Password must have uppercase, lowercase, number, and special character." });
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                using (var checkCmd = new SqliteCommand(checkQuery, conn))
                 {
                     checkCmd.Parameters.AddWithValue("@Email", email.Trim());
-                    int count = (int)checkCmd.ExecuteScalar();
+                    long count = (long)checkCmd.ExecuteScalar()!;
                     if (count > 0)
                         return Json(new { success = false, error = "This email is already registered." });
                 }
 
                 string insertQuery = @"INSERT INTO Users (FullName, Email, PasswordHash, IsActive, CreatedDate)
-                                       OUTPUT INSERTED.Id
-                                       VALUES (@FullName, @Email, @PasswordHash, @IsActive, GETDATE())";
+                                       VALUES (@FullName, @Email, @PasswordHash, @IsActive, datetime('now'))";
 
-                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                using (var cmd = new SqliteCommand(insertQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@FullName", fullName.Trim());
                     cmd.Parameters.AddWithValue("@Email", email.Trim());
                     cmd.Parameters.AddWithValue("@PasswordHash", password);
-                    cmd.Parameters.AddWithValue("@IsActive", isActive);
-                    int newId = (int)cmd.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@IsActive", isActive ? 1 : 0);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var idCmd = new SqliteCommand("SELECT last_insert_rowid()", conn))
+                {
+                    long newId = (long)idCmd.ExecuteScalar()!;
 
                     var parts = fullName.Trim().Split(' ');
                     var initials = parts.Length >= 2
@@ -134,7 +138,7 @@ namespace HelpdeskApp.Controllers
                     return Json(new
                     {
                         success = true,
-                        id = newId,
+                        id = (int)newId,
                         fullName = fullName.Trim(),
                         email = email.Trim(),
                         isActive = isActive,
@@ -153,26 +157,26 @@ namespace HelpdeskApp.Controllers
             if (string.IsNullOrWhiteSpace(email))
                 return Json(new { success = false, error = "Email is required." });
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email AND Id != @Id";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                using (var checkCmd = new SqliteCommand(checkQuery, conn))
                 {
                     checkCmd.Parameters.AddWithValue("@Email", email.Trim());
                     checkCmd.Parameters.AddWithValue("@Id", id);
-                    if ((int)checkCmd.ExecuteScalar() > 0)
-                        return Json(new { success = false, error = "This email is heavily already registered." });
+                    if ((long)checkCmd.ExecuteScalar()! > 0)
+                        return Json(new { success = false, error = "This email is already registered." });
                 }
 
                 string updateQuery = @"UPDATE Users SET FullName = @FullName, Email = @Email, IsActive = @IsActive WHERE Id = @Id";
 
-                using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+                using (var cmd = new SqliteCommand(updateQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@FullName", fullName.Trim());
                     cmd.Parameters.AddWithValue("@Email", email.Trim());
-                    cmd.Parameters.AddWithValue("@IsActive", isActive);
+                    cmd.Parameters.AddWithValue("@IsActive", isActive ? 1 : 0);
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();
                 }
@@ -191,12 +195,12 @@ namespace HelpdeskApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ToggleActive(int id)
         {
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string query = "UPDATE Users SET IsActive = CASE WHEN IsActive = 1 THEN 0 ELSE 1 END WHERE Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();

@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,36 +31,37 @@ namespace HelpdeskApp.Controllers
 
             model.Categories = GetAllActiveCategories();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string whereClause = "WHERE t.IsDeleted = 0";
-                var parameters = new List<SqlParameter>();
+                var parameters = new List<SqliteParameter>();
 
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
                     whereClause += " AND t.Title LIKE @SearchTerm";
-                    parameters.Add(new SqlParameter("@SearchTerm", "%" + searchTerm + "%"));
+                    parameters.Add(new SqliteParameter("@SearchTerm", "%" + searchTerm + "%"));
                 }
 
                 if (filterCategoryId.HasValue && filterCategoryId.Value > 0)
                 {
                     whereClause += " AND t.CategoryId = @CategoryId";
-                    parameters.Add(new SqlParameter("@CategoryId", filterCategoryId.Value));
+                    parameters.Add(new SqliteParameter("@CategoryId", filterCategoryId.Value));
                 }
 
                 if (!string.IsNullOrWhiteSpace(filterStatus))
                 {
                     whereClause += " AND t.Status = @Status";
-                    parameters.Add(new SqlParameter("@Status", filterStatus));
+                    parameters.Add(new SqliteParameter("@Status", filterStatus));
                 }
 
                 string countQuery = $"SELECT COUNT(*) FROM Tickets t {whereClause}";
-                using (SqlCommand countCmd = new SqlCommand(countQuery, conn))
+                using (var countCmd = new SqliteCommand(countQuery, conn))
                 {
-                    countCmd.Parameters.AddRange(parameters.ToArray());
-                    int totalRecords = (int)countCmd.ExecuteScalar();
+                    foreach (var p in parameters)
+                        countCmd.Parameters.Add(new SqliteParameter(p.ParameterName, p.Value));
+                    long totalRecords = (long)countCmd.ExecuteScalar()!;
                     model.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
                 }
 
@@ -72,36 +73,33 @@ namespace HelpdeskApp.Controllers
                     INNER JOIN Users u ON t.CreatedBy = u.Id
                     {whereClause}
                     ORDER BY t.CreatedDate DESC
-                    OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+                    LIMIT @PageSize OFFSET @Offset";
 
-                var queryParams = new List<SqlParameter>();
-                if (!string.IsNullOrWhiteSpace(searchTerm))
-                    queryParams.Add(new SqlParameter("@SearchTerm", "%" + searchTerm + "%"));
-                if (filterCategoryId.HasValue && filterCategoryId.Value > 0)
-                    queryParams.Add(new SqlParameter("@CategoryId", filterCategoryId.Value));
-                if (!string.IsNullOrWhiteSpace(filterStatus))
-                    queryParams.Add(new SqlParameter("@Status", filterStatus));
-
-                queryParams.Add(new SqlParameter("@Offset", (page - 1) * pageSize));
-                queryParams.Add(new SqlParameter("@PageSize", pageSize));
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
-                    cmd.Parameters.AddRange(queryParams.ToArray());
+                    if (!string.IsNullOrWhiteSpace(searchTerm))
+                        cmd.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%");
+                    if (filterCategoryId.HasValue && filterCategoryId.Value > 0)
+                        cmd.Parameters.AddWithValue("@CategoryId", filterCategoryId.Value);
+                    if (!string.IsNullOrWhiteSpace(filterStatus))
+                        cmd.Parameters.AddWithValue("@Status", filterStatus);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@Offset", (page - 1) * pageSize);
+                    cmd.Parameters.AddWithValue("@PageSize", pageSize);
+
+                    using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             model.Tickets.Add(new Ticket
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Description = reader.GetString(reader.GetOrdinal("Description")),
-                                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                                CreatedBy = reader.GetInt32(reader.GetOrdinal("CreatedBy")),
+                                CategoryId = (int)reader.GetInt64(reader.GetOrdinal("CategoryId")),
+                                CreatedBy = (int)reader.GetInt64(reader.GetOrdinal("CreatedBy")),
                                 Status = reader.GetString(reader.GetOrdinal("Status")),
-                                CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                                CreatedDate = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedDate"))),
                                 CategoryName = reader.GetString(reader.GetOrdinal("CategoryName")),
                                 CreatedByName = reader.GetString(reader.GetOrdinal("CreatedByName"))
                             });
@@ -136,14 +134,14 @@ namespace HelpdeskApp.Controllers
 
             ticket.CreatedBy = GetCurrentUserId();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string query = @"INSERT INTO Tickets (Title, Description, CategoryId, CreatedBy, Status, CreatedDate, IsDeleted)
-                                 VALUES (@Title, @Description, @CategoryId, @CreatedBy, @Status, GETDATE(), 0)";
+                                 VALUES (@Title, @Description, @CategoryId, @CreatedBy, @Status, datetime('now'), 0)";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Title", ticket.Title);
                     cmd.Parameters.AddWithValue("@Description", ticket.Description);
@@ -163,7 +161,7 @@ namespace HelpdeskApp.Controllers
         {
             Ticket? ticket = null;
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
@@ -175,24 +173,24 @@ namespace HelpdeskApp.Controllers
                                  INNER JOIN Users u ON t.CreatedBy = u.Id
                                  WHERE t.Id = @Id";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", id);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             ticket = new Ticket
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Description = reader.GetString(reader.GetOrdinal("Description")),
-                                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                                CreatedBy = reader.GetInt32(reader.GetOrdinal("CreatedBy")),
+                                CategoryId = (int)reader.GetInt64(reader.GetOrdinal("CategoryId")),
+                                CreatedBy = (int)reader.GetInt64(reader.GetOrdinal("CreatedBy")),
                                 Status = reader.GetString(reader.GetOrdinal("Status")),
-                                CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
-                                IsDeleted = reader.GetBoolean(reader.GetOrdinal("IsDeleted")),
+                                CreatedDate = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedDate"))),
+                                IsDeleted = reader.GetInt64(reader.GetOrdinal("IsDeleted")) == 1,
                                 CategoryName = reader.GetString(reader.GetOrdinal("CategoryName")),
                                 CreatedByName = reader.GetString(reader.GetOrdinal("CreatedByName"))
                             };
@@ -211,21 +209,21 @@ namespace HelpdeskApp.Controllers
                                          WHERE tc.TicketId = @TicketId
                                          ORDER BY tc.CreatedDate ASC";
 
-                using (SqlCommand commentsCmd = new SqlCommand(commentsQuery, conn))
+                using (var commentsCmd = new SqliteCommand(commentsQuery, conn))
                 {
                     commentsCmd.Parameters.AddWithValue("@TicketId", id);
 
-                    using (SqlDataReader reader = commentsCmd.ExecuteReader())
+                    using (var reader = commentsCmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             ticket.Comments.Add(new TicketComment
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                TicketId = reader.GetInt32(reader.GetOrdinal("TicketId")),
+                                Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
+                                TicketId = (int)reader.GetInt64(reader.GetOrdinal("TicketId")),
                                 CommentText = reader.GetString(reader.GetOrdinal("CommentText")),
-                                CreatedByU = reader.GetInt32(reader.GetOrdinal("CreatedByU")),
-                                CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                                CreatedByU = (int)reader.GetInt64(reader.GetOrdinal("CreatedByU")),
+                                CreatedDate = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedDate"))),
                                 CreatedByName = reader.GetString(reader.GetOrdinal("CreatedByName"))
                             });
                         }
@@ -246,12 +244,12 @@ namespace HelpdeskApp.Controllers
                 return RedirectToAction("Details", new { id = ticketId });
             }
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string statusQuery = "SELECT Status FROM Tickets WHERE Id = @Id";
-                using (SqlCommand statusCmd = new SqlCommand(statusQuery, conn))
+                using (var statusCmd = new SqliteCommand(statusQuery, conn))
                 {
                     statusCmd.Parameters.AddWithValue("@Id", ticketId);
                     string? status = statusCmd.ExecuteScalar()?.ToString();
@@ -264,9 +262,9 @@ namespace HelpdeskApp.Controllers
                 }
 
                 string query = @"INSERT INTO TicketComments (TicketId, CommentText, CreatedByU, CreatedDate)
-                                 VALUES (@TicketId, @CommentText, @CreatedByU, GETDATE())";
+                                 VALUES (@TicketId, @CommentText, @CreatedByU, datetime('now'))";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TicketId", ticketId);
                     cmd.Parameters.AddWithValue("@CommentText", commentText);
@@ -283,12 +281,12 @@ namespace HelpdeskApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SoftDelete(int id)
         {
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string query = "UPDATE Tickets SET IsDeleted = 1 WHERE Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();
@@ -309,12 +307,12 @@ namespace HelpdeskApp.Controllers
                 return RedirectToAction("Details", new { id });
             }
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
 
                 string query = "UPDATE Tickets SET Status = @Status WHERE Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (var cmd = new SqliteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Status", status);
                     cmd.Parameters.AddWithValue("@Id", id);
@@ -330,19 +328,19 @@ namespace HelpdeskApp.Controllers
         {
             var categories = new List<Category>();
 
-            using (SqlConnection conn = DbHelper.GetConnection())
+            using (var conn = DbHelper.GetConnection())
             {
                 conn.Open();
                 string query = "SELECT Id, Name FROM Categories WHERE IsActive = 1 ORDER BY Name";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var cmd = new SqliteCommand(query, conn))
+                using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         categories.Add(new Category
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Id = (int)reader.GetInt64(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name"))
                         });
                     }
