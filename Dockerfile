@@ -12,18 +12,15 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 
-# Install SQLite runtime
-RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
-
 COPY --from=build /app/publish .
 
 # Create data directory for SQLite
-RUN mkdir -p /data
+RUN mkdir -p /app/Data
 
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:8000
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ConnectionStrings__DefaultConnection="Data Source=/data/helpdesk.db"
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/Data/helpdesk.db"
 
-EXPOSE 8080
+EXPOSE 8000
 
 ENTRYPOINT ["dotnet", "HelpdeskApp.dll"]
