@@ -30,16 +30,18 @@ namespace HelpdeskApp.Models
     public class RecentActivityItem
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Status { get; set; }
+        public string Title { get; set; } = "";
+        public string Status { get; set; } = "";
         public DateTime CreatedDate { get; set; }
-        public string CreatedByName { get; set; }
+        public string CreatedByName { get; set; } = "";
         
-        public string TimeAgoEn { get; set; }
-        public string TimeAgoAr { get; set; }
-        public string DotClass { get; set; }
-        public string StatusBadgeClass { get; set; }
+        public string TimeAgoEn { get; set; } = "";
+        public string TimeAgoAr { get; set; } = "";
+        public string DotClass { get; set; } = "";
+        public string StatusBadgeClass { get; set; } = "";
+        public string StatusTextEn { get; set; } = "";
+        public string StatusTextAr { get; set; } = "";
         
-        public string Initials { get; set; }
+        public string Initials { get; set; } = "";
     }
 }

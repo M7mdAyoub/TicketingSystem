@@ -70,7 +70,8 @@ namespace HelpdeskApp.Controllers
                                 Initials = GetInitials(fullName),
                                 DotClass = status == "Closed" ? "dot-closed" : status == "InProgress" ? "dot-inprogress" : "dot-open",
                                 StatusBadgeClass = status == "Open" ? "badge-open" : status == "InProgress" ? "badge-inprogress" : "badge-resolved",
-                                StatusTextEn = status == "InProgress" ? "In Progress" : status
+                                StatusTextEn = status == "InProgress" ? "In Progress" : status,
+                                StatusTextAr = status == "Open" ? "مفتوح" : status == "InProgress" ? "قيد التنفيذ" : "مغلق"
                             };
                             
                             // Calculate TimeAgo
