@@ -17,10 +17,10 @@ COPY --from=build /app/publish .
 # Create data directory for SQLite
 RUN mkdir -p /app/Data
 
-ENV ASPNETCORE_URLS=http://+:8000
+ENV ASPNETCORE_URLS=http://+:7860
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ConnectionStrings__DefaultConnection="Data Source=/app/Data/helpdesk.db"
 
-EXPOSE 8000
+EXPOSE 7860
 
 ENTRYPOINT ["dotnet", "HelpdeskApp.dll"]
